@@ -1,0 +1,20 @@
+[
+  {
+    "label": "Uzb",
+    "value": "uz",
+    "icon": "uzb",
+    "code": "O'z"
+  },
+  {
+    "label": "Eng",
+    "value": "en",
+    "icon": "en",
+    "code": "Eng"
+  },
+  {
+    "label": "Rus",
+    "value": "ru",
+    "icon": "ru",
+    "code": "Rus"
+  }
+]

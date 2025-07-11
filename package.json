@@ -1,0 +1,44 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "start": "node .output/server/index.mjs",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "@fullcalendar/core": "^6.1.17",
+    "@fullcalendar/daygrid": "^6.1.17",
+    "@fullcalendar/interaction": "^6.1.17",
+    "@fullcalendar/timegrid": "^6.1.17",
+    "@fullcalendar/vue3": "^6.1.17",
+    "@vueuse/nuxt": "^12.5.0",
+    "axios": "^1.8.4",
+    "dayjs": "^1.11.13",
+    "lodash": "^4.17.21",
+    "nuxt": "^3.15.4",
+    "vue": "latest",
+    "vue-countup-v3": "^1.4.2",
+    "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@element-plus/nuxt": "^1.1.1",
+    "@formkit/auto-animate": "^0.8.2",
+    "@nuxtjs/device": "^3.2.4",
+    "@nuxtjs/i18n": "^9.1.5",
+    "@nuxtjs/tailwindcss": "^6.13.1",
+    "@pinia/nuxt": "^0.9.0",
+    "apexcharts": "^4.4.0",
+    "nuxt-svgo": "^4.0.14",
+    "pinia-plugin-persistedstate": "^4.2.0",
+    "sass": "^1.84.0",
+    "sass-loader": "^16.0.4",
+    "vue-the-mask": "^0.11.1",
+    "vue3-apexcharts": "^1.8.0"
+  }
+}

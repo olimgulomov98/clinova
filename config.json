@@ -1,0 +1,11 @@
+{
+    "global_error_notification": false,
+    "auth": {
+      "login_api": "/api/auth/login",
+      "refresh_api": "/token/refresh/",
+      "expires_date": { "access": 30, "refresh": 30 }
+    },
+  "department": {
+    "get_api": "/api/department/list"
+  }
+}

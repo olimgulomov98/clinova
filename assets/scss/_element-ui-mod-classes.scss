@@ -1,0 +1,151 @@
+// el button
+.el-button--large span {
+  display: flex;
+  gap: 4px;
+}
+
+// el button
+
+// el pagination 
+div.el-pagination.is-background .btn-next.is-active,
+div.el-pagination.is-background .btn-prev.is-active,
+div.el-pagination.is-background .el-pager li.is-active {
+  font-weight: 500;
+  background: #233955;
+}
+
+div.el-pagination.is-background .btn-next,
+div.el-pagination.is-background .btn-prev,
+div.el-pagination.is-background .el-pager li {
+  font-weight: 500;
+  background: #F0F0F0;
+}
+
+.el-pager li {
+  font-weight: 500;
+}
+
+.el-pagination__sizes .el-select__wrapper {
+  background: #F0F0F0;
+
+  box-shadow: none;
+  font-size: 16px !important;
+  font-weight: 500;
+  color: var(--color-stone-600);
+}
+
+
+// el pagination 
+
+// el badge
+.el-badge .el-badge__content {
+  border: none;
+  min-width: 24px;
+  top: auto;
+}
+
+// el badge
+
+// label before
+.el-form-item--label-top {
+  .el-form-item__label {
+    font-size: 14px !important;
+    margin-bottom: 8px !important;
+    color: var(--color-gray-30);
+    font-weight: 600;
+  }
+}
+
+// label after
+
+// el-input el-input__wrapper
+.el-input.is-disabled .el-input__wrapper {
+  background-color: var(--color-slate-100) !important;
+}
+
+.el-input.is-disabled .el-input__inner {
+  color: var(--color-slate-500) !important;
+  -webkit-text-fill-color: var(--color-slate-500) !important;
+}
+
+.el-select__wrapper {
+  border-radius: var(--el-border-radius-standart) !important;
+}
+
+.el-checkbox.el-checkbox--large .el-checkbox__inner {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 2px !important;
+  background: #F0F0F0;
+  outline: none;
+  border: 1px solid #C3C4C4
+}
+
+.is-checked {
+  border-radius: 2px !important;
+  background: #233955 !important;
+}
+
+.el-checkbox__inner::after {
+  width: 5px !important;
+  height: 10px !important;
+  left: 5.5px !important;
+  border-width: 2px !important;
+  border-color: #A2F2EE !important;
+}
+
+.el-checkbox__inner::before {
+  top: 8px !important;
+  background: #A2F2EE !important;
+  border-color: #A2F2EE !important;
+}
+
+
+.is-indeterminate {
+  border-radius: 2px !important;
+  outline: none !important;
+  top: 50% !important;
+  background: #233955 !important;
+}
+
+.el-checkbox .is-checked {
+  outline: none !important;
+  border: 1px solid #C3C4C4 !important;
+}
+
+// date picker
+
+.el-date-table th {
+  white-space: nowrap;
+}
+
+.demo-ruleForm {
+  .el-form-item.is-error .el-upload-dragger {
+    border-color: red !important;
+  }
+}
+
+.icon-date-picker {
+  max-width: 40px;
+}
+
+.icon-date-picker input {
+  display: none !important;
+}
+
+.icon-date-picker .el-range-separator {
+  display: none !important;
+}
+.date-picker-close .el-range__icon{
+  display: none !important;
+}
+.icon-date-picker.date-picker-close .el-range__close-icon--hidden {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: flex !important;
+}
+.icon-date-picker:not(.date-picker-close)  .el-range__close-icon--hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  display: none !important;
+}
