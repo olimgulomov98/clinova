@@ -237,5 +237,8 @@
   "AMOUNT_WITHOUT_DISCOUNT": "Chegirmasiz miqdor",
   "TOTAL_": "JAMI",
   "DUE_AMOUNT_": "TO'LLANGAN SO'MMA",
-  "THIS_MONTH": "Bu oyda ()"
+  "THIS_MONTH": "Bu oyda ()",
+  "REVENUE": "Daromad",
+  "BY_SERVICES": "Xizmatlar bo‘yicha",
+  "BY_DEPARTMENTS": "Bo‘limlar bo‘yicha"
 }

@@ -5,7 +5,6 @@
         <component :is="`icon-${icon}`" class="text-gray-20" />
         {{ title }}
       </p>
-      <button><icon-dots-three /></button>
     </div>
     <div class="flex justify-between items-center mb-[6px] h-6">
       <h5 class="font-semibold text-[22px] text-black">{{ count }}</h5>

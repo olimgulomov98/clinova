@@ -237,5 +237,8 @@
   "AMOUNT_WITHOUT_DISCOUNT": "Amount without discount",
   "TOTAL_": "TOTAL",
   "DUE_AMOUNT_": "DUE AMOUNT",
-  "THIS_MONTH": "() this month"
+  "THIS_MONTH": "() this month",
+  "REVENUE": "Revenue",
+  "BY_SERVICES": "By Services",
+  "BY_DEPARTMENTS": "By Departments"
 }

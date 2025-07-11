@@ -1,13 +1,21 @@
 <template>
   <VBlockCard>
-    <div class="flex justify-between items-center mb-4">
+    <div class="flex justify-center items-center mb-4 relative">
       <div class="flex flex-col">
-        <VBlockTitle>Patient Overview</VBlockTitle>
-        <p class="text-[10px] text-gray-20">by Departments</p>
+        <VBlockTitle>{{ t('PATIENT_OVERVIEW') }}</VBlockTitle>
+        <p class="text-[10px] text-gray-20">{{ t('BY_DEPARTMENTS') }}</p>
       </div>
-      <button>
-        <icon-dots-three class="h-[30px] w-[30px]"/>
-      </button>
+      <div class="absolute right-0 bg-gray-100 p-1 rounded-lg">
+        <button
+            v-for="(btn, index) in options"
+            :key="index"
+            class="px-3 py-1 rounded-lg text-sm"
+            :class="{ '!bg-[var(--color-blue-dark)] text-white': periodType === btn.value }"
+            @click="changePeriod(btn.value)"
+        >
+          {{ t(btn.value) }}
+        </button>
+      </div>
     </div>
     <VPieChart :key="chartKey" :series="series" type="donut" :colors="colors" :labels="labels"/>
     <div class="flex flex-col gap-3 sm:gap-[14px]">

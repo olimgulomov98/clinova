@@ -1,7 +1,7 @@
 <template>
   <VBlockCard v-loading="loading">
     <div class="flex justify-between items-center mb-4">
-      <VBlockTitle>Revenue</VBlockTitle>
+      <VBlockTitle>{{ t('REVENUE') }}</VBlockTitle>
       <div class="flex gap-2 bg-gray-100 p-1 rounded-lg">
         <button
             v-for="(btn, index) in options"

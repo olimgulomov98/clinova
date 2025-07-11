@@ -41,18 +41,16 @@
       <ViewsDashboardBarChart/>
       <ViewsDashboardAreaChart/>
     </div>
-    <div class="custom-grid-cols-2 grid gap-4 md:gap-5">
+    <div class="grid-cols-2 grid gap-4 md:gap-5">
       <ViewsDashboardPieChart/>
-      <div>
-        <ViewsDashboardDoctorSchule/>
-      </div>
+      <ViewsDashboardDoctorSchule/>
     </div>
-    <VBlockCard>
-      <div class="flex justify-between">
-        <VBlockTitle>{{ t('PATIENT_APPOINTMENT') }}</VBlockTitle>
-        <el-date-picker type="date" :placeholder="t('PICK_DAY')"/>
-      </div>
-    </VBlockCard>
+    <!--    <VBlockCard>-->
+    <!--      <div class="flex justify-between">-->
+    <!--        <VBlockTitle>{{ t('PATIENT_APPOINTMENT') }}</VBlockTitle>-->
+    <!--        <el-date-picker type="date" :placeholder="t('PICK_DAY')"/>-->
+    <!--      </div>-->
+    <!--    </VBlockCard>-->
   </div>
 </template>
 

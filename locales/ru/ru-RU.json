@@ -237,5 +237,8 @@
   "AMOUNT_WITHOUT_DISCOUNT": "Сумма без скидки",
   "TOTAL_": "ИТОГО",
   "DUE_AMOUNT_": "ПРИЧИТАЮЩАЯСЯ СУММА",
-  "THIS_MONTH": "() в этом месяце"
+  "THIS_MONTH": "() в этом месяце",
+  "REVENUE": "Доход",
+  "BY_SERVICES": "По услугам",
+  "BY_DEPARTMENTS": "По отделениям"
 }
