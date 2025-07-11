@@ -1,0 +1,11 @@
+[Unit]
+Description={{ app.name }} systemd service
+After=syslog.target
+
+[Service]
+Type=simple
+WorkingDirectory={{ app.home }}
+ExecStart=node .output/server/index.mjs
+
+[Install]
+WantedBy=multi-user.target

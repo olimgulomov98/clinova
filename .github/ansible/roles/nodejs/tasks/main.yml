@@ -1,0 +1,22 @@
+---
+- name: Check nodejs version manager
+  ansible.builtin.command: command -v nvm
+  register: is_nvm_installed
+  ignore_errors: true
+  failed_when: false
+  changed_when: false
+
+- name: Install nodejs version manager if doesn't exist
+  when: is_nvm_installed.rc != 0 and not
+  block:
+    - name: Install NVM (Node Version Manager)
+      ansible.builtin.shell: |
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+      args:
+        executable: /bin/bash
+
+    - name: "Install required nodejs version: {{ node.version }}"
+      ansible.builtin.command: "nvm install {{ node.version }}"
+
+    - name: Use required nodejs version
+      ansible.builtin.command: "nvm use {{ node.version }}"

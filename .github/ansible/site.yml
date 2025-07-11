@@ -1,0 +1,12 @@
+---
+- name: Infrastructure for application
+  hosts: infra_hosts
+  become: true
+  roles:
+    - nodejs
+
+- name: Deploying application to server
+  hosts: app_hosts
+  become: true
+  roles:
+    - app

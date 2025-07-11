@@ -1,0 +1,41 @@
+---
+- name: "Make sure the home directory of {{ app.name }}"
+  ansible.builtin.file:
+    dest: "{{ app.home }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: "Copy systemd service of {{ app.name }}"
+  ansible.builtin.template:
+    dest: "/etc/systemd/system/{{ app.service_name }}"
+    src: service.j2
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: "Restart the service of {{ app.name }}"
+  ansible.builtin.systemd:
+    name: "{{ app.service_name }}"
+    state: restarted
+    enabled: true
+    daemon_reload: true
+
+- name: Deploy application
+  tags: [never, deploy]
+  block:
+    - name: "Copy application jar of {{ app.name }}"
+      ansible.builtin.copy:
+        src: "../../.output"
+        dest: "{{ app.home }}"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: "Restart the service of {{ app.name }}"
+      ansible.builtin.systemd:
+        name: "{{ app.service_name }}"
+        state: restarted
+        enabled: true
+        daemon_reload: true

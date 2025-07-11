@@ -1,0 +1,40 @@
+name: 'Infrastructure as Code (IaC)'
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/ansible/**'
+
+jobs:
+  infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          cache: pip
+          cache-dependency-path: .github/ansible/ansible-lint-requirements.txt
+          python-version: "3.11"
+      - name: Install ansible and ansible-lint from pip
+        shell: bash
+        run: |
+          pip install ansible
+          ansible --version
+      
+      - name: Prepare ssh key from secrets
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.ID_RSA }}" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Run Ansible playbook
+        run: "ansible-playbook .github/ansible/site.yml -i .github/ansible/env/${{ github.ref_name }}/hosts"
+        env:
+          ANSIBLE_CONFIG: .github/ansible/ansible.cfg
+      
+      - name: Clear ssh key
+        run: |
+          rm -rf ~/.ssh/id_rsa

@@ -1,0 +1,9 @@
+node:
+  version: 18
+
+app:
+  name: Clinix Frontend
+  domain: app.clinix.uz
+  port: 3000
+  service_name: clinix-frontend.service
+  home: /mnt/clinix-frontend
