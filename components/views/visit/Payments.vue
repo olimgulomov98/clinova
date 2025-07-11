@@ -47,7 +47,7 @@
               </button>
               <template #dropdown>
                 <el-dropdown-menu class="!p-0">
-                  <el-dropdown-item @click="downloadPrintInvoice(row?.id, row?.code)">
+                  <el-dropdown-item @click="downloadPrintInvoice(row?.id, row?.code)" v-if="row.status !== 'PAID'">
                     <button
                         class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                     >
@@ -55,7 +55,7 @@
                     </button>
                   </el-dropdown-item>
                   <el-dropdown-item>
-                    <button
+                    <button  @click="handleDropClick(`/patients/${route.params.patientId}/payment/${row.id}?tab=invoices`, row.code)"
                         class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                     >
                       {{ t("SUMMARY") }}

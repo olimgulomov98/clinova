@@ -47,6 +47,7 @@ const removeAction = async (url: string) => {
       `/patients/${route.params?.patientId}?tab=profile`,
       `/patients/${route.params?.patientId}?tab=history`,
       `/patients/${route.params?.patientId}?tab=documents`,
+      `/patients/${route.params?.patientId}?tab=invoices`,
     ].includes(route.fullPath + "")
   ) {
     router.push("/patients");
