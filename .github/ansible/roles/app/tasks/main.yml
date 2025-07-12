@@ -78,13 +78,18 @@
 - name: Deploy application
   tags: [never, deploy]
   block:
-    - name: "Copy application jar of {{ app.name }}"
+    - name: "Copy build archive of {{ app.name }}"
       ansible.builtin.copy:
         src: "../../build.tar.gz"
-        dest: "{{ app.home }}"
+        dest: /tmp/build.tar.gz
         owner: root
         group: root
         mode: '0644'
+    
+    - name: "Unzip archive to root path"
+      ansible.builtin.unarchive:
+        src: /tmp/build.tar.gz
+        dest: {{ app.home }}
 
     - name: "Restart the service of {{ app.name }}"
       ansible.builtin.systemd:

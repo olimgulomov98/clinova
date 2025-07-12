@@ -6,16 +6,16 @@ server {
     location / {
       try_files $uri $uri/ =404;
       autoindex off;
+
+      limit_except GET HEAD {
+        deny all;
+      }
     }
 
     location ~ /\. {
       deny all;
       access_log off;
       log_not_found off;
-    }
-
-    limit_except GET HEAD {
-        deny all;
     }
 
     add_header X-Content-Type-Options "nosniff";

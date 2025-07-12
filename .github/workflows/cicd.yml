@@ -57,11 +57,12 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.ID_RSA }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
       - name: Download the jar file
         uses: actions/download-artifact@v4
         with:
           name: build.tar.gz
-          path: build.tar.gz
+          path: .
 
       - name: Run Ansible playbook
         run: "ansible-playbook .github/ansible/site.yml -i .github/ansible/env/${{ github.ref_name }}/hosts -t deploy"
