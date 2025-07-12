@@ -27,7 +27,7 @@
   block:
     - name: "Copy application jar of {{ app.name }}"
       ansible.builtin.copy:
-        src: "./.output"
+        src: "../../.output"
         dest: "{{ app.home }}"
         owner: root
         group: root
