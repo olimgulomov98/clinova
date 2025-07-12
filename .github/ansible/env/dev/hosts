@@ -4,6 +4,6 @@ app ansible_host=89.116.23.180
 [infra_hosts]
 infra ansible_host=89.116.23.180
 
-[prod:children]
+[dev:children]
 app_hosts
 infra_hosts
