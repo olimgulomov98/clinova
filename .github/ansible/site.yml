@@ -3,6 +3,8 @@
   hosts: infra_hosts
   become: true
   roles:
+    - nginx
+    - letsencrypt
     - nodejs
 
 - name: Deploying application to server

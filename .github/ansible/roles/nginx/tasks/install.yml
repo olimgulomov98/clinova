@@ -1,0 +1,17 @@
+---
+- name: Install nginx in CentOS
+  yum:
+    name: nginx
+    state: latest
+  when: ansible_distribution in ['CentOS', 'Amazon']
+
+- name: Install nginx in Ubuntu
+  apt:
+    name: nginx
+    state: latest
+  when: ansible_distribution in ['Ubuntu', 'Debian']
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted

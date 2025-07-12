@@ -1,0 +1,23 @@
+---
+- name: Check if Letsencrypt is installed at /usr/bin/letsencrypt
+  ansible.builtin.stat:
+    path: /usr/bin/letsencrypt
+  register: letsencrypt_installed
+
+- name: Include installation of Letsencrypt if not installed
+  ansible.builtin.include_tasks:
+    file: install.yml
+  when: not letsencrypt_installed.stat.exists
+
+- name: "Create letsencrypt directory: /var/www/letsencrypt if it doesn't exist"
+  ansible.builtin.file:
+    path: /var/www/letsencrypt
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Generate dhparams if not present
+  ansible.builtin.command: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+  args:
+    creates: /etc/nginx/dhparams.pem

@@ -1,8 +1,12 @@
+admin_email: aknbdev@gmail.com
+
 node:
   version: 18
 
 app:
-  name: Clinix
-  domain: app-dev.clinix.uz
+  name: Clinix Frontend
+  host: clinix-frontend-dev
   port: 3000
+  domain: app-dev.clinix.uz
+  service_name: clinix-frontend.service
   home: /mnt/clinix-frontend-dev

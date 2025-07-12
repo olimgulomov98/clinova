@@ -1,0 +1,48 @@
+---
+- name: Check if Nginx is installed
+  ansible.builtin.command: which nginx
+  register: nginx_installed
+  ignore_errors: true
+  failed_when: nginx_installed.rc != 0 and nginx_installed.rc != 1
+  changed_when: nginx_installed.rc = 1
+
+- name: Include installation of nginx if not installed
+  ansible.builtin.include_tasks:
+    file: install.yml
+  when: nginx_installed.rc != 0
+
+- name: Create sites-available directory
+  ansible.builtin.file:
+    path: /etc/nginx/sites-available
+    state: directory
+    mode: '0755'
+
+- name: Create sites-enabled directory
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled
+    state: directory
+    mode: '0755'
+
+- name: Add sites-enabled to nginx.conf
+  ansible.builtin.lineinfile:
+    path: /etc/nginx/nginx.conf
+    regexp: '^(\s*)include /etc/nginx/sites-enabled/\*;'
+    line: '    include /etc/nginx/sites-enabled/*;'
+    state: present
+
+- name: Create a default site configuration in sites-available
+  ansible.builtin.copy:
+    dest: /etc/nginx/sites-available/default
+    src: http.j2
+    mode: '0644'
+
+- name: Enable default site by creating symlink in sites-enabled
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/default
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+
+- name: Reload NGINX to apply changes
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded

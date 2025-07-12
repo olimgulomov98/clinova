@@ -1,0 +1,12 @@
+---
+- name: Install Letsencrypt in Ubuntu
+  ansible.builtin.apt:
+    name: letsencrypt
+    state: present
+  when: ansible_distribution in ['Debian', 'Ubuntu']
+
+- name: Install Letsencrypt in CentOS
+  ansible.builtin.yum:
+    name: letsencrypt
+    state: present
+  when: ansible_distribution in ['CentOS', 'Amazon']

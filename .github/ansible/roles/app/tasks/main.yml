@@ -22,12 +22,65 @@
     enabled: true
     daemon_reload: true
 
+- name: "Copy http nginx redirect configuration for domain: {{ app.domain }}"
+  ansible.builtin.template:
+    dest: "/etc/nginx/sites-available/{{ app.domain }}"
+    src: http.j2
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Enable http nginx redirect configuration by creating symlink in sites-enabled
+  ansible.builtin.file:
+    dest: "/etc/nginx/sites-enabled/{{ app.domain }}"
+    src: "/etc/nginx/sites-available/{{ app.domain }}"
+    state: link
+
+- name: Reload nginx to apply changes
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+
+- name: "Create letsencrypt certificate for domain: {{ app.domain }}"
+  ansible.builtin.command: "certbot certonly -n --webroot -w /var/www/letsencrypt -m {{ admin_email }} --agree-tos -d {{ app.domain }}"
+  args:
+    creates: "/etc/letsencrypt/live/{{ app.domain }}"
+
+- name: "Add letsencrypt cronjob for cert renewal for {{ app.domain }}"
+  ansible.builtin.cron:
+    name: "{{ app.host }}_renewal"
+    job: "certbot certonly -n --webroot -w /var/www/letsencrypt -m {{ admin_email }} --agree-tos -d {{ app.domain }}"
+    minute: "0"
+    hour: "0"
+    day: "1"
+    month: "*/2"
+    weekday: "*"
+
+- name: "Copy https nginx configuration for domain: {{ app.domain }}"
+  ansible.builtin.template:
+    dest: "/etc/nginx/sites-available/{{ app.domain }}-ssl"
+    src: https.j2
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Enable https nginx configuration by creating symlink in sites-enabled
+  ansible.builtin.file:
+    dest: "/etc/nginx/sites-enabled/{{ pp.domain }}-ssl"
+    src: "/etc/nginx/sites-available/{{ app.domain }}-ssl"
+    state: link
+
+- name: Reload nginx to apply changes
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+
 - name: Deploy application
   tags: [never, deploy]
   block:
     - name: "Copy application jar of {{ app.name }}"
       ansible.builtin.copy:
-        src: "../../.output"
+        src: "../../build.tar.gz"
         dest: "{{ app.home }}"
         owner: root
         group: root

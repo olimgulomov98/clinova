@@ -8,23 +8,44 @@ on:
         - '.github/ansible/**'
 
 jobs:
-  cicd:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+
       - name: Install required nodejs dependencies
         run: npm ci --legacy-peer-deps
+
       - name: Build application code
         run: npm run build
+
+      - name: Archive build
+        run: tar -czf build.tar.gz -C .output .
+      
+      - name: Upload archived build file
+        uses: actions/upload-artifact@v4
+        with:
+          name: build.tar.gz
+          path: build.tar.gz
+          retention-days: 7
+
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           cache: pip
           cache-dependency-path: .github/ansible/ansible-lint-requirements.txt
           python-version: "3.11"
+
       - name: Install ansible from pip
         shell: bash
         run: |
@@ -36,6 +57,11 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.ID_RSA }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+      - name: Download the jar file
+        uses: actions/download-artifact@v4
+        with:
+          name: build.tar.gz
+          path: build.tar.gz
 
       - name: Run Ansible playbook
         run: "ansible-playbook .github/ansible/site.yml -i .github/ansible/env/${{ github.ref_name }}/hosts -t deploy"
