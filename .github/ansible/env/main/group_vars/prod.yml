@@ -6,7 +6,7 @@ node:
 app:
   name: Clinix Frontend
   host: clinix-frontend
-  port: 3000
+  port: 3004
   domain: app.clinix.uz
   service_name: clinix-frontend.service
   home: /mnt/clinix-frontend

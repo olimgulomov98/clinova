@@ -85,11 +85,11 @@
         owner: root
         group: root
         mode: '0644'
-    
+
     - name: "Unzip archive to root path"
       ansible.builtin.unarchive:
         src: /tmp/build.tar.gz
-        dest: {{ app.home }}
+        dest: "{{ app.home }}"
 
     - name: "Restart the service of {{ app.name }}"
       ansible.builtin.systemd:
