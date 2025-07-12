@@ -4,6 +4,7 @@ After=syslog.target
 
 [Service]
 Type=simple
+Environment=PORT={{ app.port }}
 WorkingDirectory={{ app.home }}
 ExecStart=node .output/server/index.mjs
 
