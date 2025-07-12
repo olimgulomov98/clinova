@@ -16,7 +16,15 @@
         executable: /bin/bash
 
     - name: "Install required nodejs version: {{ node.version }}"
-      ansible.builtin.command: "nvm install {{ node.version }}"
+      ansible.builtin.shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm install {{ node.version }}
+      args:
+        executable: /bin/bash
 
     - name: Use required nodejs version
-      ansible.builtin.command: "nvm use {{ node.version }}"
+      ansible.builtin.shell: | 
+        nvm use {{ node.version }}
+      args:
+        executable: /bin/bash
