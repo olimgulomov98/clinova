@@ -90,6 +90,7 @@
       ansible.builtin.unarchive:
         src: /tmp/build.tar.gz
         dest: "{{ app.home }}"
+        remote_src: true
 
     - name: "Restart the service of {{ app.name }}"
       ansible.builtin.systemd:
