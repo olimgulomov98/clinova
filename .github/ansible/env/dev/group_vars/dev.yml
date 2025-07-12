@@ -8,5 +8,5 @@ app:
   host: clinix-frontend-dev
   port: 3006
   domain: app-dev.clinix.uz
-  service_name: clinix-frontend.service
+  service_name: clinix-frontend-dev.service
   home: /mnt/clinix-frontend-dev
