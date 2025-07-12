@@ -7,7 +7,7 @@
   changed_when: false
 
 - name: Install nodejs version manager if doesn't exist
-  when: is_nvm_installed.rc != 0 and not
+  when: is_nvm_installed.rc != 0
   block:
     - name: Install NVM (Node Version Manager)
       ansible.builtin.shell: |
