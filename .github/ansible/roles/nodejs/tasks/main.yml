@@ -24,7 +24,9 @@
         executable: /bin/bash
 
     - name: Use required nodejs version
-      ansible.builtin.shell: | 
+      ansible.builtin.shell: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         nvm use {{ node.version }}
       args:
         executable: /bin/bash
