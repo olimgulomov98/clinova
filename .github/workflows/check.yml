@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         if: env.setup_python == 'true'
         uses: actions/setup-python@v5
@@ -24,11 +25,13 @@ jobs:
           cache: pip
           cache-dependency-path: .github/ansible/ansible-lint-requirements.txt
           python-version: "3.11"
+
       - name: Install ansible and ansible-lint from pip
         shell: bash
         run: |
           pip install ansible ansible-lint
           ansible-lint --version
+
       - name: Run ansible-lint
         shell: bash
         run: ansible-lint -v -p .github/ansible/**/*
