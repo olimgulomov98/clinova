@@ -2,22 +2,19 @@
   <VBlockCard>
     <div class="flex justify-center items-center mb-4 relative">
       <div class="flex flex-col">
-        <VBlockTitle>{{ t('PATIENT_OVERVIEW') }}</VBlockTitle>
-        <p class="text-[10px] text-gray-20">{{ t('BY_DEPARTMENTS') }}</p>
-      </div>
-      <div class="absolute right-0 bg-gray-100 p-1 rounded-lg">
-        <button
-            v-for="(btn, index) in options"
-            :key="index"
-            class="px-3 py-1 rounded-lg text-sm"
-            :class="{ '!bg-[var(--color-blue-dark)] text-white': periodType === btn.value }"
-            @click="changePeriod(btn.value)"
-        >
-          {{ t(btn.value) }}
-        </button>
+        <VBlockTitle>{{ t("PATIENT_OVERVIEW") }}</VBlockTitle>
+        <p class="text-[10px] text-gray-20">{{ t("BY_DEPARTMENTS") }}</p>
       </div>
     </div>
-    <VPieChart :key="chartKey" :series="series" type="donut" :colors="colors" :labels="labels"/>
+    <VPieChart
+      :key="chartKey"
+      v-model="periodType"
+      @change-period="changePeriod"
+      :series="series"
+      type="donut"
+      :colors="colors"
+      :labels="labels"
+    />
     <div class="flex flex-col gap-3 sm:gap-[14px]">
       <div class="flex justify-between items-center" v-for="(chart, index) in chartData">
         <div class="flex items-center gap-1">
@@ -31,58 +28,60 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import { ref } from "vue";
 
-const {t} = useI18n();
+const { t } = useI18n();
 const colors = ["#233955", "#A2F2EE", "#DFF8F9", "#E6E6E7"];
-const chartData = computed(() => report_department.value?.top?.map((item) => {
+const chartData = computed(() => {
+  const main =
+    report_department.value?.top?.map((item) => {
       return {
         label: item.name,
-        seria: item.percentage
-      }
-    }
-))
-const series = computed(() => report_department.value?.top?.map((item) => item.count));
-const labels = computed(() => report_department.value?.top?.map((item) => item.name));
-const {$axios} = useNuxtApp();
+        seria: item.percentage,
+      };
+    }) || [];
+  const others = {
+    label: t("OTHER_DEPARTMENTS"),
+    seria: report_department.value?.others?.percentage || 0,
+  };
+  return [...main, others] || [];
+});
+const series = computed(() => {
+  const main = report_department.value?.top?.map((item) => item.count) || [];
+  const others = report_department.value?.others?.count || 0;
+  return [...main, others]
+});
+const labels = computed(() => {
+  const main = report_department.value?.top?.map((item) => item.name) || [];
+  const others = {
+    name: t("OTHER_DEPARTMENTS"),
+  };
+  return [...main, others];
+});
+const { $axios } = useNuxtApp();
 const report_department = ref({});
 const loading = ref(false);
-const periodType = ref('WEEK');
+const periodType = ref("WEEK");
 const chartKey = ref(0);
-const categories = computed(() => report_department.value?.breakdown?.map(item => item.label + ''));
-
-const options = computed(() => [
-  {
-    label: t('WEEK'),
-    value: 'WEEK',
-  },
-  {
-    label: t('MONTH'),
-    value: 'MONTH',
-  },
-  {
-    label: t('YEAR'),
-    value: 'YEAR'
-  }
-])
+const categories = computed(() => report_department.value?.breakdown?.map((item) => item.label + ""));
 
 const changePeriod = (type) => {
   periodType.value = type;
-  getReportPayment()
-}
+  getReportPayment();
+};
 const getReportPayment = async () => {
   loading.value = true;
   $axios
-      .get("/api/report/department", {params: {periodType: periodType.value}})
-      .then((res) => {
-        report_department.value = res?.data?.payload || {};
-        chartKey.value++
-      })
-      .finally(() => {
-        loading.value = false;
-      });
+    .get("/api/report/department", { params: { periodType: periodType.value } })
+    .then((res) => {
+      report_department.value = res?.data?.payload || {};
+      chartKey.value++;
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 onMounted(() => {
   getReportPayment();
-})
+});
 </script>

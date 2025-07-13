@@ -9,8 +9,9 @@
     <div class="flex justify-between items-center mb-[6px] h-6">
       <h5 class="font-semibold text-[22px] text-black">{{ count }}</h5>
       <p
+        v-if="percentage !== 0"
         class="py-[1px] px-1 rounded-md flex gap-[2px] items-center text-[10px] text-black leading-3"
-        :class="down ? 'bg-red-20' : 'bg-blue-light'"
+        :class="down ? '!bg-[var(--color-red-20)]' : 'bg-[#D6EBF8]'"
       >
         <icon-trend-up />
         {{ down ? "-" : "+" }}{{ percentage }}%
