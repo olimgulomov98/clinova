@@ -3,6 +3,13 @@
 import ru from "element-plus/dist/locale/ru.min.mjs";
 
 export default defineNuxtConfig({
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
+      ]
+    }
+  },
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   modules: [

@@ -240,5 +240,13 @@
   "THIS_MONTH": "Bu oyda ()",
   "REVENUE": "Daromad",
   "BY_SERVICES": "Xizmatlar bo‘yicha",
-  "BY_DEPARTMENTS": "Bo‘limlar bo‘yicha"
+  "BY_DEPARTMENTS": "Bo‘limlar bo‘yicha",
+  "OTHER_SERVICES": "Boshqa xizmatlar",
+  "OTHER_DEPARTMENTS": "Boshqa bo‘limlar",
+  "INVOICES_CREATED_TODAY": "Bugun (count) ta hisob-faktura yaratildi",
+  "NEW_PATIENTS_VISITED_TODAY": "Bugun (count) ta yangi bemor tashrif buyurdi",
+  "APPOINTMENTS_FOR_TODAY": "Bugun (count) ta uchrashuv belgilangan",
+  "MONTHLY_INVOICES": "Oylik hisob-fakturalar",
+  "MONTHLY_VISITS": "Oylik tashriflar",
+  "MONTHLY_APPOINTMENTS": "Oylik uchrashuvlar"
 }

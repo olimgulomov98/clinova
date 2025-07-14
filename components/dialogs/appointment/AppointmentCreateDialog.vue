@@ -29,6 +29,9 @@
               />
             </el-form-item>
           </div>
+          <el-form-item v-if="appointmentId" :label="t('PATIENT_NAME')" prop="patientName">
+            <el-input :model-value="form.patientName" class="form_input" :placeholder="t('ENTER_PATIENT_NAME')" readonly />
+          </el-form-item>
           <el-form-item :label="t('DATE')" prop="time">
             <v-date-picker
               type="datetime"

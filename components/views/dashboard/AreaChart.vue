@@ -27,7 +27,7 @@ const report_payment = ref({});
 const loading = ref(false);
 const periodType = ref('WEEK');
 const chartKey = ref(0);
-const categories = computed(() => report_payment.value?.breakdown?.map(item => item.label + ''));
+const categories = computed(() => report_payment.value?.breakdown?.map(item => formatAutoDate(item.label) + ''));
 const series = computed(() => {
   const breakdown = report_payment.value?.breakdown;
   return [

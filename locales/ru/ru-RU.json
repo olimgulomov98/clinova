@@ -240,5 +240,13 @@
   "THIS_MONTH": "() в этом месяце",
   "REVENUE": "Доход",
   "BY_SERVICES": "По услугам",
-  "BY_DEPARTMENTS": "По отделениям"
+  "BY_DEPARTMENTS": "По отделениям",
+  "OTHER_SERVICES": "Другие услуги",
+  "OTHER_DEPARTMENTS": "Другие отделы",
+  "INVOICES_CREATED_TODAY": "Сегодня создано (count) счетов-фактур",
+  "NEW_PATIENTS_VISITED_TODAY": "Сегодня (count) новых пациентов посетили",
+  "APPOINTMENTS_FOR_TODAY": "На сегодня назначено (count) приёмов",
+  "MONTHLY_INVOICES": "Ежемесячные счета",
+  "MONTHLY_VISITS": "Ежемесячные посещения",
+  "MONTHLY_APPOINTMENTS": "Ежемесячные приёмы"
 }

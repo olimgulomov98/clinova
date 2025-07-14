@@ -86,6 +86,19 @@
         group: root
         mode: '0644'
 
+    - name: Remove the entire home directory
+      ansible.builtin.file:
+        path: "{{ app.home }}"
+        state: absent
+
+    - name: Recreate the home directory
+      ansible.builtin.file:
+        path: "{{ app.home }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
     - name: "Unzip archive to root path"
       ansible.builtin.unarchive:
         src: /tmp/build.tar.gz

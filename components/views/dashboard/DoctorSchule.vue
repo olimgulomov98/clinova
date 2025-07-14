@@ -5,19 +5,8 @@
         <VBlockTitle>{{ t('PATIENT_OVERVIEW') }}</VBlockTitle>
         <p class="text-[10px] text-gray-20">{{ t('BY_SERVICES') }}</p>
       </div>
-      <div class="absolute right-0 bg-gray-100 p-1 rounded-lg">
-        <button
-            v-for="(btn, index) in options"
-            :key="index"
-            class="px-3 py-1 rounded-lg text-sm"
-            :class="{ '!bg-[var(--color-blue-dark)] text-white': periodType === btn.value }"
-            @click="changePeriod(btn.value)"
-        >
-          {{ t(btn.value) }}
-        </button>
-      </div>
     </div>
-    <VPieChart :key="chartKey" :series="series" type="donut" :colors="colors" :labels="labels"/>
+    <VPieChart :key="chartKey" v-model="periodType" @change-period="changePeriod" :series="series" type="donut" :colors="colors" :labels="labels"/>
     <div class="flex flex-col gap-3 sm:gap-[14px]">
       <div class="flex justify-between items-center" v-for="(chart, index) in chartData">
         <div class="flex items-center gap-1">
@@ -35,36 +24,35 @@ import {ref} from "vue";
 
 const {t} = useI18n();
 const colors = ["#233955", "#A2F2EE", "#DFF8F9", "#E6E6E7"];
-const chartData = computed(() => report_department.value?.top?.map((item) => {
-      return {
-        label: item.name,
-        seria: item.percentage.toFixed(2)
-      }
-    }
-))
-const series = computed(() => report_department.value?.top?.map((item) => item.count));
-const labels = computed(() => report_department.value?.top?.map((item) => item.name));
+const chartData = computed(() => {
+  const main = report_department.value?.top?.map((item) => {
+    return {
+      label: item.name,
+      seria: item.percentage?.toFixed(0) || 0,
+    };
+  }) || [];
+  const others = {
+    label: t("OTHER_SERVICES"),
+    seria: report_department.value?.others?.percentage?.toFixed(0) || 0,
+  };
+  return [...main, others] || [];
+})
+const series = computed(() => {
+  const main = report_department.value?.top?.map((item) => item.count) || [];
+  const others = report_department.value?.others?.count || 0;
+  return [...main, others];
+});
+const labels = computed(() => {
+  const main = report_department.value?.top?.map((item) => item.name) || [];
+  const others = t("OTHER_SERVICES");
+  return [...main, others];
+});
 const {$axios} = useNuxtApp();
 const report_department = ref({});
 const loading = ref(false);
 const periodType = ref('WEEK');
 const chartKey = ref(0);
 const categories = computed(() => report_department.value?.breakdown?.map(item => item.label + ''));
-
-const options = computed(() => [
-  {
-    label: t('WEEK'),
-    value: 'WEEK',
-  },
-  {
-    label: t('MONTH'),
-    value: 'MONTH',
-  },
-  {
-    label: t('YEAR'),
-    value: 'YEAR'
-  }
-])
 
 const changePeriod = (type) => {
   periodType.value = type;

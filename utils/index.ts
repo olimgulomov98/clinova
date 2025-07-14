@@ -139,3 +139,9 @@ export const notificationShower = (type: 'success' | 'warning' | 'info' | 'error
 export function cleanPhoneNumber(phone: string): string {
   return '+'+phone.replace(/\D/g, '');
 }
+
+export function formatAutoDate(value: string): string {
+  return value.length === 10
+    ? dayjs(value).format('D MMM')   // "9 Jul"
+    : dayjs(value + '-01').format('YYYY MMM') // "Jul"
+}
