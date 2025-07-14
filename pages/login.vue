@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="grid-container grid h-[100vh]">
-      <div class="hidden md:flex flex-col justify-center items-center gap-4 bg-gradient">
+      <div class="hidden md:flex flex-col justify-center items-center gap-4 bg-white">
         <h4 class="overflow-hidden transition-all duration-300 font-semibold text-[22px] leading-[26px] w-full">
           <span class="flex gap-2 items-center cursor-pointer justify-center" >
             <icon-logo-cyrcle class="w-[60px] h-[60px]" />
