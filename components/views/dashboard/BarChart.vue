@@ -23,7 +23,7 @@ const loading = ref(false);
 const report_age = ref({});
 const periodType = ref('WEEK');
 const chartKey = ref(0)
-const colors = ["#233955", "#A2F2EE", "#DFF8F9"];
+const colors = ["#233955", "#D6EBF8", "#D6EBF8"];
 const categories = computed(() => report_age.value?.breakdown?.map(item => formatAutoDate(item.label) + ''));
 const options = computed(() => [
   {

@@ -28,12 +28,12 @@ const chartData = computed(() => {
   const main = report_department.value?.top?.map((item) => {
     return {
       label: item.name,
-      seria: item.percentage,
+      seria: item.percentage?.toFixed(0) || 0,
     };
   }) || [];
   const others = {
     label: t("OTHER_SERVICES"),
-    seria: report_department.value?.others?.percentage || 0,
+    seria: report_department.value?.others?.percentage?.toFixed(0) || 0,
   };
   return [...main, others] || [];
 })

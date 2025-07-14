@@ -3,7 +3,7 @@
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
       <ViewsDashboardStatisticCard
           v-loading="count_loading"
-          :title="t('TOTAL_INVOICES')"
+          :title="t('MONTHLY_INVOICES')"
           :count="report_count?.invoice?.thisMonth || 0"
           :percentage="report_count?.invoice?.change"
           icon="users"
@@ -12,7 +12,7 @@
       />
       <ViewsDashboardStatisticCard
           v-loading="count_loading"
-          :title="t('TOTAL_PATIENTS')"
+          :title="t('MONTHLY_VISITS')"
           :count="report_count?.visit?.thisMonth || 0"
           :percentage="report_count?.visit?.change"
           icon="user-circle"
@@ -21,7 +21,7 @@
       />
       <ViewsDashboardStatisticCard
           v-loading="count_loading "
-          :title="t('APPOINTMENTS')"
+          :title="t('MONTHLY_APPOINTMENTS')"
           :count="report_count?.appointment?.thisMonth || 0"
           :percentage="report_count?.appointment?.change"
           icon="calendar-check"
