@@ -5,7 +5,7 @@
       <div class="dropdown">
         <select v-model="modelValue" @change="emit('change-period', modelValue)">
           <option v-for="option in options" :key="option.value" :value="option.value">
-            <span class="!flex !min-w-[200px] !bg-[red] !px-3">{{ option.label }}</span>
+          {{option.label}}
           </option>
         </select>
       </div>

@@ -31,7 +31,7 @@
 import { ref } from "vue";
 
 const { t } = useI18n();
-const colors = ["#233955", "#A2F2EE", "#DFF8F9", "#E6E6E7"];
+const colors = ["#233955", "#A2F2EE", "#D6EBF8", "#E6E6E7"];
 const chartData = computed(() => {
   const main =
     report_department.value?.top?.map((item) => {

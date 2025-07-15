@@ -16,13 +16,14 @@ const props = withDefaults(
     }>(),
     {
       categories: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-      colors: ["#233955", "#A2F2EE"],
+      colors: ["#233955", "#D6EBF8"],
       type: "line",
       legend: true
     }
 );
 
 const chartOptions = computed(() => {
+
   return {
     chart: {
       toolbar: {show: false},
