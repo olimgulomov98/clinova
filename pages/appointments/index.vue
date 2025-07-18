@@ -91,13 +91,6 @@
                 <icon-dots />
               </button>
               <template #dropdown>
-                <el-dropdown-item @click="editStatusHandle(row)">
-                  <button
-                    class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
-                  >
-                    {{ t("STATUS_CHANGE") }}
-                  </button>
-                </el-dropdown-item>
                 <el-dropdown-menu class="!p-0">
                   <el-dropdown-item @click="editHandle(row)">
                     <button
@@ -145,14 +138,28 @@
         />
         <el-table-column prop="status" :label="t('STATUS')" sortable>
           <template #default="{ row }">
-            <div v-if="row.status">
-              <div
-                :style="`background:${getStatusTheme(row.status)}`"
-                class="status-btn"
-              >
-                {{ t(row.status) }}
-              </div>
-            </div>
+            <el-select
+              v-model="row.status"
+              @change="(val) => updateStatus(row.id, val)"
+              size="small"
+              placeholder="Select"
+              class="custom-status-select"
+              :style="{
+                backgroundColor: getStatusTheme(row.status),
+                border: 'none',
+                boxShadow: 'none',
+                borderRadius: '4px',
+                color: '#fff',
+                fontWeight: 'bold',
+              }"
+            >
+              <el-option
+                v-for="status in ['CONFIRMED', 'CANCELLED']"
+                :key="status"
+                :label="t(status)"
+                :value="status"
+              />
+            </el-select>
           </template>
         </el-table-column>
       </template>
@@ -360,11 +367,11 @@ const onChangeTabStatus = (tab: string) => {
 const getStatusTheme = (status: string) => {
   switch (status) {
     case "CONFIRMED":
-      return "#2B95D6";
+      return "#3498db";
     case "PENDING":
-      return "#FFE1E1";
+      return "#f1c40f";
     case "CANCELLED":
-      return "#C3C4C4";
+      return "#e74c3c";
   }
 };
 
@@ -388,6 +395,25 @@ const getItemLengthByStatus = async () => {
 const editStatusHandle = (argAppointment: any) => {
   isAppointmentStatusVisible.value = true;
   appointment.value = argAppointment;
+};
+
+const updateStatus = async (id: number, status: string) => {
+  try {
+    await (<Axios>$axios).post(
+      `/api/appointment/confirm/${id}`,
+      {},
+      {
+        params: {
+          id,
+          confirm: status === "CONFIRMED",
+        },
+      }
+    );
+    notificationShower("success", t("STATUS_UPDATE_SUCCESS"));
+    getData(); // jadvalni yangilash
+  } catch (e) {
+    notificationShower("error", t("STATUS_UPDATE_FAILED"));
+  }
 };
 
 // hooks
@@ -475,5 +501,12 @@ onMounted(async () => {
   font-weight: 400;
   border-radius: 4px;
   width: fit-content;
+}
+
+:deep(.el-select__wrapper) {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-align: center;
 }
 </style>
