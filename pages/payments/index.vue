@@ -4,11 +4,11 @@
       <div class="box-page">
         <div class="total-page-card">
           <div class="total-card-logo">
-            <icon-receipt/>
+            <icon-receipt />
           </div>
           <div class="total-summa">
             <div class="label">
-              {{ t('TOTAL_INVOICES') }}
+              {{ t("TOTAL_INVOICES") }}
             </div>
             <div class="cost">
               {{ getFormatAmount(statistics?.total) }}
@@ -17,11 +17,11 @@
         </div>
         <div class="total-page-card">
           <div class="total-card-logo">
-            <icon-seal-check/>
+            <icon-seal-check />
           </div>
           <div class="total-summa">
             <div class="label">
-              {{ t('PAID_INVOICE') }}
+              {{ t("PAID_INVOICE") }}
             </div>
             <div class="cost">
               {{ getFormatAmount(statistics?.paid) }}
@@ -30,11 +30,11 @@
         </div>
         <div class="total-page-card">
           <div class="total-card-logo">
-            <icon-circle-dashed/>
+            <icon-circle-dashed />
           </div>
           <div class="total-summa">
             <div class="label">
-              {{ t('PENDING_INVOICE') }}
+              {{ t("PENDING_INVOICE") }}
             </div>
             <div class="cost">
               {{ getFormatAmount(statistics?.pending) }}
@@ -43,11 +43,11 @@
         </div>
         <div class="total-page-card">
           <div class="total-card-logo">
-            <icon-circle-dashed/>
+            <icon-circle-dashed />
           </div>
           <div class="total-summa">
             <div class="label">
-              {{ t('PARTIALLY_PAID') }}
+              {{ t("PARTIALLY_PAID") }}
             </div>
             <div class="cost">
               {{ getFormatAmount(statistics?.partialPaid) }}
@@ -56,103 +56,112 @@
         </div>
       </div>
       <VTable
-          :filters="filters"
-          :table-data="tableData?.list"
-          :loading="isLoading"
-          filter-right
-          search-left-position
-          :search-placeholder="t('SEARCH_FOR_PATIENT_NAME')"
-          @sort-change="sortChange"
-          @search="search"
+        :filters="filters"
+        :table-data="tableData?.list"
+        :loading="isLoading"
+        filter-right
+        search-left-position
+        :search-placeholder="t('SEARCH_FOR_PATIENT_NAME')"
+        @sort-change="sortChange"
+        @search="search"
       >
         <template #tabs>
           <el-form-item prop="statusId" class="!mb-0">
             <v-select
-                class="filter_select"
-                filterable
-                v-model="filters.status"
-                :options="statusOptions"
-                label-key="name"
-                value-key="id"
-                :placeholder="t('STATUS')"
-                clearable
-                style="width: 100px"
-                :is-filter="true"
+              class="filter_select"
+              filterable
+              v-model="filters.status"
+              :options="statusOptions"
+              label-key="name"
+              value-key="id"
+              :placeholder="t('STATUS')"
+              clearable
+              style="width: 100px"
+              :is-filter="true"
             />
           </el-form-item>
           <el-date-picker
-              v-model="value2"
-              type="daterange"
-              unlink-panels
-              range-separator="To"
-              start-placeholder="Start date"
-              end-placeholder="End date"
-              style="border-radius: 8px; background: #eaf2f8; border: 0; height: 30px; width: 220px"
-              @update:model-value="onChangeDatePicker"
-              class="icon-date-picker"
-              :class="{'date-picker-close': !!value2?.length}"
+            v-model="value2"
+            type="daterange"
+            unlink-panels
+            range-separator="To"
+            start-placeholder="Start date"
+            end-placeholder="End date"
+            style="
+              border-radius: 8px;
+              background: #eaf2f8;
+              border: 0;
+              height: 30px;
+              width: 220px;
+            "
+            @update:model-value="onChangeDatePicker"
+            class="icon-date-picker"
+            :class="{ 'date-picker-close': !!value2?.length }"
           />
         </template>
         <template #columns>
           <el-table-column :label="t('CODE')">
             <template #default="{ row }">
               <div
-                  @click="
-                  handleDropClick(`/payments/${row.id}`, row.code)
-                "
-                  class="link-div"
+                @click="handleDropClick(`/payments/${row.id}`, row.code)"
+                class="link-div"
               >
                 {{ row.code }}
               </div>
             </template>
           </el-table-column>
           <el-table-column
-              prop="visit.patient.name"
-              :label="t('PATIENT')"
-              :formatter="(row) => row.visit?.patient?.name"
+            prop="visit.patient.name"
+            :label="t('PATIENT')"
+            :formatter="(row) => row.visit?.patient?.name"
           />
           <el-table-column
-              prop="creationDate"
-              :label="t('DATE')"
-              :formatter="(row) => getFormatDate(row.creationDate)"
+            prop="creationDate"
+            :label="t('DATE')"
+            :formatter="(row) => getFormatDate(row.creationDate)"
           />
           <el-table-column :label="t('SERVICE')">
             <template #default="{ row }">
               <ul class="flex flex-col flex-wrap gap-2">
                 <li>
-                  <el-tooltip class="box-item" :disabled="row.items?.length < 2" effect="dark" placement="right-start">
+                  <el-tooltip
+                    class="box-item"
+                    :disabled="row.items?.length < 2"
+                    effect="dark"
+                    placement="right-start"
+                  >
                     <template #content>
                       <ul>
-                        <li v-for="(item, index) in row.items || []" :key="index">
+                        <li
+                          v-for="(item, index) in row.items || []"
+                          :key="index"
+                        >
                           <span>{{ item.service?.name }}</span>
                         </li>
                       </ul>
                     </template>
                     <span>
-                    {{ row.items?.[0]?.service?.name || "----" }}
-                  </span>
+                      {{ row.items?.[0]?.service?.name || "----" }}
+                    </span>
                   </el-tooltip>
                 </li>
               </ul>
             </template>
           </el-table-column>
           <el-table-column
-              prop="total"
-              :label="t('TOTAL')"
-              :formatter="row=>getFormatAmount(row.total)"
+            prop="total"
+            :label="t('TOTAL')"
+            :formatter="(row) => getFormatAmount(row.total)"
           />
           <el-table-column
-              prop="dueAmount"
-              :label="t('DUE_AMOUNT')"
-              :formatter="row=>getFormatAmount(row.dueAmount)"
+            prop="dueAmount"
+            :label="t('DUE_AMOUNT')"
+            :formatter="(row) => getFormatAmount(row.dueAmount)"
           />
           <el-table-column prop="status" :label="t('STATUS')">
             <template #default="{ row }">
               <div v-if="row.status">
-                <div
-                    :style="`background:${getStatusTheme(row.status)}`"
-                    class="status-btn"
-                >
+                <div class="status-btn">
                   {{ t(row.status) }}
                 </div>
               </div>
@@ -160,44 +169,49 @@
           </el-table-column>
         </template>
       </VTable>
-      <VPagination v-model="filters" total-page-hide :total-page="tableData?.total" @update-query="updateQuery"/>
+      <VPagination
+        v-model="filters"
+        total-page-hide
+        :total-page="tableData?.total"
+        @update-query="updateQuery"
+      />
     </div>
   </PaymentLayout>
 </template>
 
 <script setup lang="ts">
-import type {Axios} from "axios";
-import {getFormatAmount, getFormatDate,} from "~/utils";
+import type { Axios } from "axios";
+import { getFormatAmount, getFormatDate } from "~/utils";
 import dayjs from "dayjs";
 
 const router = useRouter();
 const route = useRoute();
-const {t} = useI18n();
-const {$axios} = useNuxtApp();
-const useTab = usePaymentTabStore()
+const { t } = useI18n();
+const { $axios } = useNuxtApp();
+const useTab = usePaymentTabStore();
 const isLoading = ref(false);
 const services = ref([]);
 const doctors = ref([]);
 const statistics = ref({
-  "total": 0,
-  "pending": 0,
-  "paid": 0,
-  "partialPaid": 0
-})
+  total: 0,
+  pending: 0,
+  paid: 0,
+  partialPaid: 0,
+});
 const value2 = ref([]);
 const loading = ref(false);
 const statusOptions = [
   {
     id: "NEW",
-    name: t('NEW'),
+    name: t("NEW"),
   },
   {
     id: "PAID",
-    name: t('PAID'),
+    name: t("PAID"),
   },
   {
     id: "PARTIALLY_PAID",
-    name: t('PENDING'),
+    name: t("PENDING"),
   },
 ];
 
@@ -212,21 +226,21 @@ const filters = ref<any>({
   desc: null,
   status: null,
   page: 1,
-  size: 10
+  size: 10,
 });
 
 const tableData = ref<any>([]);
-const {updateQuery, clearQuery} = useQuerySync(filters.value);
+const { updateQuery, clearQuery } = useQuerySync(filters.value);
 
 const getData = async () => {
-  await getStatistics()
+  await getStatistics();
   isLoading.value = true;
   try {
-    const {page, page_size, ...restFilters} = filters.value;
+    const { page, page_size, ...restFilters } = filters.value;
     const payload = {
       ...restFilters,
       page: page - 1,
-      size: page_size || filters.value.size
+      size: page_size || filters.value.size,
     };
 
     const response = await (<Axios>$axios).post("/api/invoice/list", payload);
@@ -247,16 +261,19 @@ const getData = async () => {
 const getStatistics = async () => {
   isLoading.value = true;
   try {
-    const {page, page_size, ...restFilters} = filters.value;
+    const { page, page_size, ...restFilters } = filters.value;
     const payload = {
       ...restFilters,
       page: 1,
-      size: 100000000
+      size: 100000000,
     };
 
-    const response = await (<Axios>$axios).post("/api/invoice/statistics", payload);
+    const response = await (<Axios>$axios).post(
+      "/api/invoice/statistics",
+      payload
+    );
     const data = response?.data?.payload;
-    console.log(data)
+    console.log(data);
     if (data) {
       statistics.value = data;
     } else {
@@ -276,12 +293,12 @@ const sortChange = (field: string, desc: boolean | null) => {
 
 const search = (value: string) => {
   filters.value.searchKey = value;
-}
+};
 
 const onChangeDatePicker = (values: string[]) => {
-  filters.value.startDate = values?.[0] || null
-  filters.value.endDate = values?.[1] || null
-}
+  filters.value.startDate = values?.[0] || null;
+  filters.value.endDate = values?.[1] || null;
+};
 
 const getStatusTheme = (status: string) => {
   switch (status) {
@@ -295,10 +312,10 @@ const getStatusTheme = (status: string) => {
 };
 
 const handleDropClick = (url: string, code?: string) => {
-  if (code) useTab.setUrl({name: code, url: url});
+  if (code) useTab.setUrl({ name: code, url: url });
   router.push({
     path: url,
-    query: {...route.query},
+    query: { ...route.query },
   });
 };
 // hooks
@@ -310,8 +327,6 @@ watch(filters.value, async () => {
 onMounted(async () => {
   await getData();
 });
-
-
 </script>
 
 <style scoped lang="scss">
@@ -329,7 +344,7 @@ onMounted(async () => {
     display: flex;
     align-items: center;
     border-radius: 16px;
-    background: #F3F8FB;
+    background: #f3f8fb;
     padding: 14px 12px;
     gap: 12px;
 
@@ -350,7 +365,7 @@ onMounted(async () => {
         font-family: "SourceSans3", sans-serif;
         font-weight: 400;
         font-size: 11px;
-        color: #3A4E63;
+        color: #3a4e63;
       }
 
       .cost {
@@ -358,7 +373,7 @@ onMounted(async () => {
         font-weight: 600;
         line-height: 24px;
         font-size: 22px;
-        color: #05080B;
+        color: #05080b;
       }
     }
   }
@@ -372,15 +387,14 @@ onMounted(async () => {
   gap: 10px;
   padding: 2px;
   cursor: pointer;
-  background: #F2F3F4;
-
+  background: #f2f3f4;
 
   .item-group {
     padding: 0 14px;
     font-weight: 400;
     font-size: 12px;
     font-family: "SourceSans3", sans-serif;
-    color: #4B4D4F;
+    color: #4b4d4f;
     border-radius: 8px;
     gap: 0 4px;
   }

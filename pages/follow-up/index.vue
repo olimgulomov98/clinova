@@ -2,120 +2,124 @@
   <div class="page-container !gap-6">
     <div class="flex justify-between flex-wrap items-center">
       <div class="page-title">{{ t("FOLLOW_UP") }}</div>
-        <!-- <el-button type="primary" class="small_btn" @click="isAppointmentCreateVisible = true">
+      <!-- <el-button type="primary" class="small_btn" @click="isAppointmentCreateVisible = true">
           <icon-plus />
           {{ t("ADD_APPOINTMENT") }}
         </el-button> -->
     </div>
     <VTable
-        :filters="filters"
-        :table-data="tableData?.list"
-        :loading="isLoading"
-        @sort-change="sortChange"
-        @search="search"
+      :filters="filters"
+      :table-data="tableData?.list"
+      :loading="isLoading"
+      @sort-change="sortChange"
+      @search="search"
     >
       <template #tabs>
         <el-form-item prop="statusId" class="!mb-0">
           <v-select
-              filterable
-              v-model="filters.status"
-              :options="statusOptions"
-              label-key="label"
-              value-key="id"
-              class="filter_select"
-              :placeholder="t('STATUS')"
-              clearable
-              :is-filter="true"
-              style="width: 120px"
+            filterable
+            v-model="filters.status"
+            :options="statusOptions"
+            label-key="label"
+            value-key="id"
+            class="filter_select"
+            :placeholder="t('STATUS')"
+            clearable
+            :is-filter="true"
+            style="width: 120px"
           />
         </el-form-item>
         <el-form-item prop="serviceId" class="!mb-0">
           <v-select
-              filterable
-              v-model="filters.serviceId"
-              :options="services"
-              label-key="name"
-              value-key="id"
-              class="filter_select"
-              remote
-              :placeholder="t('SERVICE')"
-              :remote-method="remoteServiceMethod"
-              :loading="loading"
-              clearable
-              :is-filter="true"
-              remote-show-suffix
-              style="width: 120px"
+            filterable
+            v-model="filters.serviceId"
+            :options="services"
+            label-key="name"
+            value-key="id"
+            class="filter_select"
+            remote
+            :placeholder="t('SERVICE')"
+            :remote-method="remoteServiceMethod"
+            :loading="loading"
+            clearable
+            :is-filter="true"
+            remote-show-suffix
+            style="width: 120px"
           />
         </el-form-item>
         <el-form-item prop="doctorId" class="!mb-0">
           <v-select
-              filterable
-              v-model="filters.doctorId"
-              :options="doctors"
-              label-key="name"
-              value-key="id"
-              class="filter_select"
-              remote
-              :placeholder="t('DOCTOR')"
-              :remote-method="remoteDoctorMethod"
-              :loading="loading"
-              clearable
-              remote-show-suffix
-              :is-filter="true"
-              style="width: 120px"
+            filterable
+            v-model="filters.doctorId"
+            :options="doctors"
+            label-key="name"
+            value-key="id"
+            class="filter_select"
+            remote
+            :placeholder="t('DOCTOR')"
+            :remote-method="remoteDoctorMethod"
+            :loading="loading"
+            clearable
+            remote-show-suffix
+            :is-filter="true"
+            style="width: 120px"
           />
         </el-form-item>
       </template>
       <template #filter>
-        <VDatePickerByBtnGroups @on-change-date-picker="onChangeDatePicker"/>
+        <VDatePickerByBtnGroups @on-change-date-picker="onChangeDatePicker" />
       </template>
       <template #columns>
         <el-table-column
-            prop="visit.patient.code"
-            :label="t('CODE')"
-            :formatter="(row) => row.visit?.patient?.code"
+          prop="visit.patient.code"
+          :label="t('CODE')"
+          :formatter="(row) => row.visit?.patient?.code"
         />
         <el-table-column
-            prop="visit.patient.name"
-            :label="t('PATIENT_NAME')"
-            :formatter="(row) => row.visit?.patient?.name"
+          prop="visit.patient.name"
+          :label="t('PATIENT_NAME')"
+          :formatter="(row) => row.visit?.patient?.name"
         />
         <el-table-column
-            prop="visit.patient.phone"
-            :label="t('PATIENT_PHONE')"
-            :formatter="(row) => row.visit?.patient?.phone"
+          prop="visit.patient.phone"
+          :label="t('PATIENT_PHONE')"
+          :formatter="(row) => row.visit?.patient?.phone"
         />
         <el-table-column
-            prop="time"
-            :label="t('ASSIGNED_FOLLOW_UP_DATE')"
-            sortable
-            :formatter="(row) => getFormatDate(row?.date)"
-        />
-        <el-table-column prop="service" :label="t('SERVICE')" :formatter="(row) => row.service?.name" />
-        <el-table-column
-            prop="visit.startDate"
-            :label="t('LAST_VISIT_DATE')"
-            sortable
-            :formatter="(row) => getFormatDate(row.visit?.startDate)"
+          prop="time"
+          :label="t('ASSIGNED_FOLLOW_UP_DATE')"
+          sortable
+          :formatter="(row) => getFormatDate(row?.date)"
         />
         <el-table-column
-            prop="createdBy"
-            :label="t('ASSIGNED_BY')"
-            :formatter="(row) => row?.createdBy"
+          prop="service"
+          :label="t('SERVICE')"
+          :formatter="(row) => row.service?.name"
+        />
+        <el-table-column
+          prop="visit.startDate"
+          :label="t('LAST_VISIT_DATE')"
+          sortable
+          :formatter="(row) => getFormatDate(row.visit?.startDate)"
+        />
+        <el-table-column
+          prop="createdBy"
+          :label="t('ASSIGNED_BY')"
+          :formatter="(row) => row?.createdBy"
         />
 
-        <el-table-column prop="status" :label="t('STATUS')" >
+        <el-table-column prop="status" :label="t('STATUS')">
           <template #default="{ row }">
-              <el-dropdown>
-                <button class="p-3 outline-none">
-                    <div
-                        :style="`background:${getStatusTheme(row.status)}`"
-                        class="status-btn"
-                    >
-                      {{ t(row.status) }}
-                    </div>
-                </button>
-                <template #dropdown>
+            <!-- <el-dropdown>
+              <button class="p-3 outline-none">
+                <div
+                  :style="`background:${getStatusTheme(row.status)}`"
+                  class="status-btn"
+                >
+                  {{ t(row.status) }}
+                </div>
+              </button>
+              <template #dropdown>
                   <el-dropdown-item @click="editStatusHandle(row)">
                     <button
                         class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
@@ -124,31 +128,59 @@
                     </button>
                   </el-dropdown-item>
                 </template>
-              </el-dropdown>
+            </el-dropdown> -->
+            <el-select
+              v-model="row.status"
+              @change="(val) => updateStatus(row.id, val)"
+              size="small"
+              placeholder="Select"
+              class="custom-status-select"
+            >
+              <!-- Agar status PENDING bo‘lsa, uni faqat SELECT ichida ko‘rsatish -->
+              <el-option
+                v-if="row.status === 'PENDING'"
+                :label="t('PENDING')"
+                :value="'PENDING'"
+                disabled
+              />
+
+              <!-- Foydalanuvchi tanlay oladigan statuslar -->
+              <el-option
+                v-for="status in ['CONFIRMED', 'CANCELLED']"
+                :key="status"
+                :label="t(status)"
+                :value="status"
+              />
+            </el-select>
           </template>
         </el-table-column>
       </template>
     </VTable>
-    <VPagination v-model="filters" total-page-hide :total-page="tableData?.total" @update-query="updateQuery" />
+    <VPagination
+      v-model="filters"
+      total-page-hide
+      :total-page="tableData?.total"
+      @update-query="updateQuery"
+    />
     <AppointmentCreateDialog
-        v-if="isAppointmentCreateVisible"
-        v-model="isAppointmentCreateVisible"
-        @close="isAppointmentCreateVisible = false"
-        :appointment-id="appointment?.id"
-        @get-data="getData"
+      v-if="isAppointmentCreateVisible"
+      v-model="isAppointmentCreateVisible"
+      @close="isAppointmentCreateVisible = false"
+      :appointment-id="appointment?.id"
+      @get-data="getData"
     />
     <AppointmentShowDialog
-        v-if="isAppointmentShowVisible"
-        v-model="isAppointmentShowVisible"
-        @close="isAppointmentShowVisible = false"
-        :appointment-id="appointment?.id"
+      v-if="isAppointmentShowVisible"
+      v-model="isAppointmentShowVisible"
+      @close="isAppointmentShowVisible = false"
+      :appointment-id="appointment?.id"
     />
-  <FollowUpChangeStatus
-        v-if="isAppointmentStatusVisible"
-        v-model="isAppointmentStatusVisible"
-        @close="isAppointmentStatusVisible = false"
-        :appointment-id="appointment?.id"
-        @get-data="getData"
+    <FollowUpChangeStatus
+      v-if="isAppointmentStatusVisible"
+      v-model="isAppointmentStatusVisible"
+      @close="isAppointmentStatusVisible = false"
+      :appointment-id="appointment?.id"
+      @get-data="getData"
     />
   </div>
 </template>
@@ -240,13 +272,13 @@ const remoteDoctorMethod = debounce((query: string) => {
 const getServices = (queryData?: { searchKey: string }) => {
   loading.value = true;
   (<Axios>$axios)
-      .post("/api/service/list", { ...queryData, size: 500 })
-      .then((res: IBaseResponseModel<IDepartmentListItem[]>) => {
-        services.value = res?.data?.payload?.list || [];
-      })
-      .finally(() => {
-        loading.value = false;
-      });
+    .post("/api/service/list", { ...queryData, size: 500 })
+    .then((res: IBaseResponseModel<IDepartmentListItem[]>) => {
+      services.value = res?.data?.payload?.list || [];
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 const editStatusHandle = (argAppointment: any) => {
@@ -256,7 +288,9 @@ const editStatusHandle = (argAppointment: any) => {
 const getDoctors = async (queryData: { searchKey?: string } = {}) => {
   loading.value = true;
   try {
-    const response = await (<Axios>$axios).post<IBaseResponseModel<IDepartmentListItem[]>>("/api/user/list", {
+    const response = await (<Axios>$axios).post<
+      IBaseResponseModel<IDepartmentListItem[]>
+    >("/api/user/list", {
       ...queryData,
       size: 500,
       role: "DOCTOR",
@@ -265,7 +299,9 @@ const getDoctors = async (queryData: { searchKey?: string } = {}) => {
     const list = response?.data?.payload?.list ?? [];
     doctors.value = list.map((item) => ({
       ...item,
-      name: `${item.firstName ?? ""} ${item.lastName ?? ""} ${item.middleName ?? ""}`.trim(),
+      name: `${item.firstName ?? ""} ${item.lastName ?? ""} ${
+        item.middleName ?? ""
+      }`.trim(),
     }));
   } catch (error) {
     console.error("Failed to load doctors:", error);
@@ -299,22 +335,42 @@ const onChangeDatePicker = (values: string[] | null) => {
   filters.value.startDate = values[0];
   filters.value.endDate = values[1];
 };
+
+const updateStatus = async (id: number, status: string) => {
+  try {
+    await (<Axios>$axios).post(
+      `/api/follow-up/confirm/${id}`,
+      {},
+      {
+        params: {
+          id,
+          confirm: status === "CONFIRMED",
+        },
+      }
+    );
+    notificationShower("success", t("STATUS_UPDATE_SUCCESS"));
+    getData(); // jadvalni yangilash
+  } catch (e) {
+    notificationShower("error", t("STATUS_UPDATE_FAILED"));
+  }
+};
+
 // hooks
 
 watch(filters.value, () => {
   getData();
 });
 watch(
-    () => isAppointmentCreateVisible.value,
-    (val) => {
-      if (!val) appointment.value = undefined;
-    }
+  () => isAppointmentCreateVisible.value,
+  (val) => {
+    if (!val) appointment.value = undefined;
+  }
 );
 watch(
-    () => isAppointmentShowVisible.value,
-    (val) => {
-      if (!val) appointment.value = undefined;
-    }
+  () => isAppointmentShowVisible.value,
+  (val) => {
+    if (!val) appointment.value = undefined;
+  }
 );
 onMounted(() => {
   getData();
@@ -332,14 +388,13 @@ onMounted(() => {
   align-items: end;
 }
 
-.status-btn{
+.status-btn {
   padding: 4px 6px;
   font-size: 11px;
-  color: #05080B;
+  color: #05080b;
   font-family: "SourceSans3", sans-serif;
   font-weight: 400;
   border-radius: 4px;
   width: fit-content;
 }
-
 </style>

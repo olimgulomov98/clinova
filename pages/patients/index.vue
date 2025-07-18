@@ -14,12 +14,16 @@
         search-left-position
       >
         <template #filter>
-          <el-button type="primary" class="small_btn" @click="isPatientCreateVisible = true">
+          <el-button
+            type="primary"
+            class="small_btn"
+            @click="isPatientCreateVisible = true"
+          >
             <icon-plus />
             {{ t("ADD_PATIENT") }}
           </el-button>
         </template>
-        <template #tabs>
+        <!-- <template #tabs>
           <el-form-item prop="statusId" class="!mb-0">
             <v-select
               class="filter_select"
@@ -34,7 +38,7 @@
               :is-filter="true"
             />
           </el-form-item>
-        </template>
+        </template> -->
         <template #columns>
           <el-table-column prop="action" :label="t('ACTION')">
             <template #default="{ row }">
@@ -80,7 +84,7 @@
             :label="t('LAST_VISIT_DATE')"
             :formatter="(row) => getFormatDate(row.lastVisit)"
           />
-          <el-table-column prop="status" :label="t('STATUS')">
+          <!-- <el-table-column prop="status" :label="t('STATUS')">
             <template #default="{ row }">
               <div v-if="row.status">
                 <el-tag :type="getStatusTheme(row.status)" effect="light" round>
@@ -88,10 +92,15 @@
                 </el-tag>
               </div>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </template>
       </VTable>
-      <VPagination v-model="filters" total-page-hide :total-page="tableData?.total" @update-query="updateQuery" />
+      <VPagination
+        v-model="filters"
+        total-page-hide
+        :total-page="tableData?.total"
+        @update-query="updateQuery"
+      />
       <PatientCreateDialog
         v-if="isPatientCreateVisible"
         v-model="isPatientCreateVisible"
@@ -205,7 +214,10 @@ const showHandle = (argPatient: any) => {
   if (url) {
     router.push(url.url);
   } else {
-    useSetUrl({ name: argPatient.code, url: `/patients/${argPatient.id}?tab=profile` });
+    useSetUrl({
+      name: argPatient.code,
+      url: `/patients/${argPatient.id}?tab=profile`,
+    });
     router.push(`/patients/${argPatient.id}?tab=profile`);
   }
 };

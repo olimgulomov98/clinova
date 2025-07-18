@@ -1,8 +1,7 @@
 <template>
   <div class="page-container">
     <div class="flex justify-between flex-wrap items-center">
-      <div class="page-title">{{t('DOCTORS')}}</div>
-
+      <div class="page-title">{{ t("DOCTORS") }}</div>
     </div>
     <div class="bg-[#F3F8FB] -mx-4 p-4 rounded-xl">
       <VTable
@@ -48,7 +47,12 @@
           </el-form-item>
         </template>
         <template #filter>
-          <el-button type="primary" class="small_btn" @click="isDoctorCreateVisible = true">{{t('ADD_DOCTOR')}}</el-button>
+          <el-button
+            type="primary"
+            class="small_btn"
+            @click="isDoctorCreateVisible = true"
+            >{{ t("ADD_DOCTOR") }}</el-button
+          >
         </template>
         <template #columns>
           <el-table-column prop="action" :label="t('ACTION')">
@@ -59,26 +63,26 @@
                 </button>
                 <template #dropdown>
                   <el-dropdown-menu class="!p-0">
-                    <el-dropdown-item @click="editStatusHandle(row)">
+                    <!-- <el-dropdown-item @click="editStatusHandle(row)">
                       <button
                         class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                       >
-                        {{t('STATUS_CHANGE')}}
+                        {{ t("STATUS_CHANGE") }}
                       </button>
-                    </el-dropdown-item>
+                    </el-dropdown-item> -->
                     <el-dropdown-item>
                       <button
                         @click="showHandle(row)"
                         class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                       >
-                        {{t('VIEW')}}
+                        {{ t("VIEW") }}
                       </button>
                     </el-dropdown-item>
                     <el-dropdown-item @click="editHandle(row)">
                       <button
                         class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                       >
-                        {{t('EDIT')}}
+                        {{ t("EDIT") }}
                       </button>
                     </el-dropdown-item>
                     <el-dropdown-item>
@@ -86,7 +90,7 @@
                         @click="deleteAction(row.id)"
                         class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                       >
-                        {{t('DELETE')}}
+                        {{ t("DELETE") }}
                       </button>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -94,31 +98,48 @@
               </el-dropdown>
             </template>
           </el-table-column>
-          <el-table-column prop="code" :label="t('CODE')"  />
+          <el-table-column prop="code" :label="t('CODE')" />
           <el-table-column
             prop="fistName"
             :label="t('FULL_NAME')"
-            :formatter="(row) => `${row?.firstName} ${row?.lastName} ${row.middleName}`"
+            :formatter="
+              (row) => `${row?.firstName} ${row?.lastName} ${row.middleName}`
+            "
           />
-          <el-table-column prop="phone" :label="t('PHONE_NUMBER')"  />
-          <el-table-column prop="department" :label="t('DEPARTMENT')"  :formatter="(row) => row.department?.name" />
-          <el-table-column prop="specialization" :label="t('SPECIALITY')"  />
-          <el-table-column prop="status" :label="t('STATUS')" >
+          <el-table-column prop="phone" :label="t('PHONE_NUMBER')" />
+          <el-table-column
+            prop="department"
+            :label="t('DEPARTMENT')"
+            :formatter="(row) => row.department?.name"
+          />
+          <el-table-column prop="specialization" :label="t('SPECIALITY')" />
+          <el-table-column prop="status" :label="t('STATUS')">
             <template #default="{ row }">
-              <div v-if="row.status">
-                <div
-                    class="status-btn "
-                    :style="`border: 1px solid ${getStatusTheme(row.status)};}`"
-                    :class="row.status ==='AVAILABLE' ? 'bg-[#D6EBF8] text-[#233955]' : 'bg-[#FFF4F4] text-[#FD4245]'"
-                >
-                  {{ t(row.status) }}
-                </div>
-              </div>
+              <el-select
+                v-model="row.status"
+                @change="(val) => updateStatus(row.id, val)"
+                size="small"
+                placeholder="Select"
+                class="custom-status-select"
+              >
+                <el-option
+                  v-for="status in ['AVAILABLE', 'NOT_AVAILABLE']"
+                  :key="status"
+                  :label="t(status)"
+                  :value="status"
+                />
+              </el-select>
             </template>
           </el-table-column>
         </template>
       </VTable>
-      <VPagination class="mt-5" v-model="filters" total-page-hide :total-page="tableData?.total" @update-query="updateQuery" />
+      <VPagination
+        class="mt-5"
+        v-model="filters"
+        total-page-hide
+        :total-page="tableData?.total"
+        @update-query="updateQuery"
+      />
     </div>
     <DoctorCreateDialog
       v-if="isDoctorCreateVisible"
@@ -159,11 +180,11 @@ const departments = ref<IDepartmentListItem[]>([]);
 const loading = ref(false);
 const statusOptions = ref([
   {
-    name: t('AVAILABLE'),
+    name: t("AVAILABLE"),
     id: "AVAILABLE",
   },
   {
-    name: t('NOT_AVAILABLE'),
+    name: t("NOT_AVAILABLE"),
     id: "NOT_AVAILABLE",
   },
 ]);
@@ -245,7 +266,7 @@ const showHandle = (argDoctor: any) => {
 };
 const deleteAction = (id: number) => {
   (<Axios>$axios).delete(`/api/user/${id}`).then((res) => {
-    notificationShower("success", t('DOCTOR_DELETED_SUCCESS'));
+    notificationShower("success", t("DOCTOR_DELETED_SUCCESS"));
     getData();
   });
 };
@@ -258,6 +279,26 @@ const getStatusTheme = (status: string) => {
       return "#FD4245";
   }
 };
+
+const updateStatus = async (id: number, status: string) => {
+  try {
+    await (<Axios>$axios).post(
+      `/api/user/status-change/${id}`,
+      {},
+      {
+        params: {
+          id,
+          available: status === "AVAILABLE",
+        },
+      }
+    );
+    notificationShower("success", t("STATUS_UPDATE_SUCCESS"));
+    getData();
+  } catch (e) {
+    notificationShower("error", t("STATUS_UPDATE_FAILED"));
+  }
+};
+
 // hooks
 
 watch(filters.value, () => {
@@ -296,7 +337,7 @@ onMounted(() => {
   align-items: end;
 }
 
-.status-btn{
+.status-btn {
   font-family: "SourceSans3", sans-serif;
   font-size: 11px;
   font-weight: 400;

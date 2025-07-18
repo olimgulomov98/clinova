@@ -144,15 +144,16 @@
               size="small"
               placeholder="Select"
               class="custom-status-select"
-              :style="{
-                backgroundColor: getStatusTheme(row.status),
-                border: 'none',
-                boxShadow: 'none',
-                borderRadius: '4px',
-                color: '#fff',
-                fontWeight: 'bold',
-              }"
             >
+              <!-- Agar status PENDING bo‘lsa, uni faqat SELECT ichida ko‘rsatish -->
+              <el-option
+                v-if="row.status === 'PENDING'"
+                :label="t('PENDING')"
+                :value="'PENDING'"
+                disabled
+              />
+
+              <!-- Foydalanuvchi tanlay oladigan statuslar -->
               <el-option
                 v-for="status in ['CONFIRMED', 'CANCELLED']"
                 :key="status"
@@ -501,12 +502,5 @@ onMounted(async () => {
   font-weight: 400;
   border-radius: 4px;
   width: fit-content;
-}
-
-:deep(.el-select__wrapper) {
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  text-align: center;
 }
 </style>

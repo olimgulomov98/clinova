@@ -8,60 +8,107 @@
     @update:model-value="emit('update:modelValue', $event)"
     @close="emit('close')"
   >
-    <div class="p-6">
-      <v-select
-        v-model="status"
-        :options="statuses"
-        label-key="label"
-        value-key="value"
-        @change="updateStatus"
-      />
-    </div>
+    <template #header>
+      <div
+        class="p-6 flex justify-between border-b border-solid border-gray-line"
+      >
+        <v-form-title>{{ t("UPDATE_STATUS") }}</v-form-title>
+        <button @click="emit('close')"><icon-x /></button>
+      </div>
+    </template>
+    <el-form
+      ref="formRef"
+      label-position="top"
+      :model="form"
+      :rules="rules"
+      @submit.prevent="submitForm(formRef)"
+    >
+      <div class="p-6">
+        <div class="grid grid-cols-1">
+          <el-form-item :label="t('STATUS')" prop="status" class="!mb-0">
+            <v-select
+              v-model="form.status"
+              :options="statuses"
+              label-key="label"
+              value-key="value"
+            />
+          </el-form-item>
+        </div>
+      </div>
+      <div
+        class="flex justify-end gap-3 w-full p-6 border-t border-solid border-gray-line"
+      >
+        <v-button type="default" size="xlarge" @click="emit('close')">{{
+          t("CANCEL")
+        }}</v-button>
+        <v-button
+          type="primary"
+          size="xlarge"
+          native-type="submit"
+          class="!ml-0"
+          :loading="loading"
+          >{{ t("SAVE") }}</v-button
+        >
+      </div>
+    </el-form>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
+import type { FormInstance } from "element-plus";
 import type { AxiosInstance } from "axios";
-
+import type { IDoctorCreate } from "~/types/doctor/index.type";
 const props = defineProps<{ modelValue: boolean; appointmentId?: number }>();
 const emit = defineEmits(["update:modelValue", "getData", "close"]);
-
 const { $axios } = useNuxtApp();
 const { t } = useI18n();
-
 const statuses = useConstants().APPOINTMENTS_STATUSES?.map((i) => ({
   label: t(i),
   value: i,
 }));
+const rules = {
+  status: [{ required: true, message: "", trigger: "change" }],
+};
+const loading = ref(false);
+const form = reactive<Partial<IDoctorCreate>>({
+  status: "",
+});
+const formRef = ref<FormInstance>();
+const submitForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.validate(async (valid) => {
+    if (!valid) return;
+    createDoctor();
+  });
+};
+async function createDoctor() {
+  loading.value = true;
+  const id = props.appointmentId;
+  const url = `/api/appointment/confirm/${id}`;
+  const method = "post";
+  (<AxiosInstance>$axios)
+    [method](url, {}, { params: { id, confirm: form.status === "CONFIRMED" } })
+    .then((res) => {
+      notificationShower("success", t("STATUS_UPDATE_SUCCESS"));
+      emit("close");
+      emit("getData");
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
 
-const status = ref("");
-
-const updateStatus = async () => {
-  if (!status.value || !props.appointmentId) return;
-  try {
-    await (<AxiosInstance>$axios).post(
-      `/api/appointment/confirm/${props.appointmentId}`,
-      {},
-      {
-        params: {
-          id: props.appointmentId,
-          confirm: status.value === "CONFIRMED",
-        },
-      }
-    );
-    notificationShower("success", t("STATUS_UPDATE_SUCCESS"));
-    emit("getData");
-    emit("close");
-  } catch (e) {
-    notificationShower("error", t("STATUS_UPDATE_FAILED"));
-  }
+const getAppointmentById = async () => {
+  (<AxiosInstance>$axios)
+    .get(`/api/appointment/summary/${props.appointmentId}`)
+    .then((res) => {
+      form.status = res.data.payload.status;
+    });
 };
 
-onMounted(async () => {
-  if (!props.appointmentId) return;
-  const res = await (<AxiosInstance>$axios).get(
-    `/api/appointment/summary/${props.appointmentId}`
-  );
-  status.value = res.data.payload.status;
+onMounted(() => {
+  if (props.appointmentId) getAppointmentById();
 });
 </script>
+
+<style scoped></style>
