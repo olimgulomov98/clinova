@@ -11,12 +11,18 @@
       <div class="visit-create-page-container">
         <div class="grid grid-cols-3 gap-6">
           <el-form-item class="!mb-0" :label="t('PATIENT')" prop="name">
-            <v-input :model-value="patients[0]?.name" disabled>
-
-            </v-input>
+            <v-input :model-value="patients[0]?.name" disabled> </v-input>
           </el-form-item>
-          <el-form-item class="!mb-0" :label="t('CURRENT_DATE')" prop="startDate">
-            <v-date-picker v-model="form.startDate" :disabled="!!visitId" format="DD.MM.YYYY" />
+          <el-form-item
+            class="!mb-0"
+            :label="t('CURRENT_DATE')"
+            prop="startDate"
+          >
+            <v-date-picker
+              v-model="form.startDate"
+              :disabled="!!visitId"
+              format="DD.MM.YYYY"
+            />
           </el-form-item>
           <!-- <el-form-item class="!mb-0" label="Discount" prop="name">
             <v-input v-model.number="form.discount" type="number" />
@@ -57,7 +63,9 @@
               <template #default="scope">
                 <el-form-item
                   :prop="
-                    scope.$index + 1 !== form.items.length || scope.$index == 0 ? `items.${scope.$index}.serviceId` : ''
+                    scope.$index + 1 !== form.items.length || scope.$index == 0
+                      ? `items.${scope.$index}.serviceId`
+                      : ''
                   "
                 >
                   <v-select
@@ -81,7 +89,9 @@
               <template #default="scope">
                 <el-form-item
                   :prop="
-                    scope.$index + 1 !== form.items.length || scope.$index == 0 ? `items.${scope.$index}.doctorId` : ''
+                    scope.$index + 1 !== form.items.length || scope.$index == 0
+                      ? `items.${scope.$index}.doctorId`
+                      : ''
                   "
                 >
                   <v-select
@@ -105,10 +115,18 @@
               <template #default="scope">
                 <el-form-item
                   :prop="
-                    scope.$index + 1 !== form.items.length || scope.$index == 0 ? `items.${scope.$index}.quantity` : ''
+                    scope.$index + 1 !== form.items.length || scope.$index == 0
+                      ? `items.${scope.$index}.quantity`
+                      : ''
                   "
                 >
-                  <v-input v-model.number="scope.row.quantity" :disabled="!!visitId" type="number" />
+                  <v-input
+                    v-model.number="scope.row.quantity"
+                    :disabled="!!visitId"
+                    type="number"
+                    @keypress="handleKeyPress"
+                    @blur="() => normalizeQuantity(scope.$index)"
+                  />
                 </el-form-item>
               </template>
             </el-table-column>
@@ -117,10 +135,16 @@
               <template #default="scope">
                 <el-form-item
                   :prop="
-                    scope.$index + 1 !== form.items.length || scope.$index == 0 ? `items.${scope.$index}.discount` : ''
+                    scope.$index + 1 !== form.items.length || scope.$index == 0
+                      ? `items.${scope.$index}.discount`
+                      : ''
                   "
                 >
-                  <v-input v-model.number="scope.row.discount" :disabled="!!visitId" type="number" />
+                  <v-input
+                    v-model.number="scope.row.discount"
+                    :disabled="!!visitId"
+                    type="number"
+                  />
                 </el-form-item>
               </template>
             </el-table-column>
@@ -158,24 +182,43 @@
         <div class="flex justify-end">
           <div class="max-w-fit w-full">
             <div class="flex justify-between p-[9px] gap-4">
-              <div class="text-sm font-regular text-nowrap">{{ t("SUBTOTAL") }}</div>
-              <div class="text-sm font-regular text-nowrap">{{ getFormatAmount(totalPriceWithoutDiscount) }} so'm</div>
+              <div class="text-sm font-regular text-nowrap">
+                {{ t("SUBTOTAL") }}
+              </div>
+              <div class="text-sm font-regular text-nowrap">
+                {{ getFormatAmount(totalPriceWithoutDiscount) }} so'm
+              </div>
             </div>
-            <div class="flex justify-between p-[9px] border-y-[1px] border-solid border-gray-line gap-4">
-              <div class="text-sm font-regular text-nowrap">{{ t("DISCOUNT") }}</div>
-              <div class="text-sm font-regular text-nowrap">{{ getFormatAmount(discountPrice) }} so'm</div>
+            <div
+              class="flex justify-between p-[9px] border-y-[1px] border-solid border-gray-line gap-4"
+            >
+              <div class="text-sm font-regular text-nowrap">
+                {{ t("DISCOUNT") }}
+              </div>
+              <div class="text-sm font-regular text-nowrap">
+                {{ getFormatAmount(discountPrice) }} so'm
+              </div>
             </div>
             <div class="flex justify-between p-[9px] gap-4">
-              <div class="text-sm font-semibold text-nowrap">{{ t("TOTALS") }}</div>
-              <div class="text-sm font-semibold text-nowrap">{{ getFormatAmount(totalPrice) }} so'm</div>
+              <div class="text-sm font-semibold text-nowrap">
+                {{ t("TOTALS") }}
+              </div>
+              <div class="text-sm font-semibold text-nowrap">
+                {{ getFormatAmount(totalPrice) }} so'm
+              </div>
             </div>
           </div>
         </div>
       </div>
     </el-form>
     <div class="flex justify-end" v-if="!visitId">
-      <button @click="submitForm(formRef)" :class="{ 'pointer-events-none': loading }">
-        <v-button type="primary" size="xlarge" :loading="loading">{{ t("SAVE") }}</v-button>
+      <button
+        @click="submitForm(formRef)"
+        :class="{ 'pointer-events-none': loading }"
+      >
+        <v-button type="primary" size="xlarge" :loading="loading">{{
+          t("SAVE")
+        }}</v-button>
       </button>
     </div>
   </div>
@@ -216,21 +259,31 @@ const rules: any = {
 const totalPrice = computed(() => {
   let total = 0;
   form.items.forEach((elem: any) => {
-    const findService: any = allServices.value.find((service: any) => service.id === elem.serviceId);
+    const findService: any = allServices.value.find(
+      (service: any) => service.id === elem.serviceId
+    );
     if (findService)
-      total += findService.price * elem.quantity - findService.price * elem.quantity * (elem.discount / 100);
+      total +=
+        findService.price * elem.quantity -
+        findService.price * elem.quantity * (elem.discount / 100);
   });
   return total || 0;
 });
+
 const totalPriceWithoutDiscount = computed(() => {
   let total = 0;
   form.items.forEach((elem: any) => {
-    const findService: any = allServices.value.find((service: any) => service.id === elem.serviceId);
+    const findService: any = allServices.value.find(
+      (service: any) => service.id === elem.serviceId
+    );
     if (findService) total += findService.price * elem.quantity;
   });
   return total || 0;
 });
-const discountPrice = computed(() => totalPriceWithoutDiscount.value - totalPrice.value);
+
+const discountPrice = computed(
+  () => totalPriceWithoutDiscount.value - totalPrice.value
+);
 
 const form = reactive({
   startDate: "",
@@ -245,10 +298,12 @@ const form = reactive({
   ],
   // paymentType: "",
 });
+
 itemsValidator();
 const changeDepartment = () => {
   getServices();
 };
+
 const getDepartments = (queryData?: { searchKey: string }) => {
   selectLoading.value = true;
   (<AxiosInstance>$axios)
@@ -260,7 +315,9 @@ const getDepartments = (queryData?: { searchKey: string }) => {
       selectLoading.value = false;
     });
 };
+
 const formRef = ref<FormInstance>();
+
 const submitForm = (formEl: FormInstance | undefined, tur: string) => {
   if (!formEl) return;
   formEl.validate(async (valid) => {
@@ -268,16 +325,58 @@ const submitForm = (formEl: FormInstance | undefined, tur: string) => {
     createVisit();
   });
 };
+
 function itemsValidator() {
   form.items.forEach((_, index) => {
-    rules[`items.${index}.serviceId`] = [{ required: true, message: t("SELECT_SERVICE"), trigger: "change" }];
-    rules[`items.${index}.doctorId`] = [{ required: true, message: t("SELECT_DOCTOR"), trigger: "change" }];
+    rules[`items.${index}.serviceId`] = [
+      { required: true, message: t("SELECT_SERVICE"), trigger: "change" },
+    ];
+    rules[`items.${index}.doctorId`] = [
+      { required: true, message: t("SELECT_DOCTOR"), trigger: "change" },
+    ];
     rules[`items.${index}.quantity`] = [
-      { required: true, type: "number", message: t("ENTER_QUANTITY"), trigger: "blur" },
+      {
+        required: true,
+        validator: (_: any, value: any, callback: any) => {
+          if (value === "" || value === null || value === undefined) {
+            callback(new Error(t("ENTER_QUANTITY")));
+          } else if (!Number.isInteger(value)) {
+            callback(new Error(t("QUANTITY_MUST_BE_INTEGER")));
+          } else if (value <= 0) {
+            callback(new Error(t("QUANTITY_MUST_BE_POSITIVE")));
+          } else {
+            callback();
+          }
+        },
+        trigger: "blur",
+      },
     ];
   });
   tableIndex.value++;
 }
+
+function handleKeyPress(event: KeyboardEvent) {
+  const char = event.key;
+  // Raqam emas yoki nol bo‘lsa bloklaymiz
+  if (!/[1-9]/.test(char)) {
+    event.preventDefault();
+  }
+}
+
+function normalizeQuantity(index: number) {
+  let value = form.items[index].quantity;
+
+  if (value === null || value === undefined || value === "") return;
+
+  value = Number(value);
+
+  if (isNaN(value) || value <= 0) {
+    form.items[index].quantity = null;
+  } else {
+    form.items[index].quantity = Math.floor(value);
+  }
+}
+
 const createFormItem = () => {
   form.items.push({
     serviceId: "",
@@ -292,16 +391,27 @@ const deleteItem = (index: number) => {
   form.items = form.items.filter((_, i) => i !== index);
   itemsValidator();
 };
+
 async function createVisit() {
   loading.value = true;
   const id = visitId.value;
   const url = id ? `/api/visit/update` : "/api/visit/create";
-  const startDate = dayjs(form.startDate).format("YYYY-MM-DDTHH:mm:ssZ").replace("+05:00", "");
+  const startDate = dayjs(form.startDate)
+    .format("YYYY-MM-DDTHH:mm:ssZ")
+    .replace("+05:00", "");
   const method = id ? "put" : "post";
   (<Axios>$axios)
-    [method](url, { ...form, items: form.items.filter((i) => i.serviceId && i.doctorId), id, startDate })
+    [method](url, {
+      ...form,
+      items: form.items.filter((i) => i.serviceId && i.doctorId),
+      id,
+      startDate,
+    })
     .then((res) => {
-      notificationShower("success", id ? t("VISIT_UPDATE_SUCCESS") : t("VISIT_CREATED_SUCCESS"));
+      notificationShower(
+        "success",
+        id ? t("VISIT_UPDATE_SUCCESS") : t("VISIT_CREATED_SUCCESS")
+      );
       tabStore.removeUrl(route.fullPath);
       router.push(`/patients/${patientId.value}?tab=history`);
     })
@@ -309,18 +419,22 @@ async function createVisit() {
       loading.value = false;
     });
 }
+
 const remoteDepartmentMethod = debounce((query: string) => {
   const queryData = { searchKey: query };
   if (query.length > 0) getDepartments(queryData);
 }, 300);
+
 const remoteServiceMethod = debounce((query: string) => {
   const queryData = { searchKey: query };
   if (query.length > 0) getServices(queryData);
 }, 300);
+
 const remoteDoctorMethod = debounce((query: string) => {
   const queryData = { searchKey: query };
   if (query.length > 0) getDoctors(queryData);
 }, 300);
+
 const getDoctors = async (queryData?: { searchKey: string }) => {
   try {
     selectLoading.value = true;
@@ -332,7 +446,9 @@ const getDoctors = async (queryData?: { searchKey: string }) => {
     const data = response?.data?.payload?.list;
     doctors.value = data.map((elem: any) => {
       return {
-        name: `${elem.firstName ?? ""} ${elem.lastName ?? ""} ${elem.middleName ?? ""}`.trim(),
+        name: `${elem.firstName ?? ""} ${elem.lastName ?? ""} ${
+          elem.middleName ?? ""
+        }`.trim(),
         ...elem,
       };
     });
@@ -353,7 +469,8 @@ const getServices = async (queryData?: { searchKey: string }) => {
     const data = response?.data?.payload?.list;
     services.value = data;
     services.value.forEach((elem: any) => {
-      if (!allServices.value.find((service) => service.id === elem.id)) allServices.value.push(elem);
+      if (!allServices.value.find((service) => service.id === elem.id))
+        allServices.value.push(elem);
     });
   } catch (error: any) {
     console.error("Failed to fetch data:", error?.message || error);
@@ -361,6 +478,7 @@ const getServices = async (queryData?: { searchKey: string }) => {
     selectLoading.value = false;
   }
 };
+
 const getPatientById = async () => {
   loading.value = true;
   (<AxiosInstance>$axios)
@@ -378,7 +496,9 @@ const getDepartmentById = async () => {
     form.items = res.data.payload.items.map((elem: any) => {
       const findDoc = doctors.value.find((doc) => doc.id === elem.doctor.id);
       if (!findDoc && elem.doctor) doctors.value.push(elem.doctor);
-      const findService = services.value.find((service) => service.id === elem.service.id);
+      const findService = services.value.find(
+        (service) => service.id === elem.service.id
+      );
       if (!findService && elem.service) services.value.push(elem.service);
       return {
         serviceId: elem.service.id,
@@ -412,9 +532,10 @@ onUnmounted(() => {
 :deep(.el-table tr:hover) {
   background: white !important;
 }
-:deep(.el-table--enable-row-hover .el-table__body tr:hover>td.el-table__cell) {
+:deep(
+    .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell
+  ) {
   background: white !important;
-
 }
 :deep(.el-table th.el-table__cell) {
   background-color: white !important;
