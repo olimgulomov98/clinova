@@ -18,11 +18,20 @@
             value-key="code"
           ></v-select>
         </el-form-item> -->
-        <el-form-item class="!mb-0" :label="t('VISIT_NUMBER')" prop="paymentType">
+        <el-form-item
+          class="!mb-0"
+          :label="t('VISIT_NUMBER')"
+          prop="paymentType"
+        >
           <v-input :model-value="visit?.code" disabled />
         </el-form-item>
         <el-form-item class="!mb-0" :label="t('DATE')" prop="paymentType">
-          <v-input :model-value="dayjs(visit?.startDate + '+05:00').format('DD.MM.YYYY')" disabled />
+          <v-input
+            :model-value="
+              dayjs(visit?.startDate + '+05:00').format('DD.MM.YYYY')
+            "
+            disabled
+          />
         </el-form-item>
       </div>
       <div class="visit-create-page-container">
@@ -49,7 +58,9 @@
               <template #default="scope">
                 <el-form-item
                   :prop="
-                    scope.$index + 1 !== form.items.length || scope.$index == 0 ? `items.${scope.$index}.serviceId` : ''
+                    scope.$index + 1 !== form.items.length || scope.$index == 0
+                      ? `items.${scope.$index}.serviceId`
+                      : ''
                   "
                 >
                   <v-select
@@ -60,7 +71,9 @@
                     value-key="id"
                     remote
                     :suffix-icon="Search"
-                    :remote-method="($event) => remoteServiceMethod($event, scope.$index)"
+                    :remote-method="
+                      ($event) => remoteServiceMethod($event, scope.$index)
+                    "
                     :loading="selectLoading"
                     remote-show-suffix
                   />
@@ -72,7 +85,9 @@
               <template #default="scope">
                 <el-form-item
                   :prop="
-                    scope.$index + 1 !== form.items.length || scope.$index == 0 ? `items.${scope.$index}.doctorId` : ''
+                    scope.$index + 1 !== form.items.length || scope.$index == 0
+                      ? `items.${scope.$index}.doctorId`
+                      : ''
                   "
                 >
                   <v-select
@@ -82,7 +97,9 @@
                     label-key="name"
                     value-key="id"
                     remote
-                    :remote-method="($event) => remoteDoctorMethod($event, scope.$index)"
+                    :remote-method="
+                      ($event) => remoteDoctorMethod($event, scope.$index)
+                    "
                     :loading="selectLoading"
                     :suffix-icon="Search"
                     remote-show-suffix
@@ -95,10 +112,17 @@
               <template #default="scope">
                 <el-form-item
                   :prop="
-                    scope.$index + 1 !== form.items.length || scope.$index == 0 ? `items.${scope.$index}.quantity` : ''
+                    scope.$index + 1 !== form.items.length || scope.$index == 0
+                      ? `items.${scope.$index}.quantity`
+                      : ''
                   "
                 >
-                  <v-input v-model.number="scope.row.quantity" type="number" />
+                  <v-input
+                    v-model.number="scope.row.quantity"
+                    type="number"
+                    @keypress="handleKeyPress"
+                    @blur="() => normalizeQuantity(scope.$index)"
+                  />
                 </el-form-item>
               </template>
             </el-table-column>
@@ -107,7 +131,9 @@
               <template #default="scope">
                 <el-form-item
                   :prop="
-                    scope.$index + 1 !== form.items.length || scope.$index == 0 ? `items.${scope.$index}.discount` : ''
+                    scope.$index + 1 !== form.items.length || scope.$index == 0
+                      ? `items.${scope.$index}.discount`
+                      : ''
                   "
                 >
                   <v-input v-model.number="scope.row.discount" type="number" />
@@ -138,24 +164,43 @@
         <div class="flex justify-end">
           <div class="max-w-fit w-full">
             <div class="flex justify-between p-[9px] gap-4">
-              <div class="text-sm font-regular text-nowrap">{{ t("SUBTOTAL") }}</div>
-              <div class="text-sm font-regular text-nowrap">{{ getFormatAmount(totalPriceWithoutDiscount) }} so'm</div>
+              <div class="text-sm font-regular text-nowrap">
+                {{ t("SUBTOTAL") }}
+              </div>
+              <div class="text-sm font-regular text-nowrap">
+                {{ getFormatAmount(totalPriceWithoutDiscount) }} so'm
+              </div>
             </div>
-            <div class="flex justify-between p-[9px] border-y-[1px] border-solid border-gray-line gap-4">
-              <div class="text-sm font-regular text-nowrap">{{ t("DISCOUNT") }}</div>
-              <div class="text-sm font-regular text-nowrap">{{ getFormatAmount(discountPrice) }} so'm</div>
+            <div
+              class="flex justify-between p-[9px] border-y-[1px] border-solid border-gray-line gap-4"
+            >
+              <div class="text-sm font-regular text-nowrap">
+                {{ t("DISCOUNT") }}
+              </div>
+              <div class="text-sm font-regular text-nowrap">
+                {{ getFormatAmount(discountPrice) }} so'm
+              </div>
             </div>
             <div class="flex justify-between p-[9px] gap-4">
-              <div class="text-sm font-semibold text-nowrap">{{ t("TOTALS") }}</div>
-              <div class="text-sm font-semibold text-nowrap">{{ getFormatAmount(totalPrice) }} so'm</div>
+              <div class="text-sm font-semibold text-nowrap">
+                {{ t("TOTALS") }}
+              </div>
+              <div class="text-sm font-semibold text-nowrap">
+                {{ getFormatAmount(totalPrice) }} so'm
+              </div>
             </div>
           </div>
         </div>
       </div>
     </el-form>
     <div class="flex justify-end">
-      <button @click="submitForm(formRef)" :class="{ 'pointer-events-none opacity-50': loading }">
-        <v-button type="primary" size="xlarge" :loading="loading">{{ t("SAVE") }}</v-button>
+      <button
+        @click="submitForm(formRef)"
+        :class="{ 'pointer-events-none opacity-50': loading }"
+      >
+        <v-button type="primary" size="xlarge" :loading="loading">{{
+          t("SAVE")
+        }}</v-button>
       </button>
     </div>
   </div>
@@ -198,21 +243,29 @@ const paymentTypes = useConstants().PAYMENT_TYPES.map((elem) => {
 const totalPrice = computed(() => {
   let total = 0;
   form.items.forEach((elem: any) => {
-    const findService: any = allServices.value.find((service: any) => service.id === elem.serviceId);
+    const findService: any = allServices.value.find(
+      (service: any) => service.id === elem.serviceId
+    );
     if (findService)
-      total += findService.price * elem.quantity - findService.price * elem.quantity * (elem.discount / 100);
+      total +=
+        findService.price * elem.quantity -
+        findService.price * elem.quantity * (elem.discount / 100);
   });
   return total || 0;
 });
 const totalPriceWithoutDiscount = computed(() => {
   let total = 0;
   form.items.forEach((elem: any) => {
-    const findService: any = allServices.value.find((service: any) => service.id === elem.serviceId);
+    const findService: any = allServices.value.find(
+      (service: any) => service.id === elem.serviceId
+    );
     if (findService) total += findService.price * elem.quantity;
   });
   return total || 0;
 });
-const discountPrice = computed(() => totalPriceWithoutDiscount.value - totalPrice.value);
+const discountPrice = computed(
+  () => totalPriceWithoutDiscount.value - totalPrice.value
+);
 
 const form = reactive({
   startDate: "",
@@ -255,14 +308,41 @@ const submitForm = (formEl: FormInstance | undefined, tur: string) => {
 };
 function itemsValidator() {
   form.items.forEach((_, index) => {
-    rules[`items.${index}.serviceId`] = [{ required: true, message: t("SELECT_SERVICE"), trigger: "change" }];
-    rules[`items.${index}.doctorId`] = [{ required: true, message: t("SELECT_DOCTOR"), trigger: "change" }];
+    rules[`items.${index}.serviceId`] = [
+      { required: true, message: t("SELECT_SERVICE"), trigger: "change" },
+    ];
+    rules[`items.${index}.doctorId`] = [
+      { required: true, message: t("SELECT_DOCTOR"), trigger: "change" },
+    ];
     rules[`items.${index}.quantity`] = [
-      { required: true, type: "number", message: t("ENTER_QUANTITY"), trigger: "blur" },
+      {
+        required: true,
+        validator: (_: any, value: any, callback: any) => {
+          if (value === "" || value === null || value === undefined) {
+            callback(new Error(t("ENTER_QUANTITY")));
+          } else if (!Number.isInteger(value)) {
+            callback(new Error(t("QUANTITY_MUST_BE_INTEGER")));
+          } else if (value <= 0) {
+            callback(new Error(t("QUANTITY_MUST_BE_POSITIVE")));
+          } else {
+            callback();
+          }
+        },
+        trigger: "blur",
+      },
     ];
   });
   tableIndex.value++;
 }
+
+function handleKeyPress(event: KeyboardEvent) {
+  const char = event.key;
+  // Raqam emas yoki nol bo‘lsa bloklaymiz
+  if (!/[1-9]/.test(char)) {
+    event.preventDefault();
+  }
+}
+
 const createFormItem = () => {
   form.items.push({
     doctors: [],
@@ -296,7 +376,10 @@ async function createVisit() {
   (<Axios>$axios)
     [method](url, data)
     .then((res) => {
-      notificationShower("success", id ? t("VISIT_UPDATE_SUCCESS") : t("VISIT_CREATED_SUCCESS"));
+      notificationShower(
+        "success",
+        id ? t("VISIT_UPDATE_SUCCESS") : t("VISIT_CREATED_SUCCESS")
+      );
       tabStore.removeUrl(route.fullPath);
       router.push(`/patients/${patientId.value}?tab=history`);
     })
@@ -318,7 +401,10 @@ const remoteDoctorMethod = debounce((query: string, index: number) => {
   const queryData = { searchKey: query };
   if (query.length > 0) getDoctors(queryData, index);
 }, 300);
-const getDoctors = async (queryData?: { searchKey: string }, index: number = 0) => {
+const getDoctors = async (
+  queryData?: { searchKey: string },
+  index: number = 0
+) => {
   try {
     selectLoading.value = true;
     const response = await (<Axios>$axios).post("/api/user/list", {
@@ -330,7 +416,9 @@ const getDoctors = async (queryData?: { searchKey: string }, index: number = 0) 
     const data = response?.data?.payload?.list;
     form.items[index].doctors = data.map((elem: any) => {
       return {
-        name: `${elem.firstName ?? ""} ${elem.lastName ?? ""} ${elem.middleName ?? ""}`.trim(),
+        name: `${elem.firstName ?? ""} ${elem.lastName ?? ""} ${
+          elem.middleName ?? ""
+        }`.trim(),
         ...elem,
       };
     });
@@ -341,7 +429,10 @@ const getDoctors = async (queryData?: { searchKey: string }, index: number = 0) 
   }
 };
 
-const getServices = async (queryData?: { searchKey: string }, index: number = 0) => {
+const getServices = async (
+  queryData?: { searchKey: string },
+  index: number = 0
+) => {
   try {
     selectLoading.value = true;
     const response = await (<Axios>$axios).post("/api/service/list", {
@@ -351,7 +442,8 @@ const getServices = async (queryData?: { searchKey: string }, index: number = 0)
     const data = response?.data?.payload?.list;
     form.items[index].services = data;
     form.items[index].services.forEach((elem: any) => {
-      if (!allServices.value.find((service) => service.id === elem.id)) allServices.value.push(elem);
+      if (!allServices.value.find((service) => service.id === elem.id))
+        allServices.value.push(elem);
     });
   } catch (error: any) {
     console.error("Failed to fetch data:", error?.message || error);
@@ -410,9 +502,10 @@ onUnmounted(() => {
 :deep(.el-table tr:hover) {
   background: white !important;
 }
-:deep(.el-table--enable-row-hover .el-table__body tr:hover>td.el-table__cell) {
+:deep(
+    .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell
+  ) {
   background: white !important;
-
 }
 :deep(.el-table th.el-table__cell) {
   background-color: white !important;
