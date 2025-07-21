@@ -282,11 +282,21 @@ const form = reactive({
     },
   ],
 });
+
 itemsValidator();
+
 const changeDepartment = (searchText: string) => {
   const queryData = { departmentId: searchText };
   getServices(queryData);
+
+  form.items.forEach((item) => {
+    item.serviceId = "";
+    item.doctorId = "";
+  });
+
+  itemsValidator();
 };
+
 const getDepartments = (queryData?: { searchKey: string }) => {
   selectLoading.value = true;
   (<AxiosInstance>$axios)
@@ -299,6 +309,7 @@ const getDepartments = (queryData?: { searchKey: string }) => {
     });
 };
 const formRef = ref<FormInstance>();
+
 const submitForm = (formEl: FormInstance | undefined, tur: string) => {
   if (!formEl) return;
   formEl.validate(async (valid) => {
@@ -306,6 +317,7 @@ const submitForm = (formEl: FormInstance | undefined, tur: string) => {
     createVisit();
   });
 };
+
 function itemsValidator() {
   form.items.forEach((_, index) => {
     rules[`items.${index}.serviceId`] = [

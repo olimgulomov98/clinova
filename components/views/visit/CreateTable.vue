@@ -299,9 +299,22 @@ const form = reactive({
   // paymentType: "",
 });
 
-itemsValidator();
+// itemsValidator();
+
+// const changeDepartment = () => {
+//   getServices();
+// };
+
 const changeDepartment = () => {
   getServices();
+  getDoctors();
+
+  form.items.forEach((item) => {
+    item.serviceId = "";
+    item.doctorId = "";
+  });
+
+  itemsValidator();
 };
 
 const getDepartments = (queryData?: { searchKey: string }) => {
