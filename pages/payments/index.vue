@@ -98,6 +98,12 @@
             class="icon-date-picker"
             :class="{ 'date-picker-close': !!value2?.length }"
           />
+          <el-button
+            :icon="Refresh"
+            size="small"
+            class="refresh-btn"
+            @click="handleRefresh"
+          />
         </template>
         <template #columns>
           <el-table-column :label="t('CODE')">
@@ -183,6 +189,7 @@
 import type { Axios } from "axios";
 import { getFormatAmount, getFormatDate } from "~/utils";
 import dayjs from "dayjs";
+import { Refresh } from "@element-plus/icons-vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -284,6 +291,14 @@ const getStatistics = async () => {
   } finally {
     isLoading.value = false;
   }
+};
+
+const handleRefresh = () => {
+  value2.value = [];
+  filters.value.startDate = null;
+  filters.value.endDate = null;
+  filters.value.page = 1;
+  getData();
 };
 
 const sortChange = (field: string, desc: boolean | null) => {
@@ -423,5 +438,19 @@ onMounted(async () => {
   font-weight: 400;
   border-radius: 4px;
   width: fit-content;
+}
+
+.refresh-btn {
+  border-radius: 8px;
+  background: #eaf2f8;
+  border: 1px solid #ddd;
+  height: 30px;
+  color: #bbb;
+  padding: 0 10px;
+
+  &:hover {
+    border-color: #bbb;
+    color: #999;
+  }
 }
 </style>

@@ -1,41 +1,52 @@
 <template>
   <div class="page-container mt-5">
     <VTable
-        :filters="filters"
-        :table-data="tableData?.list"
-        :loading="isLoading"
-        filter-right
-        search-left-position
-        :search-placeholder="t('SEARCH')"
-        @sort-change="sortChange"
-        @search="search"
+      :filters="filters"
+      :table-data="tableData?.list"
+      :loading="isLoading"
+      filter-right
+      search-left-position
+      :search-placeholder="t('SEARCH')"
+      @sort-change="sortChange"
+      @search="search"
     >
       <template #tabs>
         <el-form-item prop="statusId" class="!mb-0">
           <v-select
-              class="filter_select"
-              filterable
-              v-model="filters.status"
-              :options="statusOptions"
-              label-key="name"
-              value-key="id"
-              :placeholder="t('STATUS')"
-              clearable
-              style="width: 100px"
-              :is-filter="true"
+            class="filter_select"
+            filterable
+            v-model="filters.status"
+            :options="statusOptions"
+            label-key="name"
+            value-key="id"
+            :placeholder="t('STATUS')"
+            clearable
+            style="width: 100px"
+            :is-filter="true"
           />
         </el-form-item>
         <el-date-picker
-            v-model="value2"
-            type="daterange"
-            unlink-panels
-            range-separator="To"
-            start-placeholder="Start date"
-            end-placeholder="End date"
-            style="border-radius: 8px; background: #eaf2f8; border: 0; height: 30px;"
-            @update:model-value="onChangeDatePicker"
-            class="icon-date-picker"
-            :class="{'date-picker-close': !!value2?.length}"
+          v-model="value2"
+          type="daterange"
+          unlink-panels
+          range-separator="To"
+          start-placeholder="Start date"
+          end-placeholder="End date"
+          style="
+            border-radius: 8px;
+            background: #eaf2f8;
+            border: 0;
+            height: 30px;
+          "
+          @update:model-value="onChangeDatePicker"
+          class="icon-date-picker"
+          :class="{ 'date-picker-close': !!value2?.length }"
+        />
+        <el-button
+          :icon="Refresh"
+          size="small"
+          class="refresh-btn"
+          @click="handleRefresh"
         />
       </template>
       <template #columns>
@@ -43,20 +54,29 @@
           <template #default="{ row }">
             <el-dropdown>
               <button class="p-3">
-                <icon-dots/>
+                <icon-dots />
               </button>
               <template #dropdown>
                 <el-dropdown-menu class="!p-0">
-                  <el-dropdown-item @click="downloadPrintInvoice(row?.id, row?.code)" v-if="row.status !== 'PAID'">
+                  <el-dropdown-item
+                    @click="downloadPrintInvoice(row?.id, row?.code)"
+                    v-if="row.status !== 'PAID'"
+                  >
                     <button
-                        class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
+                      class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                     >
                       {{ t("PRINT_INVOICE") }}
                     </button>
                   </el-dropdown-item>
                   <el-dropdown-item>
-                    <button  @click="handleDropClick(`/patients/${route.params.patientId}/payment/${row.id}?tab=invoices`, row.code)"
-                        class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
+                    <button
+                      @click="
+                        handleDropClick(
+                          `/patients/${route.params.patientId}/payment/${row.id}?tab=invoices`,
+                          row.code
+                        )
+                      "
+                      class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                     >
                       {{ t("SUMMARY") }}
                     </button>
@@ -69,24 +89,38 @@
         <el-table-column prop="code" :label="t('CODE')">
           <template #default="{ row }">
             <div
-                @click="handleDropClick(`/patients/${route.params.patientId}/payment/${row.id}?tab=invoices`, row.code)"
-                class="link-div"
+              @click="
+                handleDropClick(
+                  `/patients/${route.params.patientId}/payment/${row.id}?tab=invoices`,
+                  row.code
+                )
+              "
+              class="link-div"
             >
               {{ row.code }}
             </div>
           </template>
         </el-table-column>
         <el-table-column
-            prop="visit.patient.name"
-            :label="t('PATIENT')"
-            :formatter="(row) => row.visit?.patient?.name"
+          prop="visit.patient.name"
+          :label="t('PATIENT')"
+          :formatter="(row) => row.visit?.patient?.name"
         />
-        <el-table-column prop="creationDate" :label="t('DATE')" :formatter="(row) => getFormatDate(row.creationDate)"/>
+        <el-table-column
+          prop="creationDate"
+          :label="t('DATE')"
+          :formatter="(row) => getFormatDate(row.creationDate)"
+        />
         <el-table-column :label="t('SERVICE')">
           <template #default="{ row }">
             <ul class="flex flex-col flex-wrap gap-2">
               <li>
-                <el-tooltip class="box-item" :disabled="row.items?.length < 2" effect="dark" placement="right-start">
+                <el-tooltip
+                  class="box-item"
+                  :disabled="row.items?.length < 2"
+                  effect="dark"
+                  placement="right-start"
+                >
                   <template #content>
                     <ul>
                       <li v-for="(item, index) in row.items || []" :key="index">
@@ -102,16 +136,20 @@
             </ul>
           </template>
         </el-table-column>
-        <el-table-column prop="total" :label="t('TOTAL')" :formatter="(row) => getFormatAmount(row.total)"/>
         <el-table-column
-            prop="dueAmount"
-            :label="t('DUE_AMOUNT')"
-            :formatter="(row) => getFormatAmount(row.dueAmount)"
+          prop="total"
+          :label="t('TOTAL')"
+          :formatter="(row) => getFormatAmount(row.total)"
+        />
+        <el-table-column
+          prop="dueAmount"
+          :label="t('DUE_AMOUNT')"
+          :formatter="(row) => getFormatAmount(row.dueAmount)"
         />
         <el-table-column prop="status" :label="t('STATUS')">
           <template #default="{ row }">
             <div v-if="row.status">
-              <div :style="`background:${getStatusTheme(row.status)}`" class="status-btn">
+              <div class="status-btn">
                 {{ t(row.status) }}
               </div>
             </div>
@@ -119,19 +157,25 @@
         </el-table-column>
       </template>
     </VTable>
-    <VPagination v-model="filters" total-page-hide :total-page="tableData?.total" @update-query="updateQuery"/>
+    <VPagination
+      v-model="filters"
+      total-page-hide
+      :total-page="tableData?.total"
+      @update-query="updateQuery"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import type {Axios} from "axios";
-import {getFormatAmount, getFormatDate} from "~/utils";
+import type { Axios } from "axios";
+import { getFormatAmount, getFormatDate } from "~/utils";
 import dayjs from "dayjs";
+import { Refresh } from "@element-plus/icons-vue";
 
 const router = useRouter();
 const route = useRoute();
-const {t} = useI18n();
-const {$axios} = useNuxtApp();
+const { t } = useI18n();
+const { $axios } = useNuxtApp();
 const useTab = useUrlTabStore();
 const isLoading = ref(false);
 
@@ -168,12 +212,12 @@ const filters = ref<any>({
 });
 
 const tableData = ref<any>([]);
-const {updateQuery, clearQuery} = useQuerySync(filters.value);
+const { updateQuery, clearQuery } = useQuerySync(filters.value);
 
 const getData = async () => {
   isLoading.value = true;
   try {
-    const {page, page_size, ...restFilters} = filters.value;
+    const { page, page_size, ...restFilters } = filters.value;
     const payload = {
       ...restFilters,
       page: page - 1,
@@ -193,6 +237,14 @@ const getData = async () => {
   } finally {
     isLoading.value = false;
   }
+};
+
+const handleRefresh = () => {
+  value2.value = [];
+  filters.value.startDate = null;
+  filters.value.endDate = null;
+  filters.value.page = 1;
+  getData();
 };
 
 const sortChange = (field: string, desc: boolean | null) => {
@@ -221,10 +273,10 @@ const getStatusTheme = (status: string) => {
 };
 
 const handleDropClick = (url: string, code?: string) => {
-  if (code) useTab.setUrl({name: code, url: url});
+  if (code) useTab.setUrl({ name: code, url: url });
   router.push({
     path: url,
-    query: {...route.query},
+    query: { ...route.query },
   });
 };
 
@@ -234,7 +286,7 @@ const downloadPrintInvoice = async (id: string, fileName: string) => {
       responseType: "blob",
     });
 
-    const blob = new Blob([response.data], {type: "application/pdf"});
+    const blob = new Blob([response.data], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
@@ -355,5 +407,19 @@ onMounted(async () => {
   font-weight: 400;
   border-radius: 4px;
   width: fit-content;
+}
+
+.refresh-btn {
+  border-radius: 8px;
+  background: #eaf2f8;
+  border: 1px solid #ddd;
+  height: 30px;
+  color: #bbb;
+  padding: 0 10px;
+
+  &:hover {
+    border-color: #bbb;
+    color: #999;
+  }
 }
 </style>
