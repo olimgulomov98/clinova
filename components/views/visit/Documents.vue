@@ -3,6 +3,7 @@
     <VTable
       :table-data="tableDataBySearch"
       :loading="isLoading"
+      :search-placeholder="t('SEARCH')"
       search-left-position
       @search="search"
     >

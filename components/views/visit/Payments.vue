@@ -101,6 +101,21 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column prop="code" :label="t('VISIT_NUMBER')">
+          <template #default="{ row }">
+            <div
+              @click="
+                handleDropClick(
+                  `/patients/${route.params.patientId}/visit/${row.visit.id}/summary?tab=history`,
+                  row.visit.code
+                )
+              "
+              class="link-div"
+            >
+              {{ row.visit.code }}
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="visit.patient.name"
           :label="t('PATIENT')"
