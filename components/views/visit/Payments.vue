@@ -415,11 +415,12 @@ onMounted(async () => {
 }
 
 .status-btn {
-  padding: 1.5px 6px;
+  padding: 0 12px;
   font-size: 11px;
   color: #233955;
   font-family: "SourceSans3", sans-serif;
   font-weight: 400;
+  border: 1px solid #ddd;
   border-radius: 4px;
   width: fit-content;
 }

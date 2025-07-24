@@ -4,7 +4,7 @@
       <teleport v-if="isMounted" to="#patient-tab-slot">
         <el-button type="primary" class="small_btn" @click="addVisit">
           <icon-plus />
-          {{t('ADD_NEW_VISIT')}}
+          {{ t("ADD_NEW_VISIT") }}
         </el-button>
       </teleport>
     </div>
@@ -23,7 +23,13 @@
           range-separator="To"
           start-placeholder="Start date"
           end-placeholder="End date"
-          style="border-radius: 8px; background: #eaf2f8; border: 0; height: 30px; width: 220px"
+          style="
+            border-radius: 8px;
+            background: #eaf2f8;
+            border: 0;
+            height: 30px;
+            width: 220px;
+          "
           @update:model-value="onChangeDatePicker"
         />
         <el-form-item prop="statusId" class="!mb-0">
@@ -131,7 +137,7 @@
                 <icon-dots />
               </button>
               <template #dropdown>
-                <el-dropdown-menu class="!p-0" >
+                <el-dropdown-menu class="!p-0">
                   <el-dropdown-item v-if="row.status !== 'COMPLETED'">
                     <button
                       @click="
@@ -142,12 +148,17 @@
                       "
                       class="text-xs flex gap-1 items-center font-medium text-gray-400 pb-0"
                     >
-                      {{t('WORKING_WITH_THE_PATIENT')}}
+                      {{ t("WORKING_WITH_THE_PATIENT") }}
                     </button>
                   </el-dropdown-item>
-                  <el-dropdown-item v-if="row.status !== 'COMPLETED'" @click="addService(row.id)">
-                    <button class="text-xs flex gap-1 items-center font-medium text-gray-400 pb-0">
-                      {{t('ADD_NEW_SERVICE')}}
+                  <el-dropdown-item
+                    v-if="row.status !== 'COMPLETED'"
+                    @click="addService(row.id)"
+                  >
+                    <button
+                      class="text-xs flex gap-1 items-center font-medium text-gray-400 pb-0"
+                    >
+                      {{ t("ADD_NEW_SERVICE") }}
                     </button>
                   </el-dropdown-item>
                   <el-dropdown-item>
@@ -155,27 +166,35 @@
                       @click="openFIleUpload(row.id)"
                       class="text-xs flex gap-1 items-center font-medium text-gray-400 pb-0"
                     >
-                     {{t('FILE_ATTACHMENT')}}
+                      {{ t("FILE_ATTACHMENT") }}
                     </button>
                   </el-dropdown-item>
-<!--                  <el-dropdown-item>-->
-<!--                    <button class="text-xs flex gap-1 items-center font-medium text-gray-400 pb-0">-->
-<!--                      {{t('PRINT_INVOICE')}}-->
-<!--                    </button>-->
-<!--                  </el-dropdown-item>-->
-                  <el-dropdown-item @click="
-                        handleDropClick(`/patients/${route.params.patientId}/visit/${row.id}/summary?tab=history`)
-                      ">
+                  <!--                  <el-dropdown-item>-->
+                  <!--                    <button class="text-xs flex gap-1 items-center font-medium text-gray-400 pb-0">-->
+                  <!--                      {{t('PRINT_INVOICE')}}-->
+                  <!--                    </button>-->
+                  <!--                  </el-dropdown-item>-->
+                  <el-dropdown-item
+                    @click="
+                      handleDropClick(
+                        `/patients/${route.params.patientId}/visit/${row.id}/summary?tab=history`
+                      )
+                    "
+                  >
                     <button
                       class="text-xs flex gap-1 items-center font-medium text-gray-400 pb-0"
-
                     >
-                     {{t('SUMMARY')}}
+                      {{ t("SUMMARY") }}
                     </button>
                   </el-dropdown-item>
-                  <el-dropdown-item v-if="row.status !== 'COMPLETED'" @click="visitCompleteAction(row.id)">
-                    <span   class="text-xs flex gap-1 items-center font-medium text-gray-400 pb-0">
-                      {{t('COMPLETE_VISIT')}}
+                  <el-dropdown-item
+                    v-if="row.status !== 'COMPLETED'"
+                    @click="visitCompleteAction(row.id)"
+                  >
+                    <span
+                      class="text-xs flex gap-1 items-center font-medium text-gray-400 pb-0"
+                    >
+                      {{ t("COMPLETE_VISIT") }}
                     </span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -183,11 +202,14 @@
             </el-dropdown>
           </template>
         </el-table-column>
-        <el-table-column :label="t('CODE')" >
+        <el-table-column :label="t('CODE')">
           <template #default="{ row }">
             <div
               @click="
-                handleDropClick(`/patients/${route.params.patientId}/visit/${row.id}/summary?tab=history`, row.code)
+                handleDropClick(
+                  `/patients/${route.params.patientId}/visit/${row.id}/summary?tab=history`,
+                  row.code
+                )
               "
               class="link-div"
             >
@@ -195,12 +217,21 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="patient.name" :label="t('PATIENT_NAME')"  :formatter="(row) => row.patient?.name" />
-        <el-table-column :label="t('DEPARTMENT')" >
+        <el-table-column
+          prop="patient.name"
+          :label="t('PATIENT_NAME')"
+          :formatter="(row) => row.patient?.name"
+        />
+        <el-table-column :label="t('DEPARTMENT')">
           <template #default="{ row }">
             <ul class="flex flex-col flex-wrap gap-2">
               <li>
-                <el-tooltip class="box-item" :disabled="row.items?.length < 2" effect="dark" placement="right-start">
+                <el-tooltip
+                  class="box-item"
+                  :disabled="row.items?.length < 2"
+                  effect="dark"
+                  placement="right-start"
+                >
                   <template #content>
                     <ul>
                       <li v-for="(item, index) in row.items || []" :key="index">
@@ -216,11 +247,16 @@
             </ul>
           </template>
         </el-table-column>
-        <el-table-column :label="t('DOCTOR')" >
+        <el-table-column :label="t('DOCTOR')">
           <template #default="{ row }">
             <ul class="flex flex-col flex-wrap gap-2">
               <li>
-                <el-tooltip class="box-item" :disabled="row.items?.length < 2" effect="dark" placement="right-start">
+                <el-tooltip
+                  class="box-item"
+                  :disabled="row.items?.length < 2"
+                  effect="dark"
+                  placement="right-start"
+                >
                   <template #content>
                     <ul>
                       <li v-for="(item, index) in row.items || []" :key="index">
@@ -236,19 +272,25 @@
             </ul>
           </template>
         </el-table-column>
-        <el-table-column :label="t('VISIT_DATE')"  :formatter="(row) => dayjs(row.startDate).format('YYYY-MM-DD HH:mm')" />
-        <el-table-column prop="status" :label="t('STATUS')" >
+        <el-table-column
+          :label="t('VISIT_DATE')"
+          :formatter="(row) => dayjs(row.startDate).format('YYYY-MM-DD HH:mm')"
+        />
+        <el-table-column prop="status" :label="t('STATUS')">
           <template #default="{ row }">
-            <div v-if="row.status">
-              <el-tag :type="getStatusTheme(row.status)" effect="light" round>
-                {{ t(row.status) }}
-              </el-tag>
+            <div v-if="row.status" class="status-btn">
+              {{ t(row.status) }}
             </div>
           </template>
         </el-table-column>
       </template>
     </VTable>
-    <VPagination v-model="filters" total-page-hide :total-page="tableData?.total" @update-query="updateQuery" />
+    <VPagination
+      v-model="filters"
+      total-page-hide
+      :total-page="tableData?.total"
+      @update-query="updateQuery"
+    />
     <DoctorCreateDialog
       v-if="isDoctorCreateVisible"
       v-model="isDoctorCreateVisible"
@@ -270,11 +312,11 @@
       @get-data="getData"
     />
     <VisitCompletDialog
-        v-if="isVisitCompleteVisible"
-        v-model="isVisitCompleteVisible"
-        @close="isVisitCompleteVisible = false"
-        :visit-id="visitId"
-        @get-data="getData"
+      v-if="isVisitCompleteVisible"
+      v-model="isVisitCompleteVisible"
+      @close="isVisitCompleteVisible = false"
+      :visit-id="visitId"
+      @get-data="getData"
     />
   </div>
 </template>
@@ -300,23 +342,23 @@ const loading = ref(false);
 const router = useRouter();
 const visitId = ref<number | null>(null);
 const value2 = ref([
-  dayjs().startOf('month').format('YYYY-MM-DDTHH:mm:ss[Z]'),
-  dayjs().endOf(new Date()).format('YYYY-MM-DDTHH:mm:ss[Z]')
+  dayjs().startOf("month").format("YYYY-MM-DDTHH:mm:ss[Z]"),
+  dayjs().endOf(new Date()).format("YYYY-MM-DDTHH:mm:ss[Z]"),
 ]);
 const statusOptions = ref([
   {
-    name: t('NEW'),
+    name: t("NEW"),
     id: "NEW",
   },
   {
-    name: t('COMPLETED'),
+    name: t("COMPLETED"),
     id: "COMPLETED",
   },
 ]);
 const filters = ref({
   searchKey: null,
   doctorId: null,
-  orderBy: 'status',
+  orderBy: "status",
   desc: true,
   page: 1,
   size: 10,
@@ -379,7 +421,9 @@ const getServices = (queryData?: { searchKey: string }) => {
 const getDoctors = async (queryData: { searchKey?: string } = {}) => {
   loading.value = true;
   try {
-    const response = await (<Axios>$axios).post<IBaseResponseModel<IDepartmentListItem[]>>("/api/user/list", {
+    const response = await (<Axios>$axios).post<
+      IBaseResponseModel<IDepartmentListItem[]>
+    >("/api/user/list", {
       ...queryData,
       size: 500,
       role: "DOCTOR",
@@ -388,7 +432,9 @@ const getDoctors = async (queryData: { searchKey?: string } = {}) => {
     const list = response?.data?.payload?.list ?? [];
     doctors.value = list.map((item) => ({
       ...item,
-      name: `${item.firstName ?? ""} ${item.lastName ?? ""} ${item.middleName ?? ""}`.trim(),
+      name: `${item.firstName ?? ""} ${item.lastName ?? ""} ${
+        item.middleName ?? ""
+      }`.trim(),
     }));
   } catch (error) {
     console.error("Failed to load doctors:", error);
@@ -427,7 +473,7 @@ const openFIleUpload = (id: number) => {
 const visitCompleteAction = (id: number) => {
   isVisitCompleteVisible.value = true;
   visitId.value = id;
-}
+};
 const onChangeDatePicker = (values: string[] | null) => {
   if (!values) {
     filters.value.startDate = null;
@@ -440,12 +486,12 @@ const onChangeDatePicker = (values: string[] | null) => {
 // hooks
 const addVisit = () => {
   const url = `/patients/${route.params.patientId}/visit/create`;
-  useSetUrl({ name: t('ADD_VISIT'), url: url });
+  useSetUrl({ name: t("ADD_VISIT"), url: url });
   router.push(url);
 };
 const addService = (id: number) => {
-  const url = `/patients/${route.params.patientId}/visit/${id}/service`
-  useSetUrl({ name: t('ADD_NEW_SERVICE'), url: url });
+  const url = `/patients/${route.params.patientId}/visit/${id}/service`;
+  useSetUrl({ name: t("ADD_NEW_SERVICE"), url: url });
   router.push(url);
 };
 watch(filters.value, () => {
@@ -472,5 +518,16 @@ onMounted(() => {
   grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
   grid-gap: 20px;
   align-items: end;
+}
+
+.status-btn {
+  padding: 0 12px;
+  font-size: 11px;
+  color: #233955;
+  font-family: "SourceSans3", sans-serif;
+  font-weight: 400;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: fit-content;
 }
 </style>
