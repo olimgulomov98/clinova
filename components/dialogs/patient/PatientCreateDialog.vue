@@ -196,6 +196,25 @@ async function createPatient() {
         "success",
         id ? t("PATIENT_UPDATE_SUCCESS") : t("PATIENT_CREATED_SUCCESS")
       );
+
+      (<AxiosInstance>$axios)
+        .put("/api/appointment/update", {
+          id: props.appointmentId,
+          status: "COMPLETED",
+        })
+        .then(() => {
+          // ✅ Shu yerda statusni qayta olish
+          return (<AxiosInstance>$axios).get(
+            `/api/appointment/get?id=${props.appointmentId}`
+          );
+        })
+        .then((res) => {
+          console.log("Yangi appointment status:", res.data.payload.status);
+        })
+        .catch((err) => {
+          console.error("Appointment update yoki get xatosi:", err);
+        });
+
       emit("close");
       emit("getData");
 
