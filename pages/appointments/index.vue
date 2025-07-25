@@ -92,6 +92,13 @@
               </button>
               <template #dropdown>
                 <el-dropdown-menu class="!p-0">
+                  <el-dropdown-item @click="convertToPatient(row)">
+                    <button
+                      class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
+                    >
+                      {{ t("Convert_to_Patient") }}
+                    </button>
+                  </el-dropdown-item>
                   <el-dropdown-item @click="editHandle(row)">
                     <button
                       class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
@@ -191,6 +198,15 @@
       :appointment-id="appointment?.id"
       @get-data="getData"
     />
+    <PatientCreateDialog
+      v-if="isPatientCreateVisible"
+      v-model="isPatientCreateVisible"
+      :appointment-id="appointment?.id"
+      :default-name="appointment?.patientName"
+      :default-phone="appointment?.patientPhone"
+      @close="isPatientCreateVisible = false"
+      @getData="getData"
+    />
   </div>
 </template>
 
@@ -213,6 +229,8 @@ const loading = ref(false);
 const activeTab = ref(null);
 const isAppointmentStatusVisible = ref(false);
 const value2 = ref([]);
+const isPatientShowVisible = ref(false);
+const isPatientCreateVisible = ref(false);
 const tabs = ref([
   {
     label: t("ALL"),
@@ -254,6 +272,11 @@ const filters = ref<any>({
   page: 1,
   size: 10,
 });
+
+const convertToPatient = (appointmentItem: any) => {
+  appointment.value = appointmentItem;
+  isPatientCreateVisible.value = true;
+};
 
 const tableData = ref<any>([]);
 const { updateQuery, clearQuery } = useQuerySync(filters.value);
@@ -441,6 +464,14 @@ watch(
     if (!val) appointment.value = undefined;
   }
 );
+
+watch(
+  () => isPatientCreateVisible.value,
+  (val) => {
+    if (!val) appointment.value = undefined;
+  }
+);
+
 onMounted(async () => {
   await getData();
   await getItemLengthByStatus();

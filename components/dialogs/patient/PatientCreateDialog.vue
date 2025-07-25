@@ -133,7 +133,13 @@ import type { FormInstance } from "element-plus";
 import type { IPatientCreate } from "~/types/patient/index.type";
 import { useDateInput } from "~/composables/useDateInput";
 const { t } = useI18n();
-const props = defineProps<{ modelValue: boolean; patientId?: number }>();
+const props = defineProps<{
+  modelValue: boolean;
+  patientId?: number;
+  defaultName?: string;
+  defaultPhone?: string;
+  appointmentId?: number;
+}>();
 const emit = defineEmits(["update:modelValue", "getData", "close"]);
 const { phoneNumberValidator } = useValidators();
 const { $axios } = useNuxtApp();
@@ -161,10 +167,10 @@ const genders = computed(() => {
 const loading = ref(false);
 const age = ref<any>("");
 const form = reactive<Partial<IPatientCreate>>({
-  name: "",
+  name: props.defaultName || "",
   dateOfBirth: "",
   address: "",
-  phone: "",
+  phone: props.defaultPhone || "",
   gender: "",
   occupation: "",
   source: "",

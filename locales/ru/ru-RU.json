@@ -248,5 +248,6 @@
   "APPOINTMENTS_FOR_TODAY": "На сегодня назначено (count) приёмов",
   "MONTHLY_INVOICES": "Ежемесячные счета",
   "MONTHLY_VISITS": "Ежемесячные посещения",
-  "MONTHLY_APPOINTMENTS": "Ежемесячные приёмы"
+  "MONTHLY_APPOINTMENTS": "Ежемесячные приёмы",
+  "Convert_to_Patient": "Преобразовать в пациента"
 }
