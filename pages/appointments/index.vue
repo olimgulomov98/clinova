@@ -424,12 +424,12 @@ const editStatusHandle = (argAppointment: any) => {
 const updateStatus = async (id: number, status: string) => {
   try {
     await (<Axios>$axios).post(
-      `/api/appointment/confirm/${id}`,
+      `/api/appointment/change-status/${id}`,
       {},
       {
         params: {
           id,
-          confirm: status === "CONFIRMED",
+          status,
         },
       }
     );

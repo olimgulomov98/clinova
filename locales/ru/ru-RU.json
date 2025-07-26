@@ -249,5 +249,6 @@
   "MONTHLY_INVOICES": "Ежемесячные счета",
   "MONTHLY_VISITS": "Ежемесячные посещения",
   "MONTHLY_APPOINTMENTS": "Ежемесячные приёмы",
-  "Convert_to_Patient": "Преобразовать в пациента"
+  "Convert_to_Patient": "Преобразовать в пациента",
+  "EMPLOYEE_LIST": "Список сотрудников"
 }

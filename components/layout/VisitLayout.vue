@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-between">  
+    <div class="flex justify-between">
       <VTab :options="options" @change="changeHandle" />
       <div id="patient-tab-slot" />
     </div>
@@ -34,9 +34,14 @@ const options = [
 ];
 const changeHandle = (value: string) => {
   let oldUrl = route.fullPath;
-  router.push({ path: `/patients/${route.params.patientId}`, query: { tab: value } }).then(() => {
-    tabStore.updateUrl(oldUrl, route.fullPath);
-  });
+  router
+    .push({
+      path: `/patients/${route.params.patientId}`,
+      query: { tab: value },
+    })
+    .then(() => {
+      tabStore.updateUrl(oldUrl, route.fullPath);
+    });
 };
 onMounted(() => {
   if (route.query.tab) activeTab.value = route.query.tab;

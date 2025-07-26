@@ -9,22 +9,44 @@
     @close="emit('close')"
   >
     <template #header>
-      <div class="p-6 flex justify-between border-b border-solid border-gray-line">
-        <v-form-title>{{ doctorId ? t('UPDATE_DOCTOR') : t('ADD_NEW_DOCTOR') }}</v-form-title>
+      <div
+        class="p-6 flex justify-between border-b border-solid border-gray-line"
+      >
+        <v-form-title>{{
+          doctorId ? t("UPDATE_DOCTOR") : t("ADD_NEW_DOCTOR")
+        }}</v-form-title>
         <button @click="emit('close')"><icon-x /></button>
       </div>
     </template>
-    <el-form ref="formRef" label-position="top" :model="form" :rules="rules" @submit.prevent="submitForm(formRef)">
+    <el-form
+      ref="formRef"
+      label-position="top"
+      :model="form"
+      :rules="rules"
+      @submit.prevent="submitForm(formRef)"
+    >
       <div class="p-6">
         <div class="grid grid-cols-3 gap-4">
           <el-form-item :label="t('FIRST_NAME')" prop="firstName">
-            <el-input class="form_input" v-model="form.firstName" :placeholder="t('ENTER_FIRST_NAME')" />
+            <el-input
+              class="form_input"
+              v-model="form.firstName"
+              :placeholder="t('ENTER_FIRST_NAME')"
+            />
           </el-form-item>
           <el-form-item :label="t('MIDDLE_NAME')" prop="middleName">
-            <el-input class="form_input" v-model="form.middleName" :placeholder="t('ENTER_MIDDLE_NAME')" />
+            <el-input
+              class="form_input"
+              v-model="form.middleName"
+              :placeholder="t('ENTER_MIDDLE_NAME')"
+            />
           </el-form-item>
           <el-form-item :label="t('LAST_NAME')" prop="lastName">
-            <el-input class="form_input" v-model="form.lastName" :placeholder="t('ENTER_LAST_NAME')" />
+            <el-input
+              class="form_input"
+              v-model="form.lastName"
+              :placeholder="t('ENTER_LAST_NAME')"
+            />
           </el-form-item>
         </div>
         <div class="grid grid-cols-3 gap-4">
@@ -51,7 +73,12 @@
             />
           </el-form-item>
           <el-form-item :label="t('AGE')">
-            <el-input class="form_input" v-model="age" :placeholder="t('AUTO_CALCULATED')" readonly />
+            <el-input
+              class="form_input"
+              v-model="age"
+              :placeholder="t('AUTO_CALCULATED')"
+              readonly
+            />
           </el-form-item>
           <el-form-item :label="t('PHONE_NUMBER')" prop="phone">
             <el-input
@@ -73,9 +100,17 @@
             />
           </el-form-item>
           <el-form-item :label="t('SPECIALITY')" prop="specialization">
-            <el-input class="form_input" v-model="form.specialization" :placeholder="t('ENTER_SPECIALITY')" />
+            <el-input
+              class="form_input"
+              v-model="form.specialization"
+              :placeholder="t('ENTER_SPECIALITY')"
+            />
           </el-form-item>
-          <el-form-item :label="t('DEPARTMENT')" prop="departmentId" class="!mb-0">
+          <el-form-item
+            :label="t('DEPARTMENT')"
+            prop="departmentId"
+            class="!mb-0"
+          >
             <v-select
               class="form_select"
               filterable
@@ -91,20 +126,40 @@
         </div>
         <div class="grid grid-cols-2 gap-4">
           <el-form-item :label="t('USERNAME')" prop="username">
-            <el-input class="form_input" v-model="form.username" :placeholder="t('ENTER_USER_NAME')" />
+            <el-input
+              class="form_input"
+              v-model="form.username"
+              :placeholder="t('ENTER_USER_NAME')"
+            />
           </el-form-item>
           <el-form-item :label="t('PASSWORD')" prop="password">
-            <el-input class="form_input" v-model="form.password" :placeholder="t('ENTER_PASSWORD')" />
+            <el-input
+              class="form_input"
+              v-model="form.password"
+              :placeholder="t('ENTER_PASSWORD')"
+            />
           </el-form-item>
         </div>
         <!-- <el-form-item label="Address" class="!mb-0">
           <el-input class="form_input" v-model="form.value" type="textarea" :rows="4" />
         </el-form-item> -->
       </div>
-      <div class="flex justify-end gap-3 w-full p-6 border-t border-solid border-gray-line">
-        <el-button type="default" class="large_btn large_cancel_btn" @click="emit('close')">{{t('CLOSE')}}</el-button>
-        <el-button type="primary" native-type="submit" class="!ml-0 large_btn" :loading="loading">
-          {{t('SAVE')}}
+      <div
+        class="flex justify-end gap-3 w-full p-6 border-t border-solid border-gray-line"
+      >
+        <el-button
+          type="default"
+          class="large_btn large_cancel_btn"
+          @click="emit('close')"
+          >{{ t("CLOSE") }}</el-button
+        >
+        <el-button
+          type="primary"
+          native-type="submit"
+          class="!ml-0 large_btn"
+          :loading="loading"
+        >
+          {{ t("SAVE") }}
         </el-button>
       </div>
     </el-form>
@@ -129,14 +184,18 @@ const rules = {
   username: [{ required: true, message: "", trigger: "change" }],
   password: [
     { required: !props.doctorId, message: "", trigger: "change" },
-    { min: 5, message: t('PASSWORD_MESSAGE'), trigger: "blur" },
+    { min: 5, message: t("PASSWORD_MESSAGE"), trigger: "blur" },
   ],
   firstName: [{ required: true, message: "", trigger: "change" }],
   lastName: [{ required: true, message: "", trigger: "change" }],
   // middleName: [{ required: true, message: "", trigger: "change" }],
   phone: [
     { required: true, message: "", trigger: "change" },
-    { validator: phoneNumberValidator, message: t('VALID_PHONE'), trigger: "blur" },
+    {
+      validator: phoneNumberValidator,
+      message: t("VALID_PHONE"),
+      trigger: "blur",
+    },
   ],
   dateOfBirth: [{ required: true, message: "", trigger: "change" }],
   specialization: [{ required: true, message: "", trigger: "change" }],
@@ -175,7 +234,10 @@ async function createDoctor() {
   (<AxiosInstance>$axios)
     [method](url, { ...form, id, phone: cleanPhoneNumber(form.phone || "") })
     .then((res) => {
-      notificationShower("success", id ? t('DOCTOR_UPDATE_SUCCESS') : t('DOCTOR_CREATED_SUCCESS'));
+      notificationShower(
+        "success",
+        id ? t("DOCTOR_UPDATE_SUCCESS") : t("DOCTOR_CREATED_SUCCESS")
+      );
       emit("close");
       emit("getData");
     })
@@ -185,18 +247,20 @@ async function createDoctor() {
 }
 
 const getDoctorById = async () => {
-  (<AxiosInstance>$axios).get(`/api/user/summary/${props.doctorId}`).then((res) => {
-    form.username = res.data.payload.username;
-    form.firstName = res.data.payload.firstName;
-    form.lastName = res.data.payload.lastName;
-    form.middleName = res.data.payload.middleName;
-    form.phone = res.data.payload.phone;
-    form.dateOfBirth = res.data.payload.dateOfBirth;
-    form.specialization = res.data.payload.specialization;
-    form.departmentId = res.data.payload.department?.id;
-    form.status = res.data.payload.status;
-    calculateAge();
-  });
+  (<AxiosInstance>$axios)
+    .get(`/api/user/summary/${props.doctorId}`)
+    .then((res) => {
+      form.username = res.data.payload.username;
+      form.firstName = res.data.payload.firstName;
+      form.lastName = res.data.payload.lastName;
+      form.middleName = res.data.payload.middleName;
+      form.phone = res.data.payload.phone;
+      form.dateOfBirth = res.data.payload.dateOfBirth;
+      form.specialization = res.data.payload.specialization;
+      form.departmentId = res.data.payload.department?.id;
+      form.status = res.data.payload.status;
+      calculateAge();
+    });
 };
 const getDepartments = (queryData?: { searchKey: string }) => {
   loading.value = true;

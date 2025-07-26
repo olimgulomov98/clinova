@@ -189,50 +189,52 @@ async function createPatient() {
   const id = props.patientId;
   const url = id ? `/api/patient/update` : "/api/patient/create";
   const method = id ? "put" : "post";
-  (<AxiosInstance>$axios)
-    [method](url, { ...form, id, phone: cleanPhoneNumber(form.phone || "") })
-    .then((res) => {
-      notificationShower(
-        "success",
-        id ? t("PATIENT_UPDATE_SUCCESS") : t("PATIENT_CREATED_SUCCESS")
-      );
 
-      // (<AxiosInstance>$axios)
-      //   .put("/api/appointment/update", {
-      //     id: props.appointmentId,
-      //     status: "COMPLETED",
-      //   })
-      //   .then(() => {
-      //     // ✅ Shu yerda statusni qayta olish
-      //     return (<AxiosInstance>$axios).get(
-      //       `/api/appointment/get?id=${props.appointmentId}`
-      //     );
-      //   })
-      //   .then((res) => {
-      //     console.log("Yangi appointment status:", res.data.payload.status);
-      //   })
-      //   .catch((err) => {
-      //     console.error("Appointment update yoki get xatosi:", err);
-      //   });
-
-      emit("close");
-      emit("getData");
-
-      if (!id) {
-        const newUrl = `/patients/${res.data.payload.id}?tab=profile`;
-        const name = res.data.payload.code || `patient-${res.data.payload.id}`;
-
-        useSetUrl({
-          name,
-          url: newUrl,
-        });
-
-        router.push(newUrl);
-      }
-    })
-    .finally(() => {
-      loading.value = false;
+  try {
+    const res = await (<AxiosInstance>$axios)[method](url, {
+      ...form,
+      id,
+      phone: cleanPhoneNumber(form.phone || ""),
     });
+
+    notificationShower(
+      "success",
+      id ? t("PATIENT_UPDATE_SUCCESS") : t("PATIENT_CREATED_SUCCESS")
+    );
+
+    if (!id && props.appointmentId) {
+      try {
+        await ($axios as AxiosInstance).post(
+          `/api/appointment/change-status/${props.appointmentId}`,
+          {},
+          {
+            params: {
+              id: props.appointmentId,
+              status: "COMPLETED",
+            },
+          }
+        );
+      } catch (err) {
+        console.error("Appointment status update error:", err);
+      }
+    }
+
+    emit("close");
+    emit("getData");
+
+    if (!id) {
+      const newUrl = `/patients/${res.data.payload.id}?tab=profile`;
+      const name = res.data.payload.code || `patient-${res.data.payload.id}`;
+
+      useSetUrl({ name, url: newUrl });
+      router.push(newUrl);
+    }
+  } catch (err) {
+    console.error("Patient create/update error:", err);
+    notificationShower("error", t("PATIENT_CREATE_FAILED"));
+  } finally {
+    loading.value = false;
+  }
 }
 
 const getPatientById = async () => {

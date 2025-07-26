@@ -249,5 +249,6 @@
   "MONTHLY_INVOICES": "Monthly Invoices",
   "MONTHLY_VISITS": "Monthly Visits",
   "MONTHLY_APPOINTMENTS": "Monthly Appointments",
-  "Convert_to_Patient": "Convert to Patient"
+  "Convert_to_Patient": "Convert to Patient",
+  "EMPLOYEE_LIST": "Employee list"
 }
