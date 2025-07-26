@@ -48,7 +48,7 @@
             <el-button
               type="primary"
               class="small_btn"
-              @click="isDoctorCreateVisible = true"
+              @click="handleDropClick('/doctors/create', 'Add Employee')"
               >{{ t("ADD_DOCTOR") }}</el-button
             >
           </template>
@@ -70,13 +70,19 @@
                     </el-dropdown-item> -->
                       <el-dropdown-item>
                         <button
-                          @click="showHandle(row)"
+                          @click="
+                            handleEditDropClick(`/doctors/${row.id}`, row.code)
+                          "
                           class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                         >
-                          {{ t("VIEW") }}
+                          {{ t("SUMMARY") }}
                         </button>
                       </el-dropdown-item>
-                      <el-dropdown-item @click="editHandle(row)">
+                      <el-dropdown-item
+                        @click="
+                          handleEditDropClick(`/doctors/${row.id}`, row.code)
+                        "
+                      >
                         <button
                           class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                         >
@@ -139,26 +145,26 @@
           @update-query="updateQuery"
         />
       </div>
-      <DoctorCreateDialog
+      <!-- <DoctorCreateDialog
         v-if="isDoctorCreateVisible"
         v-model="isDoctorCreateVisible"
         @close="isDoctorCreateVisible = false"
         :doctor-id="doctor?.id"
         @get-data="getData"
-      />
-      <DoctorShowDialog
+      /> -->
+      <!-- <DoctorShowDialog
         v-if="isDoctorShowVisible"
         v-model="isDoctorShowVisible"
         @close="isDoctorShowVisible = false"
         :doctor-id="doctor?.id"
-      />
-      <DoctorStatusDialog
+      /> -->
+      <!-- <DoctorStatusDialog
         v-if="isDoctorStatusVisible"
         v-model="isDoctorStatusVisible"
         @close="isDoctorStatusVisible = false"
         :doctor-id="doctor?.id"
         @get-data="getData"
-      />
+      /> -->
     </div>
   </DoctorLayout>
 </template>
@@ -168,9 +174,13 @@ import type { Axios } from "axios";
 import { getFormatDate } from "~/utils";
 import type { IDepartmentListItem } from "~/types/department/index.type";
 import { debounce } from "lodash";
-import DoctorLayout from "~/components/layout/DoctorLayout.vue";
+import DoctorLayout from "@/components/layout/DoctorLayout.vue";
+
+const router = useRouter();
+const route = useRoute();
 const { t } = useI18n();
 const { $axios } = useNuxtApp();
+const useTab = useDoctorTabStore();
 const isDoctorShowVisible = ref(false);
 const isDoctorCreateVisible = ref(false);
 const isDoctorStatusVisible = ref(false);
@@ -297,6 +307,24 @@ const updateStatus = async (id: number, status: string) => {
   } catch (e) {
     notificationShower("error", t("STATUS_UPDATE_FAILED"));
   }
+};
+
+const handleDropClick = (url: string, code?: string) => {
+  if (code) useTab.setUrl({ name: code, url: url });
+  router.push({
+    path: url,
+    query: { ...route.query },
+  });
+};
+
+const handleEditDropClick = (url: string, code?: string) => {
+  const tabName = code || "NewTab";
+  useTab.setUrl({ name: tabName, url });
+
+  router.push({
+    path: url,
+    query: { ...route.query },
+  });
 };
 
 // hooks

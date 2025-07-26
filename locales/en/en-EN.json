@@ -250,5 +250,7 @@
   "MONTHLY_VISITS": "Monthly Visits",
   "MONTHLY_APPOINTMENTS": "Monthly Appointments",
   "Convert_to_Patient": "Convert to Patient",
-  "EMPLOYEE_LIST": "Employee list"
+  "Employee": "Employee",
+  "EMPLOYEE_LIST": "Employee list",
+  "EMPLOYEE_INFORMATION": "EMPLOYEE INFORMATION"
 }

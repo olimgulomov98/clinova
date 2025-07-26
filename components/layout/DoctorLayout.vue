@@ -4,13 +4,13 @@
     <ul class="flex items-center mb-5">
       <li>
         <nuxt-link
-          to="/patients"
+          to="/doctors"
           class="px-3 py-[6px] text-base"
           :class="{
             'active pointer-events-none': route.fullPath === '/doctors',
           }"
         >
-          {{ t("EMPLOYEE_LIST") }}
+          {{ $t("EMPLOYEE_LIST") }}
         </nuxt-link>
       </li>
       <li v-for="(i, index) in tabStore.urls" :key="index">
@@ -34,7 +34,7 @@
 <script setup lang="ts">
 const { t } = useI18n();
 const route = useRoute();
-const tabStore = useUrlTabStore();
+const tabStore = useDoctorTabStore();
 const isMounted = ref(false);
 onMounted(() => {
   isMounted.value = true;
@@ -43,18 +43,6 @@ const router = useRouter();
 
 const removeAction = async (url: string) => {
   await tabStore.removeUrl(url);
-  if (
-    route.query?.tab &&
-    [
-      `/doctors/${route.params?.patientId}?tab=profile`,
-      `/doctors/${route.params?.patientId}?tab=history`,
-      `/doctors/${route.params?.patientId}?tab=documents`,
-      `/doctors/${route.params?.patientId}?tab=invoices`,
-    ].includes(route.fullPath + "")
-  ) {
-    router.push("/doctors");
-    return;
-  }
   if (url === route.fullPath) router.back();
 };
 </script>

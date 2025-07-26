@@ -250,5 +250,7 @@
   "MONTHLY_VISITS": "Ежемесячные посещения",
   "MONTHLY_APPOINTMENTS": "Ежемесячные приёмы",
   "Convert_to_Patient": "Преобразовать в пациента",
-  "EMPLOYEE_LIST": "Список сотрудников"
+  "Employee": "Сотрудник",
+  "EMPLOYEE_LIST": "Список сотрудников",
+  "EMPLOYEE_INFORMATION": "ИНФОРМАЦИЯ О СОТРУДНИКАХ"
 }

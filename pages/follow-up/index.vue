@@ -339,12 +339,12 @@ const onChangeDatePicker = (values: string[] | null) => {
 const updateStatus = async (id: number, status: string) => {
   try {
     await (<Axios>$axios).post(
-      `/api/follow-up/confirm/${id}`,
+      `/api/follow-up/change-status/${id}`,
       {},
       {
         params: {
           id,
-          confirm: status === "CONFIRMED",
+          status,
         },
       }
     );
