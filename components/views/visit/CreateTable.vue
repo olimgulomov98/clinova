@@ -371,7 +371,7 @@ function itemsValidator() {
 function handleKeyPress(event: KeyboardEvent) {
   const char = event.key;
   // Raqam emas yoki nol bo‘lsa bloklaymiz
-  if (!/[1-9]/.test(char)) {
+  if (!/[0-9]/.test(char)) {
     event.preventDefault();
   }
 }
