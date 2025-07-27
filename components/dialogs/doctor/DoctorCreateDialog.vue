@@ -90,7 +90,7 @@
           :loading="loading"
           class="large_btn"
         >
-          {{ doctorId ? t("EDIT") : t("SAVE") }}
+          {{ t("SAVE") }}
         </el-button>
       </div>
     </el-form>

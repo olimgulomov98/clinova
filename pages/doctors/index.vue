@@ -68,7 +68,7 @@
                         {{ t("STATUS_CHANGE") }}
                       </button>
                     </el-dropdown-item> -->
-                      <el-dropdown-item>
+                      <!-- <el-dropdown-item>
                         <button
                           @click="
                             handleEditDropClick(`/doctors/${row.id}`, row.code)
@@ -77,10 +77,13 @@
                         >
                           {{ t("SUMMARY") }}
                         </button>
-                      </el-dropdown-item>
+                      </el-dropdown-item> -->
                       <el-dropdown-item
                         @click="
-                          handleEditDropClick(`/doctors/${row.id}`, row.code)
+                          handleEditDropClick(
+                            `/doctors/edit/${row.id}`,
+                            row.code
+                          )
                         "
                       >
                         <button
@@ -102,7 +105,18 @@
                 </el-dropdown>
               </template>
             </el-table-column>
-            <el-table-column prop="code" :label="t('CODE')" />
+            <el-table-column prop="code" :label="t('CODE')">
+              <template #default="{ row }">
+                <span
+                  class="link-div"
+                  @click="
+                    handleEditDropClick(`/doctors/summary/${row.id}`, row.code)
+                  "
+                >
+                  {{ row.code }}
+                </span>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="fistName"
               :label="t('FULL_NAME')"
