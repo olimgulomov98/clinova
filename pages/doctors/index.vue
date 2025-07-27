@@ -49,7 +49,7 @@
               type="primary"
               class="small_btn"
               @click="handleDropClick('/doctors/create', 'Add Employee')"
-              >{{ t("ADD_DOCTOR") }}</el-button
+              >{{ t("Add_Employee") }}</el-button
             >
           </template>
           <template #columns>
