@@ -6,6 +6,7 @@
       :model="form"
       :rules="rules"
       @submit.prevent="submitForm(formRef)"
+      v-auto-animate
     >
       <v-form-title
         class="mb-6 border-b flex items-center gap-2 cursor-pointer pb-3"
@@ -336,7 +337,7 @@ import type { AxiosInstance } from "axios";
 import type { IDoctorCreate } from "~/types/doctor/index.type";
 import type { IDepartmentListItem } from "~/types/department/index.type";
 import type { IServiceCreate } from "~/types/service/index.type";
-import { ArrowDown, ArrowUp, Delete, Search } from "@element-plus/icons-vue";
+import { ArrowDown, ArrowUp, Search } from "@element-plus/icons-vue";
 import frameImage from "~/assets/icons/frame8.svg?url";
 
 const route = useRoute();
@@ -345,6 +346,7 @@ const collapseBasic = ref(false);
 const collapsePersonal = ref(false);
 const collapseDepartment = ref(false);
 const collapsePayments = ref(false);
+const tabStore = useDoctorTabStore();
 const { t } = useI18n();
 const { $axios } = useNuxtApp();
 const { phoneNumberValidator } = useValidators();
@@ -446,6 +448,7 @@ async function createDoctor() {
       "success",
       id ? t("EMPLOYEE_UPDATE_SUCCESS") : t("EMPLOYEE_CREATED_SUCCESS")
     );
+    tabStore.removeUrl(route.fullPath);
     router.push("/doctors");
   } finally {
     loading.value = false;
@@ -533,11 +536,38 @@ const removePayment = (index: number) => {
 };
 
 onMounted(() => {
-  getRoles();
-  getDepartments();
-  getServices();
-  if (doctorId.value) getDoctorById();
+  if (!tabStore.getData(route.fullPath)) {
+    // 🌟 Faqat birinchi marta ochilayotgan bo‘lsa, URL ni qo‘sh
+    tabStore.setUrl({ name: "Add Employee", url: route.fullPath });
+  }
+  const savedForm = tabStore.getData(route.fullPath);
+  console.log("📥 Restored form from store:", savedForm);
+  if (savedForm) {
+    Object.assign(form, JSON.parse(JSON.stringify(savedForm)));
+  }
 });
+
+onUnmounted(() => {
+  const plainForm = JSON.parse(JSON.stringify(form));
+  console.log("💾 Saving form to store:", plainForm);
+  tabStore.updateData(route.fullPath, plainForm);
+});
+
+// onMounted(() => {
+//   const savedForm = tabStore.getData(route.fullPath);
+//   if (savedForm) {
+//     Object.assign(form, savedForm);
+//   }
+
+//   getRoles();
+//   getDepartments();
+//   getServices();
+//   if (doctorId.value) getDoctorById();
+// });
+
+// onUnmounted(() => {
+//   tabStore.updateData(route.fullPath, form);
+// });
 </script>
 
 <style scoped>
