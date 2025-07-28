@@ -225,7 +225,7 @@
             <!-- BASIC SALARY -->
             <div class="flex items-end">
               <el-form-item
-                :label="t('Basic Salary')"
+                :label="t('Basic_Salary')"
                 prop="basicSalary"
                 class="custom-form-item"
                 style="width: 50%"
@@ -397,7 +397,6 @@ const roleOptions = ref<{ id: number; name: string }[]>([]);
 const getRoles = async () => {
   const { data } = await (<AxiosInstance>$axios).get("/api/user/roles");
   roleOptions.value = data.payload || [];
-  console.log("roleOptions:", roleOptions.value);
 };
 
 const statuses = useConstants().DOCTOR_STATUSES?.map((i) => ({
@@ -422,19 +421,16 @@ async function createDoctor() {
     const cleanedServicePercents = form.servicePercents.filter(
       (item) => item.serviceId && item.percent
     );
-    const response = await (<AxiosInstance>$axios)[method](url, {
+    await (<AxiosInstance>$axios)[method](url, {
       ...form,
       id,
       phone: cleanPhoneNumber(form.phone || ""),
       servicePercents: cleanedServicePercents,
     });
 
-    // ✅ Log orqali tekshiramiz
-    console.log("Doctor created/updated response:", response.data);
-
     notificationShower(
       "success",
-      id ? t("DOCTOR_UPDATE_SUCCESS") : t("DOCTOR_CREATED_SUCCESS")
+      id ? t("EMPLOYEE_UPDATE_SUCCESS") : t("EMPLOYEE_CREATED_SUCCESS")
     );
     router.push("/doctors");
   } finally {
@@ -446,17 +442,32 @@ const getDoctorById = async () => {
   const { data } = await (<AxiosInstance>$axios).get(
     `/api/user/summary/${doctorId.value}`
   );
+
+  const roles = data.payload.authorities?.length
+    ? data.payload.authorities.map((a: any) => a.authority)
+    : [];
+
   const d = data.payload;
   form.username = d.username;
   form.firstName = d.firstName;
   form.lastName = d.lastName;
   form.middleName = d.middleName;
+  form.gender = d.gender;
+  form.address = d.address;
   form.phone = d.phone;
   form.dateOfBirth = d.dateOfBirth;
   form.specialization = d.specialization;
   form.departmentId = d.department?.id;
   form.status = d.status;
-  form.roles = d.roles?.length ? d.roles.map((r: any) => r.name) : [];
+  form.basicSalary = d.basicSalary;
+  form.roles = roles;
+  form.servicePercents =
+    d.servicePercents && d.servicePercents.length
+      ? d.servicePercents.map((item: any) => ({
+          serviceId: item.service?.id || "",
+          percent: item.percent || "",
+        }))
+      : [{ serviceId: "", percent: "" }];
   calculateAge();
 };
 

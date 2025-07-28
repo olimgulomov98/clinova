@@ -37,14 +37,14 @@
   "ADD_EVENT": "Add event",
   "APPOINTMENT_UPDATE_SUCCESS": "Appointment updated successfully",
   "PATIENT_UPDATE_SUCCESS": "Patient updated successfully",
-  "DOCTOR_UPDATE_SUCCESS": "Doctor updated successfully",
+  "EMPLOYEE_UPDATE_SUCCESS": "Employee updated successfully",
   "DEPARTMENT_UPDATE_SUCCESS": "Department updated successfully",
   "SERVICE_UPDATE_SUCCESS": "Service updated successfully",
   "VISIT_UPDATE_SUCCESS": "Visit updated successfully",
   "APPOINTMENT_CREATED_SUCCESS": "Appointment created successfully",
   "DEPARTMENT_CREATED_SUCCESS": "Department created successfully",
   "PATIENT_CREATED_SUCCESS": "Patient created successfully",
-  "DOCTOR_CREATED_SUCCESS": "Doctor created successfully",
+  "EMPLOYEE_CREATED_SUCCESS": "Employee created successfully",
   "SERVICE_CREATED_SUCCESS": "Service created successfully",
   "VISIT_CREATED_SUCCESS": "Visit created successfully",
   "DATA_SAVE_SUCCESS": "Data saved successfully",
@@ -259,5 +259,7 @@
   "Position": "Position",
   "Login": "Login",
   "Service": "Service",
-  "Amount": "Amount"
+  "Amount": "Amount",
+  "ROLES": "Roles",
+  "Basic_Salary": "Basic Salary"
 }

@@ -37,14 +37,14 @@
   "ADD_EVENT": "Hodisa qo‘shish",
   "APPOINTMENT_UPDATE_SUCCESS": "Uchrashuv muvaffaqiyatli yangilandi",
   "PATIENT_UPDATE_SUCCESS": "Bemor ma'lumotlari yangilandi",
-  "DOCTOR_UPDATE_SUCCESS": "Shifokor ma'lumotlari yangilandi",
+  "EMPLOYEE_UPDATE_SUCCESS": "Xodim ma'lumotlari yangilandi",
   "DEPARTMENT_UPDATE_SUCCESS": "Bo‘lim yangilandi",
   "SERVICE_UPDATE_SUCCESS": "Xizmat yangilandi",
   "VISIT_UPDATE_SUCCESS": "Tashrif yangilandi",
   "APPOINTMENT_CREATED_SUCCESS": "Uchrashuv muvaffaqiyatli yaratildi",
   "DEPARTMENT_CREATED_SUCCESS": "Bo‘lim yaratildi",
   "PATIENT_CREATED_SUCCESS": "Bemor yaratildi",
-  "DOCTOR_CREATED_SUCCESS": "Shifokor yaratildi",
+  "EMPLOYEE_CREATED_SUCCESS": "Xodim yaratildi",
   "SERVICE_CREATED_SUCCESS": "Xizmat yaratildi",
   "VISIT_CREATED_SUCCESS": "Tashrif yaratildi",
   "DATA_SAVE_SUCCESS": "Ma'lumotlar saqlandi",
@@ -259,5 +259,7 @@
   "Position": "Lavozim",
   "Login": "Kirish",
   "Service": "Xizmat",
-  "Amount": "Miqdor"
+  "Amount": "Miqdor",
+  "ROLES": "Rollar",
+  "Basic_Salary": "Asosiy ish haqi"
 }

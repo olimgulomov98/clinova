@@ -37,14 +37,14 @@
   "ADD_EVENT": "Добавить событие",
   "APPOINTMENT_UPDATE_SUCCESS": "Прием успешно обновлен",
   "PATIENT_UPDATE_SUCCESS": "Пациент успешно обновлен",
-  "DOCTOR_UPDATE_SUCCESS": "Врач успешно обновлен",
+  "EMPLOYEE_UPDATE_SUCCESS": "Сотрудник успешно обновлен",
   "DEPARTMENT_UPDATE_SUCCESS": "Отделение успешно обновлено",
   "SERVICE_UPDATE_SUCCESS": "Услуга успешно обновлена",
   "VISIT_UPDATE_SUCCESS": "Посещение успешно обновлено",
   "APPOINTMENT_CREATED_SUCCESS": "Прием успешно создан",
   "DEPARTMENT_CREATED_SUCCESS": "Отделение успешно создано",
   "PATIENT_CREATED_SUCCESS": "Пациент успешно создан",
-  "DOCTOR_CREATED_SUCCESS": "Врач успешно создан",
+  "EMPLOYEE_CREATED_SUCCESS": "Сотрудник успешно создан",
   "SERVICE_CREATED_SUCCESS": "Услуга успешно создана",
   "VISIT_CREATED_SUCCESS": "Посещение успешно создано",
   "DATA_SAVE_SUCCESS": "Данные успешно сохранены",
@@ -259,5 +259,7 @@
   "Position": "Позиция",
   "Login": "Войти",
   "Service": "Услуга",
-  "Amount": "Сумма"
+  "Amount": "Сумма",
+  "ROLES": "Роли",
+  "Basic_Salary": "Базовая зарплата"
 }
