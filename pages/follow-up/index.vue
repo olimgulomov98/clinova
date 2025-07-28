@@ -2,10 +2,6 @@
   <div class="page-container !gap-6">
     <div class="flex justify-between flex-wrap items-center">
       <div class="page-title">{{ t("FOLLOW_UP") }}</div>
-      <!-- <el-button type="primary" class="small_btn" @click="isAppointmentCreateVisible = true">
-          <icon-plus />
-          {{ t("ADD_APPOINTMENT") }}
-        </el-button> -->
     </div>
     <VTable
       :filters="filters"
@@ -146,7 +142,7 @@
 
               <!-- Foydalanuvchi tanlay oladigan statuslar -->
               <el-option
-                v-for="status in ['CONFIRMED', 'CANCELLED']"
+                v-for="status in ['CONFIRMED', 'CANCELLED', 'COMPLETED']"
                 :key="status"
                 :label="t(status)"
                 :value="status"
@@ -213,6 +209,10 @@ const statusOptions = ref([
   {
     label: t("CANCELLED"),
     id: "CANCELLED",
+  },
+  {
+    label: t("COMPLETED"),
+    id: "COMPLETED",
   },
 ]);
 
