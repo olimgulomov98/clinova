@@ -129,7 +129,7 @@
   "AUTO_CALCULATED": "Avtomatik hisoblangan",
   "PHONE_NUMBER": "Telefon raqami",
   "SPECIALITY": "Mutaxassislik",
-  "SEARCH_AND_SELECT_DEPARTMENT": "Bo‘limni qidiring va tanlang",
+  "SEARCH_AND_SELECT_DEPARTMENT": "Qidirish uchun bu yerga yozing",
   "USERNAME": "Foydalanuvchi nomi",
   "PASSWORD": "Parol",
   "PASSWORD_MESSAGE": "Parol kamida 5 ta belgidan iborat bo‘lishi kerak",
@@ -253,5 +253,11 @@
   "Employee": "Xodim",
   "EMPLOYEE_LIST": "Xodimlar ro‘yxati",
   "EMPLOYEE_INFORMATION": "HODIM MA'LUMOTI",
-  "Add_Employee": "Xodimni qo'shish"
+  "Add_Employee": "Xodimni qo'shish",
+  "PAYMENTS_TABLE": "TO'LOVLAR JADVALI",
+  "BASIC_INFO": "ASOSIY MA'LUMOT",
+  "Position": "Lavozim",
+  "Login": "Kirish",
+  "Service": "Xizmat",
+  "Amount": "Miqdor"
 }

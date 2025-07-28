@@ -44,7 +44,8 @@ body {
 
 .filter-search .el-textarea__inner.is-focus,
 .filter-search .el-input__wrapper.is-focus {
-  box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset;
+  box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color))
+    inset;
 }
 .filter-search .el-input__wrapper,
 .filter-search .el-textarea__inner {
@@ -126,7 +127,6 @@ body {
   color: white;
 }
 
-
 .el-button.large_btn {
   height: 48px;
   border-radius: 8px;
@@ -156,7 +156,8 @@ body {
 }
 .form_input .el-textarea__inner.is-focus,
 .form_input .el-input__wrapper.is-focus {
-  box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset;
+  box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color))
+    inset;
 }
 .form_input .el-input__wrapper,
 .form_input .el-textarea__inner {

@@ -1,5 +1,5 @@
 export interface IDoctorCreate {
-  id?: number
+  id?: number;
   username: string;
   password: string;
   firstName: string;
@@ -10,4 +10,12 @@ export interface IDoctorCreate {
   specialization: string;
   departmentId: number;
   roles: string[];
+  status: string;
+  servicePercents: {
+    serviceId: number;
+    percent: number;
+  }[];
+  basicSalary: number;
+  gender: string;
+  address: string;
 }

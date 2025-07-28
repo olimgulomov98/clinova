@@ -129,7 +129,7 @@
   "AUTO_CALCULATED": "Автоматически рассчитывается",
   "PHONE_NUMBER": "Номер телефона",
   "SPECIALITY": "Специальность",
-  "SEARCH_AND_SELECT_DEPARTMENT": "Найти и выбрать отделение",
+  "SEARCH_AND_SELECT_DEPARTMENT": "Введите здесь для поиска",
   "USERNAME": "Имя пользователя",
   "PASSWORD": "Пароль",
   "PASSWORD_MESSAGE": "Пароль должен содержать не менее 5 символов",
@@ -253,5 +253,11 @@
   "Employee": "Сотрудник",
   "EMPLOYEE_LIST": "Список сотрудников",
   "EMPLOYEE_INFORMATION": "ИНФОРМАЦИЯ О СОТРУДНИКАХ",
-  "Add_Employee": "Добавить сотрудника"
+  "Add_Employee": "Добавить сотрудника",
+  "PAYMENTS_TABLE": "ТАБЛИЦА ПЛАТЕЖЕЙ",
+  "BASIC_INFO": "ОСНОВНАЯ ИНФОРМАЦИЯ",
+  "Position": "Позиция",
+  "Login": "Войти",
+  "Service": "Услуга",
+  "Amount": "Сумма"
 }

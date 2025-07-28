@@ -129,7 +129,7 @@
   "AUTO_CALCULATED": "Auto-calculated",
   "PHONE_NUMBER": "Phone Number",
   "SPECIALITY": "Speciality",
-  "SEARCH_AND_SELECT_DEPARTMENT": "Search and select department",
+  "SEARCH_AND_SELECT_DEPARTMENT": "Type here to search",
   "USERNAME": "Username",
   "PASSWORD": "Password",
   "PASSWORD_MESSAGE": "Password must be at least 5 characters",
@@ -253,5 +253,11 @@
   "Employee": "Employee",
   "EMPLOYEE_LIST": "Employee list",
   "EMPLOYEE_INFORMATION": "EMPLOYEE INFORMATION",
-  "Add_Employee": "Add Employee"
+  "Add_Employee": "Add Employee",
+  "PAYMENTS_TABLE": "PAYMENTS TABLE",
+  "BASIC_INFO": "BASIC INFO",
+  "Position": "Position",
+  "Login": "Login",
+  "Service": "Service",
+  "Amount": "Amount"
 }
