@@ -230,7 +230,7 @@
   "PARTIALLY_PAID": "Частично оплачено",
   "PAID_INVOICE": "Оплаченный счет",
   "PENDING_INVOICE": "Ожидаемый счет",
-  "AMOUNT": "Сумма",
+  "AMOUNT": "Сумма %",
   "ADD_PAYMENT": "Добавить платеж",
   "PAYMENT_SUCCESS": "Платеж успешно добавлен",
   "DUE_AMOUNT": "Сумма к оплате",

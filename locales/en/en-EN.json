@@ -230,7 +230,7 @@
   "PARTIALLY_PAID": "Partially paid",
   "PAID_INVOICE": "Paid Invoice",
   "PENDING_INVOICE": "Pending Invoice",
-  "AMOUNT": "Amount",
+  "AMOUNT": "Amount %",
   "ADD_PAYMENT": "Add payment",
   "PAYMENT_SUCCESS": "Payment successfull added",
   "DUE_AMOUNT": "Due amount",
@@ -259,7 +259,6 @@
   "Position": "Position",
   "Login": "Login",
   "Service": "Service",
-  "Amount": "Amount",
   "ROLES": "Roles",
   "Basic_Salary": "Basic Salary"
 }

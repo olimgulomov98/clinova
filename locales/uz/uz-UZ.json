@@ -230,7 +230,7 @@
   "PARTIALLY_PAID": "Qisman to'langan",
   "PAID_INVOICE": "To'langan hisob-faktura",
   "PENDING_INVOICE": "Kutilayotgan hisob-faktura",
-  "AMOUNT": "Summa",
+  "AMOUNT": "Summa %",
   "ADD_PAYMENT": "To'lovni qo'shish",
   "PAYMENT_SUCCESS": "Toʻlov muvaffaqiyatli qoʻshildi",
   "DUE_AMOUNT": "To'lanishi kerak bo'lgan miqdor",

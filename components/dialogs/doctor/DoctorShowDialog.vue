@@ -100,7 +100,12 @@
               prop="address"
               class="col-span-2 custom-form-item"
             >
-              <el-input v-model="form.address" type="textarea" :rows="4" />
+              <el-input
+                v-model="form.address"
+                type="textarea"
+                :rows="4"
+                class="no-radius-textarea"
+              />
             </el-form-item>
           </div>
         </div>

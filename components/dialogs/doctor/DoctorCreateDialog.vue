@@ -55,7 +55,7 @@
                 prop="question"
                 class="custom-form-item"
               >
-                <div class="rounded-lg bg-gray-bg px-[5px] flex">
+                <div class="rounded-lg bg-gray-bg px-[10px] flex">
                   <div v-for="gender in genders">
                     <v-button
                       type="primary"
@@ -145,6 +145,8 @@
                 label-key="name"
                 value-key="id"
                 remote
+                :suffix-icon="Search"
+                remote-show-suffix
                 :loading="loading"
                 :placeholder="t('SEARCH_AND_SELECT_DEPARTMENT')"
               />
@@ -179,48 +181,64 @@
       <transition name="fade">
         <div v-show="!collapsePayments" class="mb-5">
           <div class="grid grid-cols-2 gap-12">
-            <div class="grid grid-cols-1">
-              <div class="grid grid-cols-2 gap-4">
-                <div class="text-sm text-gray-500 font-medium">
-                  {{ t("Service") }}
-                </div>
-                <div class="text-sm text-gray-500 font-medium">
-                  {{ t("Amount") }} / %
-                </div>
-                <div></div>
-              </div>
-              <div
-                v-for="(row, index) in form.servicePercents"
-                :key="index"
-                class="flex"
-              >
-                <v-select
-                  v-model="row.serviceId"
-                  filterable
-                  class="no-radius-select"
-                  :options="services"
-                  label-key="name"
-                  value-key="id"
-                  remote
-                  :loading="loading"
-                  :placeholder="t('SEARCH_AND_SELECT_DEPARTMENT')"
-                />
+            <el-form-item prop="servicePercents">
+              <el-table :data="form.servicePercents" style="width: 100%">
+                <el-table-column :label="t('SERVICE')">
+                  <template #default="scope">
+                    <el-form-item
+                      :prop="`servicePercents.${scope.$index}.serviceId`"
+                    >
+                      <v-select
+                        v-model="scope.row.serviceId"
+                        :options="services"
+                        filterable
+                        label-key="name"
+                        value-key="id"
+                        remote
+                        :loading="loading"
+                        :suffix-icon="Search"
+                        remote-show-suffix
+                        :placeholder="t('SEARCH_AND_SELECT_DEPARTMENT')"
+                      />
+                    </el-form-item>
+                  </template>
+                </el-table-column>
 
-                <el-input
-                  v-model="row.percent"
-                  type="number"
-                  size="small"
-                  class="no-radius-input"
-                />
+                <!-- AMOUNT / % column -->
+                <el-table-column :label="t('AMOUNT')">
+                  <template #default="scope">
+                    <el-form-item
+                      :prop="`servicePercents.${scope.$index}.percent`"
+                    >
+                      <v-input
+                        v-model.number="scope.row.percent"
+                        type="number"
+                      />
+                    </el-form-item>
+                  </template>
+                </el-table-column>
 
-                <el-button
-                  :icon="Delete"
-                  size="large"
-                  style="border-radius: 0; padding: 17px"
-                  @click="removePayment(index)"
-                />
-              </div>
-            </div>
+                <!-- Delete / Add row -->
+                <el-table-column align="right" width="60">
+                  <template #default="scope">
+                    <div
+                      v-if="form.servicePercents.length !== scope.$index + 1"
+                      class="flex items-center justify-center w-full gap-x-5 cursor-pointer float-right"
+                      @click="removePayment(scope.$index)"
+                    >
+                      <icon-trash />
+                    </div>
+                    <div
+                      v-else
+                      class="flex items-center justify-center w-full gap-x-5 cursor-pointer float-right"
+                      @click="addPayment"
+                    >
+                      <icon-plus />
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-form-item>
 
             <!-- BASIC SALARY -->
             <div class="flex items-end">
@@ -381,10 +399,6 @@ const form = reactive<Partial<IDoctorCreate>>({
       serviceId: "",
       percent: "",
     },
-    {
-      serviceId: "",
-      percent: "",
-    },
   ],
   basicSalary: "",
   gender: "",
@@ -508,19 +522,15 @@ const disabledDate = (time: Date) => {
   return time.getTime() > Date.now();
 };
 
+const addPayment = () => {
+  form.servicePercents.push({ serviceId: "", percent: "" });
+};
+
 const removePayment = (index: number) => {
-  if (form.servicePercents.length > 2) {
+  if (form.servicePercents.length > 1) {
     form.servicePercents.splice(index, 1);
   }
 };
-
-watchEffect(() => {
-  const last = form.servicePercents[form.servicePercents.length - 1];
-
-  if (last.serviceId || last.percent) {
-    form.servicePercents.push({ serviceId: "", percent: "" });
-  }
-});
 
 onMounted(() => {
   getRoles();
@@ -549,10 +559,49 @@ onMounted(() => {
   opacity: 1;
 }
 
+/* for paytments table */
+:deep(.el-table tr:hover) {
+  background: white !important;
+}
+:deep(
+    .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell
+  ) {
+  background: white !important;
+}
+:deep(.el-table th.el-table__cell) {
+  background-color: white !important;
+}
+:deep(tbody tr td) {
+  border-right: 1px solid #f0f0f0 !important;
+  border-top: 1px solid #f0f0f0 !important;
+  padding: 0 !important;
+}
+
+:deep(tbody tr td .el-select__wrapper),
+:deep(tbody tr td .el-input__wrapper) {
+  box-shadow: none !important;
+  border: 0 !important;
+}
+:deep(tbody tr td:first-child) {
+  border-left: 1px solid #f0f0f0 !important;
+}
+
+:deep(.el-input__wrapper),
+:deep(.el-textarea__inner),
+:deep(.el-select__wrapper) {
+  background-color: white;
+  border-color: #a7aaad !important;
+}
+
+:deep(.el-form-item--label-top .el-form-item__label) {
+  color: #757575;
+}
+
+/* for roles */
 .role-list {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
-  max-height: 250px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
@@ -563,6 +612,7 @@ onMounted(() => {
   border-bottom: 1px solid #f0f0f0;
   font-weight: 500;
   color: #4b5563;
+  margin-right: 0;
 }
 
 .role-item:last-child {
@@ -589,16 +639,6 @@ onMounted(() => {
   gap: 20px;
 }
 
-.role-list {
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.role-item {
-  margin-right: 0;
-}
-
-/* Custom scrollbar (Chrome, Edge, Safari) */
 .role-list::-webkit-scrollbar {
   width: 6px;
 }
@@ -612,7 +652,6 @@ onMounted(() => {
   border-radius: 4px;
 }
 
-/* Firefox scroll style */
 @supports (scrollbar-width: thin) {
   .role-list {
     scrollbar-width: thin;
