@@ -273,18 +273,24 @@
             </div>
 
             <div>
-              <el-form-item :label="t('ROLES')" prop="roles">
-                <div class="role-list flex flex-wrap gap-5">
-                  <el-checkbox-group v-model="form.roles">
-                    <el-checkbox
-                      v-for="role in roleOptions"
-                      :key="role"
-                      :label="role"
-                      class="role-item"
-                    >
-                      {{ role }}
-                    </el-checkbox>
-                  </el-checkbox-group>
+              <el-form-item
+                :label="t('ROLES')"
+                prop="roles"
+                class="roles-form-item"
+              >
+                <div class="scroll-wrapper">
+                  <div class="role-list flex flex-wrap">
+                    <el-checkbox-group v-model="form.roles">
+                      <el-checkbox
+                        v-for="role in roleOptions"
+                        :key="role"
+                        :label="role"
+                        class="custom-checkbox role-item"
+                      >
+                        {{ role }}
+                      </el-checkbox>
+                    </el-checkbox-group>
+                  </div>
                 </div>
               </el-form-item>
             </div>
@@ -488,7 +494,6 @@ const disabledDate = (time: Date) => {
 };
 
 const removePayment = (index: number) => {
-  // kamida 2 dona qator qolishi kerak
   if (form.servicePercents.length > 2) {
     form.servicePercents.splice(index, 1);
   }
@@ -497,7 +502,6 @@ const removePayment = (index: number) => {
 watchEffect(() => {
   const last = form.servicePercents[form.servicePercents.length - 1];
 
-  // Agar oxirgi qatorda qiymat bor bo‘lsa, yangi qator qo‘shiladi
   if (last.serviceId || last.percent) {
     form.servicePercents.push({ serviceId: "", percent: "" });
   }
@@ -552,5 +556,52 @@ onMounted(() => {
 
 .button-margin {
   margin-top: 30px;
+}
+
+::v-deep(.custom-checkbox.is-checked) {
+  background-color: transparent !important;
+}
+
+::v-deep(.custom-checkbox .el-checkbox__input.is-checked .el-checkbox__inner) {
+  background-color: #facc15 !important;
+  border-color: #facc15 !important;
+}
+
+::v-deep(.custom-checkbox) {
+  min-width: 400px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.role-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.role-item {
+  margin-right: 0;
+}
+
+/* Custom scrollbar (Chrome, Edge, Safari) */
+.role-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.role-list::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+.role-list::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
+
+/* Firefox scroll style */
+@supports (scrollbar-width: thin) {
+  .role-list {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f3f4f6;
+  }
 }
 </style>
