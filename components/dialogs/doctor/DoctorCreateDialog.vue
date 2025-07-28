@@ -422,12 +422,16 @@ async function createDoctor() {
     const cleanedServicePercents = form.servicePercents.filter(
       (item) => item.serviceId && item.percent
     );
-    await (<AxiosInstance>$axios)[method](url, {
+    const response = await (<AxiosInstance>$axios)[method](url, {
       ...form,
       id,
       phone: cleanPhoneNumber(form.phone || ""),
       servicePercents: cleanedServicePercents,
     });
+
+    // ✅ Log orqali tekshiramiz
+    console.log("Doctor created/updated response:", response.data);
+
     notificationShower(
       "success",
       id ? t("DOCTOR_UPDATE_SUCCESS") : t("DOCTOR_CREATED_SUCCESS")

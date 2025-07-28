@@ -214,7 +214,7 @@ const statusOptions = ref([
 ]);
 
 const filters = ref<any>({
-  role: "DOCTOR",
+  // role: "DOCTOR",
   searchKey: null,
   departmentId: null,
   orderBy: null,
