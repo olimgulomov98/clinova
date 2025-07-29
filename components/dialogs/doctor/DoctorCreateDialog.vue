@@ -537,37 +537,23 @@ const removePayment = (index: number) => {
 
 onMounted(() => {
   if (!tabStore.getData(route.fullPath)) {
-    // 🌟 Faqat birinchi marta ochilayotgan bo‘lsa, URL ni qo‘sh
     tabStore.setUrl({ name: "Add Employee", url: route.fullPath });
   }
   const savedForm = tabStore.getData(route.fullPath);
-  console.log("📥 Restored form from store:", savedForm);
   if (savedForm) {
     Object.assign(form, JSON.parse(JSON.stringify(savedForm)));
   }
+
+  getRoles();
+  getDepartments();
+  getServices();
+  if (doctorId.value) getDoctorById();
 });
 
 onUnmounted(() => {
   const plainForm = JSON.parse(JSON.stringify(form));
-  console.log("💾 Saving form to store:", plainForm);
   tabStore.updateData(route.fullPath, plainForm);
 });
-
-// onMounted(() => {
-//   const savedForm = tabStore.getData(route.fullPath);
-//   if (savedForm) {
-//     Object.assign(form, savedForm);
-//   }
-
-//   getRoles();
-//   getDepartments();
-//   getServices();
-//   if (doctorId.value) getDoctorById();
-// });
-
-// onUnmounted(() => {
-//   tabStore.updateData(route.fullPath, form);
-// });
 </script>
 
 <style scoped>
