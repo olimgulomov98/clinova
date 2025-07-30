@@ -131,6 +131,7 @@
               size="small"
               placeholder="Select"
               class="custom-status-select"
+              :disabled="!hasPermission('appointment', 'change_status')"
             >
               <!-- Agar status PENDING bo‘lsa, uni faqat SELECT ichida ko‘rsatish -->
               <el-option
@@ -197,6 +198,10 @@ const services = ref([]);
 const doctors = ref([]);
 const loading = ref(false);
 const route = useRoute();
+const { hasPermission } = usePermission();
+const userStore = useUserStore();
+const roles = userStore.userRoles;
+const userId = userStore.userInfo?.id || null;
 const statusOptions = ref([
   {
     label: t("CONFIRMED"),
@@ -243,6 +248,10 @@ const getData = async () => {
       page: page - 1,
       size: page_size || filters.value.size,
     };
+
+    if (roles.includes("DOCTOR") && userId) {
+      payload.doctorId = userId;
+    }
 
     const response = await (<Axios>$axios).post("/api/follow-up/list", payload);
     const data = response?.data?.payload;

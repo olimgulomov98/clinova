@@ -2,7 +2,12 @@
   <div class="page-container !gap-6">
     <div class="flex w-full justify-between flex-wrap items-center">
       <teleport v-if="isMounted" to="#patient-tab-slot">
-        <el-button type="primary" class="small_btn" @click="addVisit">
+        <el-button
+          type="primary"
+          class="small_btn"
+          @click="addVisit"
+          v-if="hasPermission('patient', 'add_new_to_visit')"
+        >
           <icon-plus />
           {{ t("ADD_NEW_VISIT") }}
         </el-button>
@@ -175,6 +180,7 @@
                   <!--                    </button>-->
                   <!--                  </el-dropdown-item>-->
                   <el-dropdown-item
+                    v-if="hasPermission('patient', 'add_new_to_visit')"
                     @click="
                       handleDropClick(
                         `/patients/${route.params.patientId}/visit/${row.id}/summary?tab=history`
@@ -340,6 +346,7 @@ const doctors = ref([]);
 const isLoading = ref(false);
 const loading = ref(false);
 const router = useRouter();
+const { hasPermission } = usePermission();
 const visitId = ref<number | null>(null);
 const value2 = ref([
   dayjs().startOf("month").format("YYYY-MM-DDTHH:mm:ss[Z]"),

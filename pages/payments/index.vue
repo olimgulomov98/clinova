@@ -1,188 +1,190 @@
 <template>
-  <PaymentLayout>
-    <div class="page-container">
-      <div class="box-page">
-        <div class="total-page-card">
-          <div class="total-card-logo">
-            <icon-receipt />
-          </div>
-          <div class="total-summa">
-            <div class="label">
-              {{ t("TOTAL_INVOICES") }}
+  <div v-if="hasPermission('kassa', 'full_access')">
+    <PaymentLayout>
+      <div class="page-container">
+        <div class="box-page">
+          <div class="total-page-card">
+            <div class="total-card-logo">
+              <icon-receipt />
             </div>
-            <div class="cost">
-              {{ getFormatAmount(statistics?.total) }}
+            <div class="total-summa">
+              <div class="label">
+                {{ t("TOTAL_INVOICES") }}
+              </div>
+              <div class="cost">
+                {{ getFormatAmount(statistics?.total) }}
+              </div>
+            </div>
+          </div>
+          <div class="total-page-card">
+            <div class="total-card-logo">
+              <icon-seal-check />
+            </div>
+            <div class="total-summa">
+              <div class="label">
+                {{ t("PAID_INVOICE") }}
+              </div>
+              <div class="cost">
+                {{ getFormatAmount(statistics?.paid) }}
+              </div>
+            </div>
+          </div>
+          <div class="total-page-card">
+            <div class="total-card-logo">
+              <icon-circle-dashed />
+            </div>
+            <div class="total-summa">
+              <div class="label">
+                {{ t("PENDING_INVOICE") }}
+              </div>
+              <div class="cost">
+                {{ getFormatAmount(statistics?.pending) }}
+              </div>
+            </div>
+          </div>
+          <div class="total-page-card">
+            <div class="total-card-logo">
+              <icon-circle-dashed />
+            </div>
+            <div class="total-summa">
+              <div class="label">
+                {{ t("PARTIALLY_PAID") }}
+              </div>
+              <div class="cost">
+                {{ getFormatAmount(statistics?.partialPaid) }}
+              </div>
             </div>
           </div>
         </div>
-        <div class="total-page-card">
-          <div class="total-card-logo">
-            <icon-seal-check />
-          </div>
-          <div class="total-summa">
-            <div class="label">
-              {{ t("PAID_INVOICE") }}
-            </div>
-            <div class="cost">
-              {{ getFormatAmount(statistics?.paid) }}
-            </div>
-          </div>
-        </div>
-        <div class="total-page-card">
-          <div class="total-card-logo">
-            <icon-circle-dashed />
-          </div>
-          <div class="total-summa">
-            <div class="label">
-              {{ t("PENDING_INVOICE") }}
-            </div>
-            <div class="cost">
-              {{ getFormatAmount(statistics?.pending) }}
-            </div>
-          </div>
-        </div>
-        <div class="total-page-card">
-          <div class="total-card-logo">
-            <icon-circle-dashed />
-          </div>
-          <div class="total-summa">
-            <div class="label">
-              {{ t("PARTIALLY_PAID") }}
-            </div>
-            <div class="cost">
-              {{ getFormatAmount(statistics?.partialPaid) }}
-            </div>
-          </div>
-        </div>
-      </div>
-      <VTable
-        :filters="filters"
-        :table-data="tableData?.list"
-        :loading="isLoading"
-        filter-right
-        search-left-position
-        :search-placeholder="t('SEARCH_FOR_PATIENT_NAME')"
-        @sort-change="sortChange"
-        @search="search"
-      >
-        <template #tabs>
-          <el-form-item prop="statusId" class="!mb-0">
-            <v-select
-              class="filter_select"
-              filterable
-              v-model="filters.status"
-              :options="statusOptions"
-              label-key="name"
-              value-key="id"
-              :placeholder="t('STATUS')"
-              clearable
-              style="width: 100px"
-              :is-filter="true"
+        <VTable
+          :filters="filters"
+          :table-data="tableData?.list"
+          :loading="isLoading"
+          filter-right
+          search-left-position
+          :search-placeholder="t('SEARCH_FOR_PATIENT_NAME')"
+          @sort-change="sortChange"
+          @search="search"
+        >
+          <template #tabs>
+            <el-form-item prop="statusId" class="!mb-0">
+              <v-select
+                class="filter_select"
+                filterable
+                v-model="filters.status"
+                :options="statusOptions"
+                label-key="name"
+                value-key="id"
+                :placeholder="t('STATUS')"
+                clearable
+                style="width: 100px"
+                :is-filter="true"
+              />
+            </el-form-item>
+            <el-date-picker
+              v-model="value2"
+              type="daterange"
+              unlink-panels
+              range-separator="To"
+              start-placeholder="Start date"
+              end-placeholder="End date"
+              style="
+                border-radius: 8px;
+                background: #eaf2f8;
+                border: 0;
+                height: 30px;
+                width: 220px;
+              "
+              @update:model-value="onChangeDatePicker"
+              class="icon-date-picker"
+              :class="{ 'date-picker-close': !!value2?.length }"
             />
-          </el-form-item>
-          <el-date-picker
-            v-model="value2"
-            type="daterange"
-            unlink-panels
-            range-separator="To"
-            start-placeholder="Start date"
-            end-placeholder="End date"
-            style="
-              border-radius: 8px;
-              background: #eaf2f8;
-              border: 0;
-              height: 30px;
-              width: 220px;
-            "
-            @update:model-value="onChangeDatePicker"
-            class="icon-date-picker"
-            :class="{ 'date-picker-close': !!value2?.length }"
-          />
-          <el-button
-            :icon="Refresh"
-            size="small"
-            class="refresh-btn"
-            @click="handleRefresh"
-          />
-        </template>
-        <template #columns>
-          <el-table-column :label="t('CODE')">
-            <template #default="{ row }">
-              <div
-                @click="handleDropClick(`/payments/${row.id}`, row.code)"
-                class="link-div"
-              >
-                {{ row.code }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="visit.patient.name"
-            :label="t('PATIENT')"
-            :formatter="(row) => row.visit?.patient?.name"
-          />
-          <el-table-column
-            prop="creationDate"
-            :label="t('DATE')"
-            :formatter="(row) => getFormatDate(row.creationDate)"
-          />
-          <el-table-column :label="t('SERVICE')">
-            <template #default="{ row }">
-              <ul class="flex flex-col flex-wrap gap-2">
-                <li>
-                  <el-tooltip
-                    class="box-item"
-                    :disabled="row.items?.length < 2"
-                    effect="dark"
-                    placement="right-start"
-                  >
-                    <template #content>
-                      <ul>
-                        <li
-                          v-for="(item, index) in row.items || []"
-                          :key="index"
-                        >
-                          <span>{{ item.service?.name }}</span>
-                        </li>
-                      </ul>
-                    </template>
-                    <span>
-                      {{ row.items?.[0]?.service?.name || "----" }}
-                    </span>
-                  </el-tooltip>
-                </li>
-              </ul>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="total"
-            :label="t('TOTAL')"
-            :formatter="(row) => getFormatAmount(row.total)"
-          />
-          <el-table-column
-            prop="dueAmount"
-            :label="t('DUE_AMOUNT')"
-            :formatter="(row) => getFormatAmount(row.dueAmount)"
-          />
-          <el-table-column prop="status" :label="t('STATUS')">
-            <template #default="{ row }">
-              <div v-if="row.status">
-                <div class="status-btn">
-                  {{ t(row.status) }}
+            <el-button
+              :icon="Refresh"
+              size="small"
+              class="refresh-btn"
+              @click="handleRefresh"
+            />
+          </template>
+          <template #columns>
+            <el-table-column :label="t('CODE')">
+              <template #default="{ row }">
+                <div
+                  @click="handleDropClick(`/payments/${row.id}`, row.code)"
+                  class="link-div"
+                >
+                  {{ row.code }}
                 </div>
-              </div>
-            </template>
-          </el-table-column>
-        </template>
-      </VTable>
-      <VPagination
-        v-model="filters"
-        total-page-hide
-        :total-page="tableData?.total"
-        @update-query="updateQuery"
-      />
-    </div>
-  </PaymentLayout>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="visit.patient.name"
+              :label="t('PATIENT')"
+              :formatter="(row) => row.visit?.patient?.name"
+            />
+            <el-table-column
+              prop="creationDate"
+              :label="t('DATE')"
+              :formatter="(row) => getFormatDate(row.creationDate)"
+            />
+            <el-table-column :label="t('SERVICE')">
+              <template #default="{ row }">
+                <ul class="flex flex-col flex-wrap gap-2">
+                  <li>
+                    <el-tooltip
+                      class="box-item"
+                      :disabled="row.items?.length < 2"
+                      effect="dark"
+                      placement="right-start"
+                    >
+                      <template #content>
+                        <ul>
+                          <li
+                            v-for="(item, index) in row.items || []"
+                            :key="index"
+                          >
+                            <span>{{ item.service?.name }}</span>
+                          </li>
+                        </ul>
+                      </template>
+                      <span>
+                        {{ row.items?.[0]?.service?.name || "----" }}
+                      </span>
+                    </el-tooltip>
+                  </li>
+                </ul>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="total"
+              :label="t('TOTAL')"
+              :formatter="(row) => getFormatAmount(row.total)"
+            />
+            <el-table-column
+              prop="dueAmount"
+              :label="t('DUE_AMOUNT')"
+              :formatter="(row) => getFormatAmount(row.dueAmount)"
+            />
+            <el-table-column prop="status" :label="t('STATUS')">
+              <template #default="{ row }">
+                <div v-if="row.status">
+                  <div class="status-btn">
+                    {{ t(row.status) }}
+                  </div>
+                </div>
+              </template>
+            </el-table-column>
+          </template>
+        </VTable>
+        <VPagination
+          v-model="filters"
+          total-page-hide
+          :total-page="tableData?.total"
+          @update-query="updateQuery"
+        />
+      </div>
+    </PaymentLayout>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -199,6 +201,7 @@ const useTab = usePaymentTabStore();
 const isLoading = ref(false);
 const services = ref([]);
 const doctors = ref([]);
+const { hasPermission } = usePermission();
 const statistics = ref({
   total: 0,
   pending: 0,

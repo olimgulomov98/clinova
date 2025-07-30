@@ -78,6 +78,7 @@
           :class="{ 'date-picker-close': !!value2?.length }"
         />
         <el-button
+          :disabled="!hasPermission('appointment', 'add')"
           class="small_btn"
           @click="isAppointmentCreateVisible = true"
           >{{ t("ADD_APPOINTMENT") }}</el-button
@@ -99,14 +100,19 @@
                       {{ t("Convert_to_Patient") }}
                     </button>
                   </el-dropdown-item>
-                  <el-dropdown-item @click="editHandle(row)">
+                  <el-dropdown-item
+                    v-if="hasPermission('appointment', 'edit')"
+                    @click="editHandle(row)"
+                  >
                     <button
                       class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                     >
                       {{ t("RESCHEDULE") }}
                     </button>
                   </el-dropdown-item>
-                  <el-dropdown-item>
+                  <el-dropdown-item
+                    v-if="hasPermission('appointment', 'delete')"
+                  >
                     <button
                       @click="deleteAction(row.id)"
                       class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
@@ -151,6 +157,7 @@
               size="small"
               placeholder="Select"
               class="custom-status-select"
+              :disabled="!hasPermission('appointment', 'change_status')"
             >
               <!-- Agar status PENDING bo‘lsa, uni faqat SELECT ichida ko‘rsatish -->
               <el-option
@@ -231,6 +238,10 @@ const isAppointmentStatusVisible = ref(false);
 const value2 = ref([]);
 const isPatientShowVisible = ref(false);
 const isPatientCreateVisible = ref(false);
+const { hasPermission } = usePermission();
+const userStore = useUserStore();
+const roles = userStore.userRoles;
+const userId = userStore.userInfo?.id || null;
 const tabs = ref([
   {
     label: t("ALL"),
@@ -284,13 +295,19 @@ const { updateQuery, clearQuery } = useQuerySync(filters.value);
 const getData = async () => {
   await getItemLengthByStatus();
   isLoading.value = true;
+
   try {
     const { page, page_size, ...restFilters } = filters.value;
-    const payload = {
+
+    const payload: any = {
       ...restFilters,
       page: page - 1,
       size: page_size || filters.value.size,
     };
+
+    if (roles.includes("DOCTOR") && userId) {
+      payload.doctorId = userId;
+    }
 
     const response = await (<Axios>$axios).post(
       "/api/appointment/list",
@@ -406,6 +423,11 @@ const getItemLengthByStatus = async () => {
     page: 1,
     size: 100000,
   };
+
+  if (roles.includes("DOCTOR") && userId) {
+    payload.doctorId = userId;
+  }
+
   const response = await (<Axios>$axios).post(
     "/api/appointment/statistics",
     payload

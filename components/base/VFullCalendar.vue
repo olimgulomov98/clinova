@@ -3,164 +3,156 @@ import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import type {ICalendarEvent} from "@/types/time-grid-calendar.type";
-import type {AxiosInstance} from "axios";
-import type {IAppointmentCreate} from "~/types/appointment/index.type";
-import enLocale from "@fullcalendar/core/locales/en-gb"; // yoki 'en'
+import enLocale from "@fullcalendar/core/locales/en-gb";
 import ruLocale from "@fullcalendar/core/locales/ru";
-import uzLocale from "../../locales/fullcalendar-uz";
+import uzLocale from "@/locales/fullcalendar-uz";
 
-const loading = ref(false);
+import type { ICalendarEvent } from "@/types/time-grid-calendar.type";
+import type { IAppointmentCreate } from "@/types/appointment/index.type";
+import type { AxiosInstance } from "axios";
+
+import { useUserStore } from "@/store/auth.store";
+
+const userStore = useUserStore();
+const roles = userStore.userRoles;
+const canEditCalendar = computed(() => !roles.includes("DOCTOR"));
+
 const props = defineProps<{ events: ICalendarEvent[] }>();
-const {t, locale} = useI18n();
-const {$axios} = useNuxtApp();
 const emit = defineEmits(["handleEventId", "getData"]);
-const currentEvents = ref([]);
-const filter = ref({
-  startDate: "",
-  endDate: "",
-});
-const form = ref<Partial<IAppointmentCreate>>({
-  time: "",
-  patientName: undefined,
-  patientPhone: undefined,
-  serviceId: undefined,
-  doctorId: undefined,
-});
-const uzWeekdays = ['Yakshanba', 'Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba'];
-const calendarOptions = computed<any>(() => {
-  return {
-    locale: locale.value,
-    locales: [enLocale, ruLocale, uzLocale],
-    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-    headerToolbar: {
-      left: "prev,next,title",
-      center: "",
-      right: "dayGridMonth,timeGridWeek,timeGridDay",
-    },
+const { t, locale } = useI18n();
+const { $axios } = useNuxtApp();
 
-    buttonText: {
-      month: t("MONTH"),
-      week: t("WEEK"),
-      day: t("DAY"),
-      addEventBtn: t("ADD_EVENT"),
-    },
-    titleFormat: {
-      month: "long",
-      // day: "numeric",
-      year: "numeric",
-    },
-    initialView: "dayGridMonth",
-    dayHeaderContent: (arg: any) => {
-      if (arg.view.type === 'timeGridWeek' || arg.view.type === 'timeGridDay') {
-        if (locale.value === 'uz') {
-          const dayIndex = arg.date.getDay();
-          const day = arg.date.getDate();
-          return day + ' ' + uzWeekdays[dayIndex];
-        }
-        return arg.date.toLocaleDateString(locale.value === 'ru' ? 'ru-RU' : 'en-US', {
-          weekday: "long",
-          day: "numeric",
-        });
-      }
-      if (locale.value === 'uz') {
-        const dayIndex = arg.date.getDay();
-        return uzWeekdays[dayIndex];
-      }
-      return arg.date.toLocaleDateString(locale.value === 'ru' ? 'ru-RU' : 'en-US', {
-        weekday: "long",
-      });
-    },
-    events: props.events,
-    editable: true,
-    selectable: true,
-    selectMirror: true,
-    dayMaxEvents: 2,
-    weekends: true,
-    allDaySlot: false,
-    eventClick: handleEventClick,
-    eventsSet: handleEvents,
-    eventDrop: handleEventDrop,
-    datesSet: handleDatesSet,
-  };
-});
+const filter = ref({ startDate: "", endDate: "" });
+const form = ref<Partial<IAppointmentCreate>>({});
+const loading = ref(false);
+const calendarRef = ref(0);
+
+const uzWeekdays = [
+  "Yakshanba",
+  "Dushanba",
+  "Seshanba",
+  "Chorshanba",
+  "Payshanba",
+  "Juma",
+  "Shanba",
+];
+
+const calendarOptions = computed(() => ({
+  locale: locale.value,
+  locales: [enLocale, ruLocale, uzLocale],
+  plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+  headerToolbar: {
+    left: "prev,next,title",
+    center: "",
+    right: "dayGridMonth,timeGridWeek,timeGridDay",
+  },
+  buttonText: {
+    month: t("MONTH"),
+    week: t("WEEK"),
+    day: t("DAY"),
+  },
+  initialView: "dayGridMonth",
+  editable: canEditCalendar.value,
+  selectable: canEditCalendar.value,
+  selectMirror: true,
+  allDaySlot: false,
+  dayMaxEvents: 2,
+  weekends: true,
+  events: props.events,
+  eventClick: handleEventClick,
+  eventsSet: (ev) => (currentEvents.value = ev),
+  eventDrop: canEditCalendar.value ? handleEventDrop : null,
+  datesSet: handleDatesSet,
+  dayHeaderContent: (arg: any) => {
+    const d = arg.date;
+    const dayIdx = d.getDay();
+    if (locale.value === "uz") return uzWeekdays[dayIdx];
+    return d.toLocaleDateString(locale.value === "ru" ? "ru-RU" : "en-US", {
+      weekday: "long",
+    });
+  },
+}));
 
 function handleDatesSet(info: any) {
-  const newStart = info.startStr.replace("+05:00", "");
-  const newEnd = info.endStr.replace("+05:00", "");
-  if (filter.value.startDate === newStart && filter.value.endDate === newEnd) return;
-
-  filter.value.startDate = newStart;
-  filter.value.endDate = newEnd;
+  const start = info.startStr.replace("+05:00", "");
+  const end = info.endStr.replace("+05:00", "");
+  if (filter.value.startDate === start && filter.value.endDate === end) return;
+  filter.value = { startDate: start, endDate: end };
   emit("getData", filter.value);
 }
 
+function handleEventClick(info: any) {
+  if (info.event.id) emit("handleEventId", info.event.id);
+}
+
 function handleEventDrop(info: any) {
+  const app = info.event.extendedProps?.appointment;
   form.value = {
-    id: info.event.extendedProps?.appointment?.id,
+    id: app?.id,
     time: info.event.startStr?.replace("+05:00", ""),
-    patientName: info.event.extendedProps?.appointment?.patientName,
-    patientPhone: info.event.extendedProps?.appointment?.patientPhone,
-    serviceId: info.event.extendedProps?.appointment?.service?.id,
-    doctorId: info.event.extendedProps?.appointment?.doctor?.id,
+    patientName: app?.patientName,
+    patientPhone: app?.patientPhone,
+    serviceId: app?.service?.id,
+    doctorId: app?.doctor?.id,
   };
-  createAppointment();
+  updateAppointment();
 }
 
-async function createAppointment() {
+async function updateAppointment() {
   loading.value = true;
-  const method = "put";
-  (<AxiosInstance>$axios)
-      [method](`/api/appointment/update`, form.value)
-      .then((res) => {
-        notificationShower("success", t("APPOINTMENT_UPDATE_SUCCESS"));
-        emit("getData", filter.value);
-      })
-      .finally(() => {
-        loading.value = false;
-      });
-}
-
-function handleEventClick(clickInfo: any) {
-  if (clickInfo.event.id) {
-    emit("handleEventId", clickInfo.event.id);
+  try {
+    await ($axios as AxiosInstance).put(`/api/appointment/update`, form.value);
+    emit("getData", filter.value);
+  } finally {
+    loading.value = false;
   }
 }
 
-function handleEvents(events: any) {
-  currentEvents.value = events;
-}
+const updateCalendar = () => calendarRef.value++;
+defineExpose({ updateCalendar });
 
-const calendarRef = ref(0);
-const updateCalendar = () => {
-  calendarRef.value++;
-};
-defineExpose({
-  updateCalendar,
-});
+const currentEvents = ref([]);
 </script>
 
 <template>
   <div class="calendar-container">
-    <FullCalendar :key="calendarRef" class="demo-app-calendar" :options="calendarOptions">
+    <FullCalendar
+      :key="calendarRef"
+      class="demo-app-calendar"
+      :options="calendarOptions"
+    >
       <template v-slot:eventContent="arg">
         <div
-            class="flex flex-col h-full items-start justify-center p-1 rounded-[5px] gap-[2px] w-full event-title"
-            :class="arg.event.extendedProps.index % 2 === 0 ? '!bg-[#2B95D6]' : '!bg-[#DFF8F9]'"
+          class="flex flex-col h-full items-start justify-center p-1 rounded-[5px] gap-[2px] w-full event-title"
+          :class="
+            arg.event.extendedProps.index % 2 === 0
+              ? '!bg-[#2B95D6]'
+              : '!bg-[#DFF8F9]'
+          "
         >
-          <p class="flex justify-center text-xs !font-semibold !text-[#4B4D4F]">{{ arg.event.title }}</p>
+          <p class="flex justify-center text-xs !font-semibold !text-[#4B4D4F]">
+            {{ arg.event.title }}
+          </p>
           <p
-              class="flex justify-center text-[11px] text-gray-20 text-wrap text-start event-dec"
-              v-if="arg.event.extendedProps.desc"
+            class="flex justify-center text-[11px] text-gray-20 text-wrap text-start event-dec"
+            v-if="arg.event.extendedProps.desc"
           >
             {{ arg.event.extendedProps.desc }}
           </p>
           <p
-              class="flex justify-center text-center text-gray-30 text-[11px] items-center gap-1"
-              v-if="arg.view.type === 'dayGridMonth' ? arg.event.extendedProps.time : arg.event.extendedProps.date"
+            class="flex justify-center text-center text-gray-30 text-[11px] items-center gap-1"
+            v-if="
+              arg.view.type === 'dayGridMonth'
+                ? arg.event.extendedProps.time
+                : arg.event.extendedProps.date
+            "
           >
-            <icon-clock/>
-            {{ arg.view.type === "dayGridMonth" ? arg.event.extendedProps.time : arg.event.extendedProps.date }}
+            <icon-clock />
+            {{
+              arg.view.type === "dayGridMonth"
+                ? arg.event.extendedProps.time
+                : arg.event.extendedProps.date
+            }}
           </p>
         </div>
       </template>

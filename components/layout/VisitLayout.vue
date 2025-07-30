@@ -14,6 +14,7 @@ const router = useRouter();
 const route = useRoute();
 const tabStore = useUrlTabStore();
 const activeTab = ref("profile");
+const { hasPermission } = usePermission();
 const options = [
   {
     label: t("PATIENT_PROFILE"),
@@ -27,10 +28,14 @@ const options = [
     label: t("DOCUMENTS"),
     value: "documents",
   },
-  {
-    label: t("PAYMENTS"),
-    value: "invoices",
-  },
+  ...(hasPermission("patient", "view_all_tabs_with_payments")
+    ? [
+        {
+          label: t("PAYMENTS"),
+          value: "invoices",
+        },
+      ]
+    : []),
 ];
 const changeHandle = (value: string) => {
   let oldUrl = route.fullPath;

@@ -18,6 +18,7 @@
             type="primary"
             class="small_btn"
             @click="isPatientCreateVisible = true"
+            v-if="hasPermission('patient', 'add_delete_patient')"
           >
             <icon-plus />
             {{ t("ADD_PATIENT") }}
@@ -55,7 +56,9 @@
                         {{ t("EDIT") }}
                       </button>
                     </el-dropdown-item>
-                    <el-dropdown-item>
+                    <el-dropdown-item
+                      v-if="hasPermission('patient', 'add_delete_patient')"
+                    >
                       <button
                         @click="deleteAction(row.id)"
                         class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
@@ -129,6 +132,7 @@ const isPatientCreateVisible = ref(false);
 const patient = ref();
 const isLoading = ref(false);
 const router = useRouter();
+const { hasPermission } = usePermission();
 const filters = ref({
   searchKey: null,
   departmentId: null,
