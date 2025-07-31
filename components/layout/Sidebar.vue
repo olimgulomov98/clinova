@@ -1,15 +1,22 @@
 <template>
   <el-aside
-    class="h-[100vh] flex flex-col justify-between app-sidebar p-5  md:p-5 sticky top-0 bg-[--color-gray-bg-sidebar]"
+    class="h-[100vh] flex flex-col justify-between app-sidebar sticky top-0 bg-[--color-gray-bg-sidebar]"
   >
-    <div class="flex flex-col gap-5 ">
-      <div class="flex gap-[10px] py-[10px]">
-        <h4 class="overflow-hidden transition-all duration-300 font-semibold text-[22px] leading-[26px] w-full">
-          <span class="flex gap-2 items-center cursor-pointer justify-center" @click="setToggleCollapse">
+    <div class="flex flex-col gap-5">
+      <div class="flex gap-[10px] py-[10px] p-5 md:p-5">
+        <h4
+          class="overflow-hidden transition-all duration-300 font-semibold text-[22px] leading-[26px] w-full"
+        >
+          <span
+            class="flex gap-2 items-center cursor-pointer justify-center"
+            @click="setToggleCollapse"
+          >
             <icon-logo-cyrcle class="w-[40px] h-[40px]" />
             <div class="flex flex-col" v-if="!isCollapse">
               <icon-logo-text class="w-[70px] h-[30px]" />
-              <p class="whitespace-wrap text-[11px] leading-4 text-[#64748B]">Hospital Management System</p>
+              <p class="whitespace-wrap text-[11px] leading-4 text-[#64748B]">
+                Hospital Management System
+              </p>
             </div>
             <!-- <icon-logo @click="setToggleCollapse"/> -->
             <!-- <div
@@ -22,26 +29,123 @@
         </h4>
       </div>
       <el-menu class="el-menu-vertical-demo" :collapse="isCollapse">
-        <template v-for="(nav, index) in useNavigations()" :key="index">
+        <!-- 1. DASHBOARD -->
+        <template v-if="groupedMenus.dashboard.length">
           <el-menu-item
-            :index="`${index + 1}`"
-            :class="{ 'is-active': $route.path == nav.to }"
-            @click="router.push(nav.to)"
+            :index="groupedMenus.dashboard[0].to"
+            :class="[
+              'menu-dashboard',
+              { 'is-active': $route.path === groupedMenus.dashboard[0].to },
+            ]"
+            @click="router.push(groupedMenus.dashboard[0].to)"
           >
-            <el-icon><component :is="`icon-nav-${nav.icon}`" class="min-w-6 min-h-6" /></el-icon>
-            <template #title>
-              <div class="flex justify-between gap-1 w-full items-center relative">
-                <p class="leading-5 min-w-[175px] max-w-[194px] text-wrap">{{ t(`${nav.title}`) }}</p>
-              </div>
-            </template>
+            <el-icon>
+              <component :is="`icon-nav-${groupedMenus.dashboard[0].icon}`" />
+            </el-icon>
+            <span>{{ t(groupedMenus.dashboard[0].title) }}</span>
           </el-menu-item>
+        </template>
+
+        <!-- 2. REGISTRATION -->
+        <template v-if="groupedMenus.registration.length">
+          <el-sub-menu index="registration">
+            <template #title>
+              <span class="flex items-center gap-3">
+                <el-icon>
+                  <component :is="`icon-nav-${sectionIcons.registration}`" />
+                </el-icon>
+                <span class="section-title-text">{{
+                  t(sectionTitles.registration)
+                }}</span>
+              </span>
+            </template>
+            <el-menu-item
+              v-for="(nav, index) in groupedMenus.registration"
+              :key="`registration-${index}`"
+              :index="nav.to"
+              :class="{ 'is-active': $route.path === nav.to }"
+              @click="router.push(nav.to)"
+            >
+              <span class="submenu-title"> - {{ t(nav.title) }} </span>
+            </el-menu-item>
+          </el-sub-menu>
+        </template>
+
+        <!-- ✅ 3. EXTRA ITEM: PAYMENTS -->
+        <template v-if="groupedMenus.payments.length">
+          <el-menu-item
+            :index="groupedMenus.payments[0].to"
+            :class="[
+              'menu-payments',
+              { 'is-active': $route.path === groupedMenus.payments[0].to },
+            ]"
+            @click="router.push(groupedMenus.payments[0].to)"
+          >
+            <el-icon>
+              <component :is="`icon-nav-${groupedMenus.payments[0].icon}`" />
+            </el-icon>
+            <span>{{ t(groupedMenus.payments[0].title) }}</span>
+          </el-menu-item>
+        </template>
+
+        <!-- 4. ACCOUNTING -->
+        <!-- <template v-if="groupedMenus.accounting.length"> -->
+        <el-sub-menu index="accounting">
+          <template #title>
+            <span class="flex items-center gap-3">
+              <el-icon>
+                <component :is="`icon-nav-${sectionIcons.accounting}`" />
+              </el-icon>
+              <span class="section-title-text">{{
+                t(sectionTitles.accounting)
+              }}</span>
+            </span>
+          </template>
+
+          <template v-if="groupedMenus.accounting.length">
+            <el-menu-item
+              v-for="(nav, index) in groupedMenus.accounting"
+              :key="`accounting-${index}`"
+              :index="nav.to"
+              :class="{ 'is-active': $route.path === nav.to }"
+              @click="router.push(nav.to)"
+            >
+              <span class="submenu-title"> - {{ t(nav.title) }} </span>
+            </el-menu-item>
+          </template>
+        </el-sub-menu>
+        <!-- </template> -->
+
+        <!-- 5. COMPANY -->
+        <template v-if="groupedMenus.company.length">
+          <el-sub-menu index="company">
+            <template #title>
+              <span class="flex items-center gap-3">
+                <el-icon>
+                  <component :is="`icon-nav-${sectionIcons.company}`" />
+                </el-icon>
+                <span class="section-title-text">{{
+                  t(sectionTitles.company)
+                }}</span>
+              </span>
+            </template>
+            <el-menu-item
+              v-for="(nav, index) in groupedMenus.company"
+              :key="`company-${index}`"
+              :index="nav.to"
+              :class="{ 'is-active': $route.path === nav.to }"
+              @click="router.push(nav.to)"
+            >
+              <span class="submenu-title"> - {{ t(nav.title) }} </span>
+            </el-menu-item>
+          </el-sub-menu>
         </template>
       </el-menu>
     </div>
-    <div  v-if="!isCollapse&&!mobileSidebar" class="language-content">
+    <div v-if="!isCollapse && !mobileSidebar" class="language-content">
       <el-dropdown>
         <button
-            class="bg-[--color-gray-bg-sidebar] gap-x-2 rounded-[12px] outline-0 h-10 px-2 flex items-center justify-between"
+          class="bg-[--color-gray-bg-sidebar] gap-x-2 rounded-[12px] outline-0 h-10 px-2 flex items-center justify-between"
         >
           <div class="profile-name">
             {{ `${userInfo?.firstName} ${userInfo?.lastName}` }}
@@ -51,7 +155,9 @@
         <template #dropdown>
           <el-dropdown-menu class="!p-0 w-50">
             <el-dropdown-item @click="logout">
-              <div class="flex items-center text-base font-medium text-[--color-red-30] justify-between gap-x-2">
+              <div
+                class="flex items-center text-base font-medium text-[--color-red-30] justify-between gap-x-2"
+              >
                 <icon-sign-in />
                 Log out
               </div>
@@ -61,7 +167,7 @@
       </el-dropdown>
       <el-dropdown>
         <button
-            class="bg-[--color-gray-bg-sidebar] gap-x-1 rounded-[12px] outline-0 h-10 px-2 flex items-center justify-between"
+          class="bg-[--color-gray-bg-sidebar] gap-x-1 rounded-[12px] outline-0 h-10 px-2 flex items-center justify-between"
         >
           <div class="profile-name">
             <icon-lang />
@@ -70,14 +176,14 @@
         <template #dropdown>
           <el-dropdown-menu class="!p-0">
             <el-dropdown-item
-                v-for="(language, index) in useLanguages()"
-                :key="index"
-                :class="{ '!bg-pink': locale === language.value }"
-                @click="setLanguage(language)"
+              v-for="(language, index) in useLanguages()"
+              :key="index"
+              :class="{ '!bg-pink': locale === language.value }"
+              @click="setLanguage(language)"
             >
               <button
-                  class="text-base flex gap-1 items-center font-medium text-gray-400 pb-0"
-                  :class="{ '!text-brown ': locale === language.value }"
+                class="text-base flex gap-1 items-center font-medium text-gray-400 pb-0"
+                :class="{ '!text-brown ': locale === language.value }"
               >
                 {{ language.label }}
               </button>
@@ -98,6 +204,7 @@ const { clearTokens } = useToken();
 const userStore = useUserStore();
 const { locale, setLocale } = useI18n();
 const language = ref("Uzb");
+const navigations = useNavigations();
 
 const props = defineProps<{ mobileSidebar?: boolean }>();
 const setToggleCollapse = () => {
@@ -118,6 +225,50 @@ const setLanguage = (lang: { value: string; label: string }) => {
   setLocale(lang.value);
   language.value = lang.label;
 };
+
+const sectionMap = {
+  registration: ["APPOINTMENTS", "FOLLOW_UP", "PATIENTS", "DOCTOR_SCHEDULE"],
+  accounting: [],
+  company: ["EMPLOYEE", "SERVICES", "DEPARTMENTS"],
+};
+
+const sectionTitles = {
+  registration: "Registration",
+  accounting: "Accounting",
+  company: "Company",
+};
+
+const sectionIcons = {
+  registration: "calendar-dots",
+  accounting: "cube",
+  company: "hospital",
+};
+
+const groupedMenus = computed(() => {
+  const result = {
+    dashboard: [],
+    payments: [],
+    registration: [],
+    accounting: [],
+    company: [],
+  };
+
+  for (const item of navigations) {
+    if (item.title === "DASHBOARD") {
+      result.dashboard.push(item);
+    } else if (item.title === "PAYMENTS") {
+      result.payments.push(item);
+    } else {
+      for (const [section, titles] of Object.entries(sectionMap)) {
+        if (titles.includes(item.title)) {
+          result[section].push(item);
+        }
+      }
+    }
+  }
+
+  return result;
+});
 
 watch(
   () => isCollapse.value,
@@ -141,13 +292,12 @@ watch(
 }
 
 .app-sidebar {
-
-  .language-content{
+  .language-content {
     position: fixed;
     left: 25px;
     bottom: 5px;
     display: flex;
-    background: #F3F8FB;
+    background: #f3f8fb;
     width: 200px;
     justify-content: space-between;
 
@@ -163,40 +313,84 @@ watch(
   width: 200px;
   background: #f3f8fb;
 }
+/* SIDEBAR ORQA FON */
 .app-sidebar .el-menu {
   border-right: none;
   background: #f3f8fb;
 }
 
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 100%;
+/* SUBMENU TUGMAGI */
+.app-sidebar .el-sub-menu .el-sub-menu__title {
+  padding: 6px 12px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-stone-600);
+  border-radius: 4px;
 }
 
-.app-sidebar .el-menu-item {
-  border-radius: 22px;
+.section-title-text {
   font-size: 16px;
-  margin-bottom: 10px;
-  color: var(--color-stone-600);
-  background-color: var(--color-light-grey);
   font-weight: 500;
-  min-height: 40px;
-  padding: 12px 14px;
-  gap: 0 8px;
-  height: 40px;
+  padding: 10px 0;
+  color: #999999;
+  margin: 0;
 }
-.app-sidebar .el-sub-menu .el-sub-menu__title {
-  border-radius: 8px;
-  margin-bottom: 4px;
+
+/* MENU ITEM */
+.app-sidebar .el-menu-item {
+  background: #f3f8fb;
+  font-size: 16px;
+  font-weight: 500;
+  color: #999999;
+  gap: 12px;
+  padding: 5px 0;
 }
-.app-sidebar .el-menu-item svg {
-  color: var(--color-brown);
+
+::v-deep(.submenu-title) {
+  font-size: 15px;
+  font-weight: 400;
+  color: #a3a3a3;
 }
+
+/* ACTIVE ITEM */
 .app-sidebar .el-menu-item.is-active {
-  background-color: var(--color-blue-light);
-  color: var(--color-blue-dark);
+  color: var(--color-blue-light);
 }
-.app-sidebar .el-menu-item.is-active svg {
-  color: var(--color-blue-dark);
+
+::v-deep(.el-menu-item.is-active .submenu-title) {
+  color: var(--color-blue-light);
+}
+
+/* ICON STYLE */
+.app-sidebar .el-menu-item .el-icon svg {
+  color: #999999;
+  width: 18px;
+  height: 18px;
+}
+
+.app-sidebar .el-sub-menu__title svg {
+  color: #999999;
+  width: 18px;
+  height: 18px;
+}
+
+/* NO COLLAPSE WIDTH */
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 100%;
+  background: #f3f8fb;
+}
+
+/* SCROLLBAR */
+.app-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+.app-sidebar::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+.app-sidebar::-webkit-scrollbar-thumb {
+  background: var(--color-brown);
+  border-radius: 10px;
 }
 
 .logo-title {
@@ -207,7 +401,7 @@ watch(
 }
 
 @media (min-width: 360px) and (max-width: 767px) {
-  .language-content{
+  .language-content {
     display: none;
   }
 }
