@@ -119,8 +119,9 @@ const getData = async (filter?: { startDate?: string; endDate?: string }) => {
 
     const response = await (<AxiosInstance>$axios).post(
       "/api/appointment/list",
-      { ...filters.value, ...filter }
+      payload
     );
+
     const data = response?.data?.payload?.list || [];
     events.value = data.map((item: any, index: number) => {
       return {
@@ -141,6 +142,7 @@ const getData = async (filter?: { startDate?: string; endDate?: string }) => {
     isLoading.value = false;
   }
 };
+
 const remoteDoctorMethod = debounce((query: string) => {
   const queryData = { searchKey: query };
   if (query.length > 0) getDoctors(queryData);

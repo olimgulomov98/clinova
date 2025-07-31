@@ -3,25 +3,25 @@ export default [
     title: "DASHBOARD",
     icon: "squares-four",
     to: "/",
-    roles: ["DOCTOR", "ADMIN"],
+    roles: ["ADMIN"],
   },
   {
     title: "APPOINTMENTS",
     icon: "check-square",
     to: "/appointments",
-    roles: ["RECEPTION", "DOCTOR", "ADMIN"],
+    roles: ["RECEPTION", "DOCTOR", "ADMIN", "CASHIER"],
   },
   {
     title: "FOLLOW_UP",
     icon: "check-square",
     to: "/follow-up",
-    roles: ["RECEPTION", "DOCTOR", "ADMIN"],
+    roles: ["RECEPTION", "DOCTOR", "ADMIN", "CASHIER"],
   },
   {
     title: "PATIENTS",
     icon: "bed",
     to: "/patients",
-    roles: ["RECEPTION", "ADMIN", "DOCTOR"],
+    roles: ["RECEPTION", "ADMIN", "DOCTOR", "CASHIER"],
   },
   {
     title: "Employee",
@@ -45,7 +45,7 @@ export default [
     title: "DOCTOR_SCHEDULE",
     icon: "calendar-dots",
     to: "/schedule",
-    roles: ["RECEPTION", "DOCTOR", "ADMIN"],
+    roles: ["RECEPTION", "DOCTOR", "ADMIN", "CASHIER"],
   },
   {
     title: "PAYMENTS",
