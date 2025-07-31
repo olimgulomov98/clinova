@@ -45,6 +45,7 @@
                   v-model="form.dateOfBirth"
                   type="date"
                   class="no-radius-input"
+                  :max="maxDate"
                   @change="calculateAge"
                 />
               </el-form-item>
@@ -273,8 +274,8 @@
 
       <transition name="fade">
         <div v-show="!collapseBasic">
-          <div class="grid grid-cols-2 gap-4">
-            <div class="w-1/2">
+          <div class="grid grid-cols-3 gap-12">
+            <div>
               <el-form-item
                 :label="t('Login')"
                 prop="username"
@@ -433,6 +434,15 @@ async function createDoctor() {
   const id = doctorId.value;
   const url = id ? `/api/user/update` : "/api/user/create";
   const method = id ? "put" : "post";
+
+  const birthDate = new Date(form.dateOfBirth as string);
+  const today = new Date();
+  if (birthDate > today) {
+    notificationShower("error", t("birth_future_error"));
+    loading.value = false;
+    return;
+  }
+
   try {
     const cleanedServicePercents = form.servicePercents.filter(
       (item) => item.serviceId && item.percent
@@ -513,12 +523,27 @@ const getServices = async (query = "") => {
   }
 };
 
+const maxDate = computed(() => {
+  const today = new Date();
+  return today.toISOString().split("T")[0];
+});
+
 const calculateAge = () => {
   const today = new Date();
   const birthDate = new Date(form.dateOfBirth as string);
-  const ageDifMs = today.getTime() - birthDate.getTime();
-  const ageDate = new Date(ageDifMs);
-  age.value = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+  if (birthDate > today) {
+    age.value = null;
+    notificationShower("error", t("birth_future_error"));
+    return;
+  }
+
+  let years = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    years--;
+  }
+  age.value = years;
 };
 
 const disabledDate = (time: Date) => {
@@ -616,7 +641,7 @@ onUnmounted(() => {
 /* for roles */
 .role-list {
   border: 1px solid #e0e0e0;
-  border-radius: 4px;
+  border-radius: 0;
   max-height: 200px;
   overflow-y: auto;
 }
@@ -624,19 +649,11 @@ onUnmounted(() => {
 .role-item {
   display: flex;
   align-items: center;
-  padding: 10px 14px;
+  padding: 5px 14px;
   border-bottom: 1px solid #f0f0f0;
   font-weight: 500;
   color: #4b5563;
   margin-right: 0;
-}
-
-.role-item:last-child {
-  border-bottom: none;
-}
-
-.button-margin {
-  margin-top: 30px;
 }
 
 ::v-deep(.custom-checkbox.is-checked) {
@@ -648,11 +665,19 @@ onUnmounted(() => {
   border-color: #facc15 !important;
 }
 
+::v-deep(.custom-checkbox .el-checkbox__input) {
+  transform: scale(0.8);
+}
+
+::v-deep(.custom-checkbox .el-checkbox__label) {
+  font-size: 12px;
+}
+
 ::v-deep(.custom-checkbox) {
   min-width: 400px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
 }
 
 .role-list::-webkit-scrollbar {

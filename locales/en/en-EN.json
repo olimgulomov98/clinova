@@ -260,5 +260,6 @@
   "Login": "Login",
   "Service": "Service",
   "ROLES": "Roles",
-  "Basic_Salary": "Basic Salary"
+  "Basic_Salary": "Basic Salary",
+  "birth_future_error": "Date of birth cannot be in the future."
 }

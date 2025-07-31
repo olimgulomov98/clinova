@@ -261,5 +261,6 @@
   "Service": "Xizmat",
   "Amount": "Miqdor",
   "ROLES": "Rollar",
-  "Basic_Salary": "Asosiy ish haqi"
+  "Basic_Salary": "Asosiy ish haqi",
+  "birth_future_error": "Tug‘ilgan sana kelajakda bo‘lishi mumkin emas."
 }

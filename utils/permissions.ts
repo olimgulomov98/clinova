@@ -8,13 +8,18 @@ export const permissions = {
   },
   RECEPTION: {
     appointment: ["add", "edit", "delete", "change_status"],
-    patient: ["add_delete_patient", "add_new_to_visit"],
+    patient: ["add_delete_patient", "add_new_to_visit", "payments_action"],
     followup: ["change_status"],
     schedule: ["full_access"],
   },
   CASHIER: {
     appointment: ["add", "edit", "delete", "change_status"],
-    patient: ["add_delete_patient", "add_new_to_visit"],
+    patient: [
+      "add_delete_patient",
+      "add_new_to_visit",
+      "view_all_tabs_with_payments",
+      "payments_action",
+    ],
     followup: ["change_status"],
     schedule: ["full_access"],
     kassa: ["full_access"],

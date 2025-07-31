@@ -52,7 +52,9 @@
       <template #columns>
         <el-table-column prop="action" :label="t('ACTION')">
           <template #default="{ row }">
-            <el-dropdown>
+            <el-dropdown
+              :disabled="!hasPermission('patient', 'payments_action')"
+            >
               <button class="p-3">
                 <icon-dots />
               </button>
@@ -89,28 +91,43 @@
         <el-table-column prop="code" :label="t('CODE')">
           <template #default="{ row }">
             <div
+              :class="{
+                'link-div': hasPermission('patient', 'payments_action'),
+                'text-gray-400 cursor-not-allowed': !hasPermission(
+                  'patient',
+                  'payments_action'
+                ),
+              }"
               @click="
-                handleDropClick(
-                  `/patients/${route.params.patientId}/payment/${row.id}?tab=invoices`,
-                  row.code
-                )
+                hasPermission('patient', 'payments_action') &&
+                  handleDropClick(
+                    `/patients/${route.params.patientId}/payment/${row.id}?tab=invoices`,
+                    row.code
+                  )
               "
-              class="link-div"
             >
               {{ row.code }}
             </div>
           </template>
         </el-table-column>
+
         <el-table-column prop="code" :label="t('VISIT_NUMBER')">
           <template #default="{ row }">
             <div
+              :class="{
+                'link-div': hasPermission('patient', 'payments_action'),
+                'text-gray-400 cursor-not-allowed': !hasPermission(
+                  'patient',
+                  'payments_action'
+                ),
+              }"
               @click="
-                handleDropClick(
-                  `/patients/${route.params.patientId}/visit/${row.visit.id}/summary?tab=history`,
-                  row.visit.code
-                )
+                hasPermission('patient', 'payments_action') &&
+                  handleDropClick(
+                    `/patients/${route.params.patientId}/visit/${row.visit.id}/summary?tab=history`,
+                    row.visit.code
+                  )
               "
-              class="link-div"
             >
               {{ row.visit.code }}
             </div>
@@ -193,6 +210,7 @@ const { t } = useI18n();
 const { $axios } = useNuxtApp();
 const useTab = useUrlTabStore();
 const isLoading = ref(false);
+const { hasPermission } = usePermission();
 
 const value2 = ref([]);
 const loading = ref(false);
