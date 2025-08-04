@@ -261,5 +261,8 @@
   "Service": "Service",
   "ROLES": "Roles",
   "Basic_Salary": "Basic Salary",
-  "birth_future_error": "Date of birth cannot be in the future."
+  "birth_future_error": "Date of birth cannot be in the future.",
+  "Registration": "Registration",
+  "Accounting": "Accounting",
+  "Company": "Company"
 }

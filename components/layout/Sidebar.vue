@@ -233,14 +233,14 @@ const sectionMap = {
 };
 
 const sectionTitles = {
-  registration: "Registration",
-  accounting: "Accounting",
-  company: "Company",
+  registration: t("Registration"),
+  accounting: t("Accounting"),
+  company: t("Company"),
 };
 
 const sectionIcons = {
   registration: "calendar-dots",
-  accounting: "cube",
+  accounting: "report",
   company: "hospital",
 };
 
