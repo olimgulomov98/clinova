@@ -96,23 +96,21 @@
               <el-icon>
                 <component :is="`icon-nav-${sectionIcons.accounting}`" />
               </el-icon>
-              <span class="section-title-text">{{
-                t(sectionTitles.accounting)
-              }}</span>
+              <span class="section-title-text">
+                {{ t(sectionTitles.accounting) }}
+              </span>
             </span>
           </template>
 
-          <template v-if="groupedMenus.accounting.length">
-            <el-menu-item
-              v-for="(nav, index) in groupedMenus.accounting"
-              :key="`accounting-${index}`"
-              :index="nav.to"
-              :class="{ 'is-active': $route.path === nav.to }"
-              @click="router.push(nav.to)"
-            >
-              <span class="submenu-title"> - {{ t(nav.title) }} </span>
-            </el-menu-item>
-          </template>
+          <el-menu-item
+            v-for="(nav, index) in groupedMenus.accounting"
+            :key="`accounting-${index}`"
+            :index="nav.to"
+            :class="{ 'is-active': $route.path === nav.to }"
+            @click="router.push(nav.to)"
+          >
+            <span class="submenu-title"> - {{ t(nav.title) }} </span>
+          </el-menu-item>
         </el-sub-menu>
         <!-- </template> -->
 
@@ -253,7 +251,7 @@ const groupedMenus = computed(() => {
     company: [],
   };
 
-  for (const item of navigations) {
+  for (const item of navigations.value) {
     if (item.title === "DASHBOARD") {
       result.dashboard.push(item);
     } else if (item.title === "PAYMENTS") {

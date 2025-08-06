@@ -14,9 +14,9 @@ export const useLoginApi = () => {
     (<Axios>$axios)
       .post(login_api, form)
       .then((response: any) => {
-        console.log("response",response)
+        console.log("response", response);
         handleSuccessfulLogin(response.data).then((res) => {
-          console.log(res)
+          console.log(res);
         });
       })
       .catch((error: any) => {
@@ -24,7 +24,7 @@ export const useLoginApi = () => {
       });
   };
   const getUserInfo = async () => {
-    isLogin = !userStore.isAuthenticated
+    isLogin = !userStore.isAuthenticated;
     if (isLogin) return;
     (<Axios>$axios).get<any>("/api/auth/user/fetch").then((res) => {
       userStore.setUserInfo(res?.data?.payload);
@@ -36,10 +36,10 @@ export const useLoginApi = () => {
     return new Promise(async (resolve, reject) => {
       try {
         setAccessToken(response?.payload);
-        await getUserInfo()
+        await getUserInfo();
         // setRefreshToken(response.refresh);
         userStore.setUserLogin(true);
-        router.push(useNavigations()?.[0]?.to || '/');
+        router.push(useNavigations().value?.[0]?.to || "/");
         resolve("success");
       } catch (error) {
         reject(error);
@@ -48,6 +48,6 @@ export const useLoginApi = () => {
   };
   return {
     userLogin,
-    getUserInfo
+    getUserInfo,
   };
 };
