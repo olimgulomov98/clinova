@@ -265,5 +265,6 @@
   "birth_future_error": "Дата рождения не может быть в будущем.",
   "Registration": "Регистрация",
   "Accounting": "Бухгалтерия",
-  "Company": "Компания"
+  "Company": "Компания",
+  "PRINT_CHECK": "Распечатать чек"
 }

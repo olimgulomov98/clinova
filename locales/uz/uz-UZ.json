@@ -265,5 +265,6 @@
   "birth_future_error": "Tug‘ilgan sana kelajakda bo‘lishi mumkin emas.",
   "Registration": "Ro'yxatdan o'tish",
   "Accounting": "Buxgalteriya",
-  "Company": "Kompaniya"
+  "Company": "Kompaniya",
+  "PRINT_CHECK": "Chekni chop etish"
 }

@@ -264,5 +264,6 @@
   "birth_future_error": "Date of birth cannot be in the future.",
   "Registration": "Registration",
   "Accounting": "Accounting",
-  "Company": "Company"
+  "Company": "Company",
+  "PRINT_CHECK": "Print check"
 }

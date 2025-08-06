@@ -11,10 +11,22 @@
       <div class="visit-create-page-container">
         <div class="grid grid-cols-3 gap-6">
           <el-form-item class="!mb-0" :label="t('PATIENT')" prop="name">
-            <v-input :model-value="invoice?.visit?.patient?.name" :readonly="true" />
+            <v-input
+              :model-value="invoice?.visit?.patient?.name"
+              :readonly="true"
+            />
           </el-form-item>
-          <el-form-item class="!mb-0" :label="t('CURRENT_DATE')" prop="startDate">
-            <v-input :model-value="dayjs(visit?.startDate + '+05:00').format('DD.MM.YYYY')" :readonly="true" />
+          <el-form-item
+            class="!mb-0"
+            :label="t('CURRENT_DATE')"
+            prop="startDate"
+          >
+            <v-input
+              :model-value="
+                dayjs(visit?.startDate + '+05:00').format('DD.MM.YYYY')
+              "
+              :readonly="true"
+            />
           </el-form-item>
           <el-form-item :label="t('VISIT_NUMBER')" prop="patientName">
             <v-input :model-value="invoice?.visit?.code" :readonly="true" />
@@ -40,39 +52,72 @@
             type="button"
             @click="submitForm(formRef)"
             class="mb-1"
-            :class="{ 'pointer-events-none opacity-50': loading || !invoice?.dueAmount }"
+            :class="{
+              'pointer-events-none opacity-50': loading || !invoice?.dueAmount,
+            }"
           >
-            <v-button type="primary" size="large" :loading="loading">{{ t("ADD_PAYMENT") }}</v-button>
+            <v-button type="primary" size="large" :loading="loading">{{
+              t("ADD_PAYMENT")
+            }}</v-button>
           </button>
         </div>
         <div class="max-w-[250px] w-full">
           <div class="flex justify-between p-[9px]">
-            <div class="text-sm font-regular fs-[12px]">{{ t("AMOUNT_WITHOUT_DISCOUNT") }}</div>
-            <div class="text-sm font-regular fs-[12px]">{{ getFormatAmount(invoice?.subTotal || 0) }} so'm</div>
+            <div class="text-sm font-regular fs-[12px]">
+              {{ t("AMOUNT_WITHOUT_DISCOUNT") }}
+            </div>
+            <div class="text-sm font-regular fs-[12px]">
+              {{ getFormatAmount(invoice?.subTotal || 0) }} so'm
+            </div>
           </div>
           <div class="flex justify-between p-[9px]">
-            <div class="text-sm font-regular fs-[12px]">{{ t("DISCOUNT") }}</div>
-            <div class="text-sm font-regular fs-[12px]">{{ getFormatAmount(Number(invoice?.discount) || 0) }} so'm</div>
+            <div class="text-sm font-regular fs-[12px]">
+              {{ t("DISCOUNT") }}
+            </div>
+            <div class="text-sm font-regular fs-[12px]">
+              {{ getFormatAmount(Number(invoice?.discount) || 0) }} so'm
+            </div>
           </div>
-          <div class="flex justify-between p-[9px] border-b-[1px] border-dashed border-black">
+          <div
+            class="flex justify-between p-[9px] border-b-[1px] border-dashed border-black"
+          >
             <div class="text-sm font-semibold fs-[12px]">{{ t("TOTAL_") }}</div>
-            <div class="text-sm font-semibold fs-[12px]">{{ getFormatAmount(invoice?.total || 0) }} so'm</div>
+            <div class="text-sm font-semibold fs-[12px]">
+              {{ getFormatAmount(invoice?.total || 0) }} so'm
+            </div>
           </div>
           <div
             class="flex justify-between p-[9px] fs-[12px]"
             v-for="payment in payments.filter((item: any) => item.amount)"
           >
             <div>
-              <p class="text-base text-[#4B83C3] font-regular fs-[12px]">{{ $t(payment.type) }}</p>
-              <span class="text-xs fs-[12px]">{{ dayjs(payment.date).format("MMM, DD YYYY") }}</span>
+              <p class="text-base text-[#4B83C3] font-regular fs-[12px]">
+                {{ $t(payment.type) }}
+              </p>
+              <span class="text-xs fs-[12px]">{{
+                dayjs(payment.date).format("MMM, DD YYYY")
+              }}</span>
             </div>
-            <div class="text-sm fs-[12px] font-regular">{{ getFormatAmount(payment.amount) }} so'm</div>
+            <div class="text-sm fs-[12px] font-regular">
+              {{ getFormatAmount(payment.amount) }} so'm
+            </div>
           </div>
           <div class="border-b-[1px] border-dashed border-black pb-[1px]">
-            <div class="flex justify-between p-[9px] border-y-[1px] border-dashed border-black">
-              <div class="text-sm fs-[12px] font-semibold">{{ t("DUE_AMOUNT_") }}</div>
-              <div class="text-sm fs-[12px] font-semibold">{{ getFormatAmount(invoice?.dueAmount) }} so'm</div>
+            <div
+              class="flex justify-between p-[9px] border-y-[1px] border-dashed border-black"
+            >
+              <div class="text-sm fs-[12px] font-semibold">
+                {{ t("DUE_AMOUNT_") }}
+              </div>
+              <div class="text-sm fs-[12px] font-semibold">
+                {{ getFormatAmount(invoice?.dueAmount) }} so'm
+              </div>
             </div>
+          </div>
+          <div class="flex justify-end mt-5">
+            <el-button class="small_btn" @click="downloadPrintInvoice">{{
+              t("PRINT_CHECK")
+            }}</el-button>
           </div>
         </div>
       </div>
@@ -111,22 +156,32 @@ const paymentTypes = useConstants().PAYMENT_TYPES.map((elem) => {
 const totalPrice = computed(() => {
   let total = 0;
   visit.items.forEach((elem: any) => {
-    const findService: any = allServices.value.find((service: any) => service.id === elem.serviceId);
+    const findService: any = allServices.value.find(
+      (service: any) => service.id === elem.serviceId
+    );
     if (findService)
-      total += findService.price * elem.quantity - findService.price * elem.quantity * (elem.discount / 100);
+      total +=
+        findService.price * elem.quantity -
+        findService.price * elem.quantity * (elem.discount / 100);
   });
   return total || 0;
 });
 const totalPriceWithoutDiscount = computed(() => {
   let total = 0;
   visit.items.forEach((elem: any) => {
-    const findService: any = allServices.value.find((service: any) => service.id === elem.serviceId);
+    const findService: any = allServices.value.find(
+      (service: any) => service.id === elem.serviceId
+    );
     if (findService) total += findService.price * elem.quantity;
   });
   return total || 0;
 });
-const discountPrice = computed(() => totalPriceWithoutDiscount.value - totalPrice.value);
-const summPayment = computed(() => payments.value.reduce((a: number, b: any) => a + b.amount, 0));
+const discountPrice = computed(
+  () => totalPriceWithoutDiscount.value - totalPrice.value
+);
+const summPayment = computed(() =>
+  payments.value.reduce((a: number, b: any) => a + b.amount, 0)
+);
 
 const form = reactive({
   type: "",
@@ -181,9 +236,17 @@ const getInvoiceById = async () => {
       payments.value.push({ amount: 0, type: "" });
     }
     visit.items = res.data.payload.visit.items.map((elem: any) => {
-      const findDoc = doctors.value.find((doc: any) => doc.id === elem.doctor.id);
-      if (!findDoc && elem.doctor) doctors.value.push({ ...elem.doctor, name: elem.doctor.name || "----" });
-      const findService = services.value.find((service: any) => service.id === elem.service.id);
+      const findDoc = doctors.value.find(
+        (doc: any) => doc.id === elem.doctor.id
+      );
+      if (!findDoc && elem.doctor)
+        doctors.value.push({
+          ...elem.doctor,
+          name: elem.doctor.name || "----",
+        });
+      const findService = services.value.find(
+        (service: any) => service.id === elem.service.id
+      );
       if (!findService && elem.service) services.value.push(elem.service);
       return {
         serviceId: elem.service?.id,
@@ -202,15 +265,43 @@ onMounted(() => {
   if (paymentId.value) getInvoiceById();
   tableIndex.value++;
 });
+
+const downloadPrintInvoice = async () => {
+  try {
+    const response = await (<Axios>$axios).get(
+      `/api/pdf/invoice/${invoice.value?.id}`,
+      {
+        responseType: "blob",
+      }
+    );
+
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = invoice.value?.code
+      ? `invoice-${invoice.value.code}.pdf`
+      : "invoice.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Failed to download invoice:", error);
+  }
+};
 </script>
 
 <style scoped>
 :deep(.el-table tr:hover) {
   background: white !important;
 }
-:deep(.el-table--enable-row-hover .el-table__body tr:hover>td.el-table__cell) {
+:deep(
+    .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell
+  ) {
   background: white !important;
-
 }
 .visit-create-page-container {
   display: grid;
