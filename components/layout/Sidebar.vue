@@ -331,7 +331,7 @@ watch(
   font-size: 16px;
   font-weight: 500;
   padding: 10px 0;
-  color: #999999;
+  /* color: #64748b; */
   margin: 0;
 }
 
@@ -340,7 +340,7 @@ watch(
   background: #f3f8fb;
   font-size: 16px;
   font-weight: 500;
-  color: #999999;
+  /* color: #999999; */
   gap: 12px;
   padding: 5px 0;
 }
@@ -348,7 +348,7 @@ watch(
 ::v-deep(.submenu-title) {
   font-size: 15px;
   font-weight: 400;
-  color: #a3a3a3;
+  /* color: #a3a3a3; */
 }
 
 /* ACTIVE ITEM */
@@ -362,13 +362,13 @@ watch(
 
 /* ICON STYLE */
 .app-sidebar .el-menu-item .el-icon svg {
-  color: #999999;
+  /* color: #000; */
   width: 18px;
   height: 18px;
 }
 
 .app-sidebar .el-sub-menu__title svg {
-  color: #999999;
+  /* color: #000; */
   width: 18px;
   height: 18px;
 }
