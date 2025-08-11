@@ -13,8 +13,8 @@
         class="py-[1px] px-1 rounded-md flex gap-[2px] items-center text-[10px] text-black leading-3"
         :class="down ? '!bg-[var(--color-red-20)]' : 'bg-[#D6EBF8]'"
       >
-        <icon-trend-up />
-        {{ down ? "-" : "+" }}{{ percentage }}%
+        <component :is="down ? IconTrendDown : IconTrendUp" />
+        {{ down ? "-" : "+" }}{{ percentage.toFixed(2) }}%
       </p>
     </div>
     <p class="text-gray-20 text-[11px]">{{ text }}</p>
@@ -22,7 +22,22 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{ title: string; count: number; percentage: number; icon: string; text: string; down: boolean }>();
+import IconTrendUp from "@/components/IconTrendUp.vue";
+import IconTrendDown from "@/components/IconTrendDown.vue";
+
+withDefaults(
+  defineProps<{
+    title: string;
+    count: number;
+    percentage?: number;
+    icon: string;
+    text: string;
+    down: boolean;
+  }>(),
+  {
+    percentage: 0,
+  }
+);
 </script>
 
 <style scoped></style>

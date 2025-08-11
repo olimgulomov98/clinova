@@ -1,6 +1,6 @@
 <template>
   <el-aside
-    class="h-[100vh] flex flex-col justify-between app-sidebar sticky top-0 bg-[--color-gray-bg-sidebar]"
+    class="h-[100vh] flex flex-col justify-between app-sidebar sticky top-0 bg-[#fff] border"
   >
     <div class="flex flex-col gap-5">
       <div class="flex gap-[10px] py-[10px] p-5 md:p-5">
@@ -28,7 +28,11 @@
           </span>
         </h4>
       </div>
-      <el-menu class="el-menu-vertical-demo" :collapse="isCollapse">
+      <el-menu
+        class="el-menu-vertical-demo"
+        :collapse="isCollapse"
+        :default-openeds="['registration', 'accounting', 'company']"
+      >
         <!-- 1. DASHBOARD -->
         <template v-if="groupedMenus.dashboard.length">
           <el-menu-item
@@ -143,7 +147,7 @@
     <div v-if="!isCollapse && !mobileSidebar" class="language-content">
       <el-dropdown>
         <button
-          class="bg-[--color-gray-bg-sidebar] gap-x-2 rounded-[12px] outline-0 h-10 px-2 flex items-center justify-between"
+          class="bg-[#fff] gap-x-2 rounded-[12px] outline-0 h-10 px-2 flex items-center justify-between"
         >
           <div class="profile-name">
             {{ `${userInfo?.firstName} ${userInfo?.lastName}` }}
@@ -165,7 +169,7 @@
       </el-dropdown>
       <el-dropdown>
         <button
-          class="bg-[--color-gray-bg-sidebar] gap-x-1 rounded-[12px] outline-0 h-10 px-2 flex items-center justify-between"
+          class="bg-[#fff] gap-x-1 rounded-[12px] outline-0 h-10 px-2 flex items-center justify-between"
         >
           <div class="profile-name">
             <icon-lang />
@@ -295,7 +299,7 @@ watch(
     left: 25px;
     bottom: 5px;
     display: flex;
-    background: #f3f8fb;
+    background: #fff;
     width: 200px;
     justify-content: space-between;
 
@@ -309,12 +313,12 @@ watch(
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
-  background: #f3f8fb;
+  background: #fff;
 }
 /* SIDEBAR ORQA FON */
 .app-sidebar .el-menu {
   border-right: none;
-  background: #f3f8fb;
+  background: #fff;
 }
 
 /* SUBMENU TUGMAGI */
@@ -337,7 +341,7 @@ watch(
 
 /* MENU ITEM */
 .app-sidebar .el-menu-item {
-  background: #f3f8fb;
+  background: #fff;
   font-size: 16px;
   font-weight: 500;
   /* color: #999999; */
@@ -376,7 +380,7 @@ watch(
 /* NO COLLAPSE WIDTH */
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 100%;
-  background: #f3f8fb;
+  background: #fff;
 }
 
 /* SCROLLBAR */
