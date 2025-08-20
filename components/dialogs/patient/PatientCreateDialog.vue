@@ -37,7 +37,7 @@
             <el-input
               v-model="form.phone"
               class="form_input"
-              v-mask="'+998 ## ### ## ##'"
+              v-mask="'998 ## ### ## ##'"
               :placeholder="t('ENTER_PHONE_NUMBER')"
             />
           </el-form-item>
