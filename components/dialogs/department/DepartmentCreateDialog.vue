@@ -32,9 +32,12 @@
             filterable
             clearable
             remote
+            allow-create
+            default-first-option
             reserve-keyword
             :loading="selectLoading"
-            :remote-method="(query: any) => getDepartments({ searchKey: query })"
+            :remote-method="(query: any) => getDepartments({ searchKey: query
+            })"
             :placeholder="t('SELECT_PARENT_DEPARTMENT')"
           >
             <el-option
@@ -102,7 +105,6 @@ const { $axios } = useNuxtApp();
 const rules = {
   name: [{ required: true, message: "", trigger: "change" }],
   description: [{ required: true, message: "", trigger: "change" }],
-  parentId: [{ required: true, message: "", trigger: "change" }],
 };
 
 const loading = ref(false);
