@@ -8,15 +8,29 @@
     @close="emit('close')"
   >
     <template #header>
-      <div class="p-4 sm:p-6 flex justify-between border-b border-solid border-gray-line">
-        <v-form-title>{{ serviceId ? t('UPDATE_SERVICE') : t('ADD_NEW_SERVICE') }}</v-form-title>
+      <div
+        class="p-4 sm:p-6 flex justify-between border-b border-solid border-gray-line"
+      >
+        <v-form-title>{{
+          serviceId ? t("UPDATE_SERVICE") : t("ADD_NEW_SERVICE")
+        }}</v-form-title>
         <button @click="emit('close')"><icon-x /></button>
       </div>
     </template>
-    <el-form ref="formRef" label-position="top" :model="form" :rules="rules" @submit.prevent="submitForm(formRef)">
+    <el-form
+      ref="formRef"
+      label-position="top"
+      :model="form"
+      :rules="rules"
+      @submit.prevent="submitForm(formRef)"
+    >
       <div class="p-4 sm:p-6">
         <el-form-item :label="t('SERVICE_NAME')" prop="name">
-          <el-input v-model="form.name" class="form_input" :placeholder="t('ENTER_SERVICE_NAME')" />
+          <el-input
+            v-model="form.name"
+            class="form_input"
+            :placeholder="t('ENTER_SERVICE_NAME')"
+          />
         </el-form-item>
         <el-form-item :label="t('PRICE')" prop="price">
           <el-input
@@ -28,7 +42,11 @@
             placeholder="0.00"
           />
         </el-form-item>
-        <el-form-item :label="t('DEPARTMENT')" prop="departmentId" class="!mb-0">
+        <el-form-item
+          :label="t('DEPARTMENT')"
+          prop="departmentId"
+          class="!mb-0"
+        >
           <v-select
             filterable
             class="form_select"
@@ -50,10 +68,23 @@
         </el-form-item>
       </div>
 
-      <div class="flex justify-end gap-3 w-full p-4 sm:p-6 border-t border-solid border-gray-line">
-        <el-button type="default" class="large_btn large_cancel_btn" @click="emit('close')">{{t('CANCEL')}}</el-button>
-        <el-button type="primary" size="xlarge" native-type="submit" class="!ml-0 large_btn" :loading="loading">
-          {{t('SAVE')}}
+      <div
+        class="flex justify-end gap-3 w-full p-4 sm:p-6 border-t border-solid border-gray-line"
+      >
+        <el-button
+          type="default"
+          class="large_btn large_cancel_btn"
+          @click="emit('close')"
+          >{{ t("CANCEL") }}</el-button
+        >
+        <el-button
+          type="primary"
+          size="xlarge"
+          native-type="submit"
+          class="!ml-0 large_btn"
+          :loading="loading"
+        >
+          {{ t("SAVE") }}
         </el-button>
       </div>
     </el-form>
@@ -97,7 +128,7 @@ const remoteMethod = debounce((query: string) => {
 const getDepartments = (queryData?: { searchKey: string }) => {
   loading.value = true;
   (<Axios>$axios)
-    .post("/api/department/list", { ...queryData })
+    .post("/api/department/list", { ...queryData, showAll: true })
     .then((res: IBaseResponseModel<IDepartmentListItem[]>) => {
       departments.value = res?.data?.payload?.list || [];
     })
@@ -113,7 +144,10 @@ async function createService() {
   (<Axios>$axios)
     [method](url, { ...form, price: Number(form.price), id })
     .then((res) => {
-      notificationShower("success", id ? t('SERVICE_UPDATE_SUCCESS') : t('SERVICE_CREATED_SUCCESS'));
+      notificationShower(
+        "success",
+        id ? t("SERVICE_UPDATE_SUCCESS") : t("SERVICE_CREATED_SUCCESS")
+      );
       emit("close");
       emit("getData");
     })
@@ -126,7 +160,11 @@ const getServiceById = async () => {
     form.name = res.data.payload.name;
     form.departmentId = res.data.payload.department?.id;
     form.price = res.data.payload.price;
-    if (!departments.value.find((department) => department.id === form.departmentId)) {
+    if (
+      !departments.value.find(
+        (department) => department.id === form.departmentId
+      )
+    ) {
       departments.value.push(res.data.payload.department);
     }
   });

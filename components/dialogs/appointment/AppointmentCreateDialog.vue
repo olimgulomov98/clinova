@@ -8,19 +8,41 @@
     @close="emit('close')"
   >
     <template #header>
-      <div class="p-4 sm:p-6 flex justify-between border-b border-solid border-gray-line">
-        <v-form-title>{{ appointmentId ? t('RESCHEDULE') : t("ADD_NEW_APPOINTMENT") }}</v-form-title>
+      <div
+        class="p-4 sm:p-6 flex justify-between border-b border-solid border-gray-line"
+      >
+        <v-form-title>{{
+          appointmentId ? t("RESCHEDULE") : t("ADD_NEW_APPOINTMENT")
+        }}</v-form-title>
         <button @click="emit('close')"><icon-x /></button>
       </div>
     </template>
-    <el-form ref="formRef" label-position="top" :model="form" :rules="rules" @submit.prevent="submitForm(formRef)">
+    <el-form
+      ref="formRef"
+      label-position="top"
+      :model="form"
+      :rules="rules"
+      @submit.prevent="submitForm(formRef)"
+    >
       <div class="p-4 sm:p-6">
         <div class="grid sm:grid-cols-1">
           <div class="grid grid-cols-2 gap-4">
-            <el-form-item v-if="!appointmentId" :label="t('PATIENT_NAME')" prop="patientName">
-              <el-input v-model="form.patientName" class="form_input" :placeholder="t('ENTER_PATIENT_NAME')" />
+            <el-form-item
+              v-if="!appointmentId"
+              :label="t('PATIENT_NAME')"
+              prop="patientName"
+            >
+              <el-input
+                v-model="form.patientName"
+                class="form_input"
+                :placeholder="t('ENTER_PATIENT_NAME')"
+              />
             </el-form-item>
-            <el-form-item v-if="!appointmentId" :label="t('PATIENT_PHONE')" prop="patientPhone">
+            <el-form-item
+              v-if="!appointmentId"
+              :label="t('PATIENT_PHONE')"
+              prop="patientPhone"
+            >
               <el-input
                 v-model="form.patientPhone"
                 class="form_input"
@@ -29,8 +51,17 @@
               />
             </el-form-item>
           </div>
-          <el-form-item v-if="appointmentId" :label="t('PATIENT_NAME')" prop="patientName">
-            <el-input :model-value="form.patientName" class="form_input" :placeholder="t('ENTER_PATIENT_NAME')" readonly />
+          <el-form-item
+            v-if="appointmentId"
+            :label="t('PATIENT_NAME')"
+            prop="patientName"
+          >
+            <el-input
+              :model-value="form.patientName"
+              class="form_input"
+              :placeholder="t('ENTER_PATIENT_NAME')"
+              readonly
+            />
           </el-form-item>
           <el-form-item :label="t('DATE')" prop="time">
             <v-date-picker
@@ -41,7 +72,7 @@
               :disabled-date="disabledDate"
             />
           </el-form-item>
-          <el-form-item  v-if="!appointmentId" :label="t('DEPARTMENT')">
+          <el-form-item v-if="!appointmentId" :label="t('DEPARTMENT')">
             <v-select
               filterable
               v-model="departmentId"
@@ -53,9 +84,13 @@
               @change="changeDepartment"
             />
           </el-form-item>
-          <el-form-item v-if="!appointmentId" :label="t('SERVICE')" prop="serviceId">
+          <el-form-item
+            v-if="!appointmentId"
+            :label="t('SERVICE')"
+            prop="serviceId"
+          >
             <v-select
-            :disabled="!departmentId"
+              :disabled="!departmentId"
               filterable
               v-model="form.serviceId"
               :options="services"
@@ -87,10 +122,22 @@
           </el-form-item>
         </div>
       </div>
-      <div class="flex justify-end gap-3 w-full p-4 sm:p-6 border-t border-solid border-gray-line">
-        <el-button type="default" class="large_btn large_cancel_btn" @click="emit('close')">{{t('CANCEL')}}</el-button>
-        <el-button type="primary" native-type="submit" class="!ml-0 large_btn" :loading="loading">
-          {{ !appointmentId ? t('SAVE_APPOINTMENT') : t("SAVE") }}
+      <div
+        class="flex justify-end gap-3 w-full p-4 sm:p-6 border-t border-solid border-gray-line"
+      >
+        <el-button
+          type="default"
+          class="large_btn large_cancel_btn"
+          @click="emit('close')"
+          >{{ t("CANCEL") }}</el-button
+        >
+        <el-button
+          type="primary"
+          native-type="submit"
+          class="!ml-0 large_btn"
+          :loading="loading"
+        >
+          {{ !appointmentId ? t("SAVE_APPOINTMENT") : t("SAVE") }}
         </el-button>
       </div>
     </el-form>
@@ -115,7 +162,11 @@ const rules = {
   patientName: [{ required: true, message: "", trigger: "change" }],
   patientPhone: [
     { required: true, message: "", trigger: "change" },
-    { validator: phoneNumberValidator, message: t('VALID_PHONE'), trigger: "blur" },
+    {
+      validator: phoneNumberValidator,
+      message: t("VALID_PHONE"),
+      trigger: "blur",
+    },
   ],
   serviceId: [{ required: true, message: "", trigger: "change" }],
   doctorId: [{ required: true, message: "", trigger: "change" }],
@@ -144,14 +195,24 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
 async function createAppointment() {
   loading.value = true;
-  const time = dayjs(form.time).format("YYYY-MM-DDTHH:mm:ssZ").replace("+05:00", "");
+  const time = dayjs(form.time)
+    .format("YYYY-MM-DDTHH:mm:ssZ")
+    .replace("+05:00", "");
   const id = props.appointmentId;
   const url = id ? `/api/appointment/update` : "/api/appointment/create";
   const method = id ? "put" : "post";
   (<AxiosInstance>$axios)
-    [method](url, { ...form, patientPhone: cleanPhoneNumber(form.patientPhone || ""), id, time })
+    [method](url, {
+      ...form,
+      patientPhone: cleanPhoneNumber(form.patientPhone || ""),
+      id,
+      time,
+    })
     .then((res) => {
-      notificationShower("success", id ? t('APPOINTMENT_UPDATE_SUCCESS') : t('APPOINTMENT_CREATED_SUCCESS'));
+      notificationShower(
+        "success",
+        id ? t("APPOINTMENT_UPDATE_SUCCESS") : t("APPOINTMENT_CREATED_SUCCESS")
+      );
       emit("close");
       emit("getData");
     })
@@ -161,25 +222,31 @@ async function createAppointment() {
 }
 
 const getAppointmentById = async () => {
-  (<AxiosInstance>$axios).get(`/api/appointment/summary/${props.appointmentId}`).then((res) => {
-    const data = res?.data?.payload;
-    if (data) {
-      form.time = data.time;
-      form.doctorId = data?.doctor?.id;
-      form.serviceId = data?.service?.id;
-      form.patientName = data?.patientName;
-      form.patientPhone = data?.patientPhone;
-    }
-  });
+  (<AxiosInstance>$axios)
+    .get(`/api/appointment/summary/${props.appointmentId}`)
+    .then((res) => {
+      const data = res?.data?.payload;
+      if (data) {
+        form.time = data.time;
+        form.doctorId = data?.doctor?.id;
+        form.serviceId = data?.service?.id;
+        form.patientName = data?.patientName;
+        form.patientPhone = data?.patientPhone;
+      }
+    });
 };
 const remoteServiceMethod = debounce((query: string) => {
   const queryData = { searchKey: query || undefined };
-  if(query.length > 1) getServices(queryData);
+  if (query.length > 1) getServices(queryData);
 }, 300);
 const getServices = (queryData?: { searchKey: string }) => {
   selectLoading.value = true;
   (<AxiosInstance>$axios)
-    .post("/api/service/list", { ...queryData, size: 500, departmentId: departmentId.value })
+    .post("/api/service/list", {
+      ...queryData,
+      size: 500,
+      departmentId: departmentId.value,
+    })
     .then((res) => {
       services.value = res?.data?.payload?.list || [];
     })
@@ -190,10 +257,19 @@ const getServices = (queryData?: { searchKey: string }) => {
 const getDoctors = (queryData?: { searchKey: string }) => {
   selectLoading.value = true;
   (<AxiosInstance>$axios)
-    .post("/api/user/list", { ...queryData, size: 500, role: "DOCTOR", status: "AVAILABLE", serviceId: form.serviceId })
+    .post("/api/user/list", {
+      ...queryData,
+      size: 500,
+      role: "DOCTOR",
+      status: "AVAILABLE",
+      serviceId: form.serviceId,
+    })
     .then((res) => {
       doctors.value =
-        res?.data?.payload?.list?.map((item: any) => ({ ...item, name: `${item.firstName} ${item.lastName}` })) || [];
+        res?.data?.payload?.list?.map((item: any) => ({
+          ...item,
+          name: `${item.firstName} ${item.lastName}`,
+        })) || [];
     })
     .finally(() => {
       selectLoading.value = false;
@@ -202,7 +278,7 @@ const getDoctors = (queryData?: { searchKey: string }) => {
 const getDepartments = (queryData?: { searchKey: string }) => {
   selectLoading.value = true;
   (<AxiosInstance>$axios)
-    .post("/api/department/list", { ...queryData, size: 500 })
+    .post("/api/department/list", { ...queryData, showAll: true, size: 500 })
     .then((res: IBaseResponseModel<IDepartmentListItem[]>) => {
       departments.value = res?.data?.payload?.list || [];
     })

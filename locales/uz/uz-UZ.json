@@ -266,5 +266,8 @@
   "Registration": "Ro'yxatdan o'tish",
   "Accounting": "Buxgalteriya",
   "Company": "Kompaniya",
-  "PRINT_CHECK": "Chekni chop etish"
+  "PRINT_CHECK": "Chekni chop etish",
+  "PARENT_DEPARTMENT": "Asosiy bo‘lim",
+  "SELECT_PARENT_DEPARTMENT": "Asosiy bo‘limni tanlang",
+  "SUB_DEPARTMENT": "Qo‘shimcha bo‘lim"
 }

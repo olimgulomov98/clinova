@@ -1,6 +1,7 @@
 export interface IDepartmentCreate {
   name: string;
   description: string;
+  parentId: number;
 }
 
 export interface IDepartmentListItem {

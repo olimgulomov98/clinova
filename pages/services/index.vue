@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-      <div class="page-title">{{t('SERVICES')}}</div>
+    <div class="page-title">{{ t("SERVICES") }}</div>
     <VTable
       :filters="filters"
       :table-data="tableData?.list"
@@ -11,7 +11,12 @@
       search-class="filter-search filter-search_light"
     >
       <template #filter>
-        <el-button type="primary" class="small_btn" @click="isServiceCreateVisible = true">{{t('ADD_NEW_SERVICE')}}</el-button>
+        <el-button
+          type="primary"
+          class="small_btn"
+          @click="isServiceCreateVisible = true"
+          >{{ t("ADD_NEW_SERVICE") }}</el-button
+        >
       </template>
       <template #tabs>
         <el-form-item prop="departmentId" class="!mb-0">
@@ -45,14 +50,14 @@
                       @click="showHandle(row)"
                       class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                     >
-                      {{t('VIEW')}}
+                      {{ t("VIEW") }}
                     </button>
                   </el-dropdown-item>
                   <el-dropdown-item @click="editHandle(row)">
                     <button
                       class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                     >
-                      {{t('EDIT')}}
+                      {{ t("EDIT") }}
                     </button>
                   </el-dropdown-item>
                   <el-dropdown-item>
@@ -60,7 +65,7 @@
                       @click="deleteAction(row.id)"
                       class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                     >
-                      {{t('DELETE')}}
+                      {{ t("DELETE") }}
                     </button>
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -68,8 +73,8 @@
             </el-dropdown>
           </template>
         </el-table-column>
-        <el-table-column prop="code" :label="t('CODE')"  />
-        <el-table-column prop="name" :label="t('NAME')"  />
+        <el-table-column prop="code" :label="t('CODE')" />
+        <el-table-column prop="name" :label="t('NAME')" />
         <el-table-column
           prop="price"
           :label="t('PRICE')"
@@ -77,10 +82,19 @@
           sortable
           :formatter="(row) => getFormatAmount(row.price)"
         />
-        <el-table-column prop="department" :label="t('DEPARTMENT')"  :formatter="(row) => row.department?.name" />
+        <el-table-column
+          prop="department"
+          :label="t('DEPARTMENT')"
+          :formatter="(row) => row.department?.name"
+        />
       </template>
     </VTable>
-    <VPagination v-model="filters" total-page-hide :total-page="tableData?.total" @update-query="updateQuery" />
+    <VPagination
+      v-model="filters"
+      total-page-hide
+      :total-page="tableData?.total"
+      @update-query="updateQuery"
+    />
     <ServiceCreateDialog
       v-if="isServiceCreateVisible"
       v-model="isServiceCreateVisible"
@@ -155,7 +169,7 @@ const remoteMethod = debounce((query: string) => {
 const getDepartments = (queryData?: { searchKey: string }) => {
   loading.value = true;
   (<Axios>$axios)
-    .post("/api/department/list", { ...queryData })
+    .post("/api/department/list", { ...queryData, showAll: true })
     .then((res: IBaseResponseModel<IDepartmentListItem[]>) => {
       departments.value = res?.data?.payload?.list || [];
     })
@@ -182,7 +196,7 @@ const showHandle = (argService: any) => {
 };
 const deleteAction = (id: number) => {
   (<Axios>$axios).delete(`/api/service/${id}`).then((res) => {
-    notificationShower("success", t('SERVICE_DELETED_SUCCESS'));
+    notificationShower("success", t("SERVICE_DELETED_SUCCESS"));
     getData();
   });
 };

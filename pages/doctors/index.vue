@@ -258,7 +258,7 @@ const remoteMethod = debounce((query: string) => {
 const getDepartments = (queryData?: { searchKey: string }) => {
   loading.value = true;
   (<Axios>$axios)
-    .post("/api/department/list", { ...queryData })
+    .post("/api/department/list", { ...queryData, showAll: true })
     .then((res: IBaseResponseModel<IDepartmentListItem[]>) => {
       departments.value = res?.data?.payload?.list || [];
     })

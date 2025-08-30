@@ -500,6 +500,7 @@ const getDepartments = async () => {
   try {
     const res = await (<AxiosInstance>$axios).post("/api/department/list", {
       size: 500,
+      showAll: true,
     });
     departments.value = res.data.payload?.list || [];
   } finally {

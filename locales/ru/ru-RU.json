@@ -266,5 +266,8 @@
   "Registration": "Регистрация",
   "Accounting": "Бухгалтерия",
   "Company": "Компания",
-  "PRINT_CHECK": "Распечатать чек"
+  "PRINT_CHECK": "Распечатать чек",
+  "PARENT_DEPARTMENT": "Родительский отдел",
+  "SELECT_PARENT_DEPARTMENT": "Выберите родительский отдел",
+  "SUB_DEPARTMENT": "Подотдел"
 }

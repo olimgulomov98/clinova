@@ -59,6 +59,22 @@
                 />
               </el-form-item>
             </el-table-column>
+            <el-table-column :label="t('SUB_DEPARTMENT')">
+              <el-form-item>
+                <v-select
+                  filterable
+                  v-model="form.subDepartmentId"
+                  :options="subDepartments"
+                  label-key="name"
+                  value-key="id"
+                  :placeholder="t('SUB_DEPARTMENT')"
+                  class="form_select"
+                  :disabled="!subDepartments.length || !!visitId"
+                  :suffix-icon="Search"
+                  remote-show-suffix
+                />
+              </el-form-item>
+            </el-table-column>
             <el-table-column :label="t('SERVICE')">
               <template #default="scope">
                 <el-form-item
@@ -244,7 +260,7 @@ const allServices = ref([]);
 const services = ref<any>([]);
 const patients = ref([]);
 const selectLoading = ref(false);
-const departments = ref([]);
+const departments = ref<any>([]);
 const departmentId = ref(null);
 const rules: any = {
   startDate: [{ required: true, message: "", trigger: "change" }],
@@ -301,11 +317,15 @@ const form = reactive({
 
 // itemsValidator();
 
-// const changeDepartment = () => {
-//   getServices();
-// };
+const subDepartments = ref<any[]>([]);
+const selectedDepartment = ref<any>(null);
 
+// Department tanlanganda ishlaydi
 const changeDepartment = () => {
+  const dep = departments.value.find((d) => d.id === departmentId.value);
+  selectedDepartment.value = dep || null;
+  subDepartments.value = dep?.subDepartments || [];
+
   getServices();
   getDoctors();
 
@@ -320,8 +340,9 @@ const changeDepartment = () => {
 const getDepartments = (queryData?: { searchKey: string }) => {
   selectLoading.value = true;
   (<AxiosInstance>$axios)
-    .post("/api/department/list", { ...queryData, size: 500 })
+    .post("/api/department/list", { ...queryData, showAll: true, size: 500 })
     .then((res: IBaseResponseModel<IDepartmentListItem[]>) => {
+      console.log("getDepartments response:", res);
       departments.value = res?.data?.payload?.list || [];
     })
     .finally(() => {

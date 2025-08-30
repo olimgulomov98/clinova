@@ -300,7 +300,7 @@ const changeDepartment = (searchText: string) => {
 const getDepartments = (queryData?: { searchKey: string }) => {
   selectLoading.value = true;
   (<AxiosInstance>$axios)
-    .post("/api/department/list", { ...queryData, size: 500 })
+    .post("/api/department/list", { ...queryData, showAll: true, size: 500 })
     .then((res: IBaseResponseModel<IDepartmentListItem[]>) => {
       departments.value = res?.data?.payload?.list || [];
     })

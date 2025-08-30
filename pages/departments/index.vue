@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-      <div class="page-title">{{t('DEPARTMENTS')}}</div>
+    <div class="page-title">{{ t("DEPARTMENTS") }}</div>
     <VTable
       :filters="filters"
       :table-data="tableData?.list"
@@ -10,7 +10,12 @@
       @search="search"
     >
       <template #filter>
-        <el-button type="primary" class="small_btn" @click="isDepartmentCreateVisible = true">{{t('ADD_NEW_DEPARTMENT')}}</el-button>
+        <el-button
+          type="primary"
+          class="small_btn"
+          @click="isDepartmentCreateVisible = true"
+          >{{ t("ADD_NEW_DEPARTMENT") }}</el-button
+        >
       </template>
       <template #columns>
         <el-table-column prop="action" :label="t('ACTION')">
@@ -26,12 +31,14 @@
                       @click="showHandle(row)"
                       class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                     >
-                      {{t('VIEW')}}
+                      {{ t("VIEW") }}
                     </button>
                   </el-dropdown-item>
                   <el-dropdown-item @click="editHandle(row)">
-                    <button class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full">
-                      {{t('EDIT')}}
+                    <button
+                      class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
+                    >
+                      {{ t("EDIT") }}
                     </button>
                   </el-dropdown-item>
                   <el-dropdown-item>
@@ -39,7 +46,7 @@
                       @click="deleteAction(row.id)"
                       class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                     >
-                      {{t('DELETE')}}
+                      {{ t("DELETE") }}
                     </button>
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -50,21 +57,26 @@
         <el-table-column prop="code" :label="t('CODE')" />
         <el-table-column prop="name" :label="t('NAME')" />
         <el-table-column
-            prop="serviceCount"
-            :label="t('SERVICE_COUNT')"
-            align="right"
-            :formatter="row => getFormatAmount(row.serviceCount)"
+          prop="serviceCount"
+          :label="t('SERVICE_COUNT')"
+          align="right"
+          :formatter="(row) => getFormatAmount(row.serviceCount)"
         />
         <el-table-column
-            prop="doctorCount"
-            :label="t('DOCTOR_COUNT')"
-            align="right"
-            :formatter="row => getFormatAmount(row.doctorCount)"
+          prop="doctorCount"
+          :label="t('DOCTOR_COUNT')"
+          align="right"
+          :formatter="(row) => getFormatAmount(row.doctorCount)"
         />
-        <el-table-column prop="description" :label="t('DESCRIPTION')"/>
+        <el-table-column prop="description" :label="t('DESCRIPTION')" />
       </template>
     </VTable>
-    <VPagination v-model="filters" total-page-hide :total-page="tableData?.total" @update-query="updateQuery" />
+    <VPagination
+      v-model="filters"
+      total-page-hide
+      :total-page="tableData?.total"
+      @update-query="updateQuery"
+    />
     <DepartmentCreateDialog
       v-if="isDepartmentCreateVisible"
       v-model="isDepartmentCreateVisible"
@@ -83,7 +95,7 @@
 
 <script setup lang="ts">
 import type { Axios } from "axios";
-import {getFormatAmount} from "~/utils";
+import { getFormatAmount } from "~/utils";
 const { t } = useI18n();
 const { $axios } = useNuxtApp();
 const isDepartmentCreateVisible = ref(false);
@@ -95,7 +107,7 @@ const filters = ref<any>({
   orderBy: null,
   desc: null,
   page: 1,
-  size: 10
+  size: 10,
 });
 
 const tableData = ref<any>([]);
@@ -107,11 +119,15 @@ const getData = async () => {
     const { page, page_size, ...restFilters } = filters.value;
     const payload = {
       ...restFilters,
+      showAll: true,
       page: page - 1,
-      size: page_size || filters.value.size
+      size: page_size || filters.value.size,
     };
 
-    const response = await (<Axios>$axios).post("/api/department/list", payload);
+    const response = await (<Axios>$axios).post(
+      "/api/department/list",
+      payload
+    );
     const data = response?.data?.payload;
 
     if (data) {
@@ -144,7 +160,7 @@ const showHandle = (argDepartment: any) => {
 };
 const deleteAction = (id: number) => {
   (<Axios>$axios).delete(`/api/department/${id}`).then((res) => {
-    notificationShower("success", t('DEPARTMENT_DELETED_SUCCESS'));
+    notificationShower("success", t("DEPARTMENT_DELETED_SUCCESS"));
     getData();
   });
 };
