@@ -25,6 +25,13 @@
       @submit.prevent="submitForm(formRef)"
     >
       <div class="p-4 sm:p-6">
+        <el-form-item :label="t('DEPARTMENT_NAME')" prop="name">
+          <el-input
+            v-model="form.name"
+            class="form_input"
+            :placeholder="t('ENTER_DEPARTMENT_NAME')"
+          />
+        </el-form-item>
         <el-form-item :label="t('PARENT_DEPARTMENT')" prop="parentId">
           <el-select
             v-model="form.parentId"
@@ -47,13 +54,6 @@
               :value="dept.id"
             />
           </el-select>
-        </el-form-item>
-        <el-form-item :label="t('DEPARTMENT_NAME')" prop="name">
-          <el-input
-            v-model="form.name"
-            class="form_input"
-            :placeholder="t('ENTER_DEPARTMENT_NAME')"
-          />
         </el-form-item>
         <el-form-item
           :label="t('DEPARTMENT_ABOUT')"
