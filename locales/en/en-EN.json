@@ -268,5 +268,6 @@
   "PRINT_CHECK": "Print check",
   "PARENT_DEPARTMENT": "Parent Department",
   "SELECT_PARENT_DEPARTMENT": "Select Parent Department",
-  "SUB_DEPARTMENT": "Sub Department"
+  "SUB_DEPARTMENT": "Sub Department",
+  "PARENT": "Parent"
 }

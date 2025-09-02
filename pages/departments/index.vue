@@ -56,6 +56,12 @@
         </el-table-column>
         <el-table-column prop="code" :label="t('CODE')" />
         <el-table-column prop="name" :label="t('NAME')" />
+        <el-table-column prop="parent" :label="t('PARENT')">
+          <template #default="{ row }">
+            {{ row.parent?.name || "-" }}
+          </template>
+        </el-table-column>
+
         <el-table-column
           prop="serviceCount"
           :label="t('SERVICE_COUNT')"

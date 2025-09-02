@@ -11,7 +11,14 @@
       <div class="visit-create-page-container">
         <div class="grid grid-cols-3 gap-6">
           <el-form-item class="!mb-0" :label="t('PATIENT')" prop="name">
-            <v-input :model-value="patients[0]?.name" disabled> </v-input>
+            <v-input
+              :model-value="
+                patients[0]?.name ||
+                patients[0]?.firstName + ' ' + patients[0]?.lastName
+              "
+              disabled
+            >
+            </v-input>
           </el-form-item>
           <el-form-item
             class="!mb-0"
@@ -72,6 +79,7 @@
                   :disabled="!subDepartments.length || !!visitId"
                   :suffix-icon="Search"
                   remote-show-suffix
+                  @change="changeSubDepartment"
                 />
               </el-form-item>
             </el-table-column>
@@ -256,9 +264,9 @@ const router = useRouter();
 const visitId = computed(() => route.params?.id);
 const patientId = computed(() => route.params?.patientId);
 const doctors = ref<any>([]);
-const allServices = ref([]);
+const allServices = ref<any>([]);
 const services = ref<any>([]);
-const patients = ref([]);
+const patients = ref<any>([]);
 const selectLoading = ref(false);
 const departments = ref<any>([]);
 const departmentId = ref(null);
@@ -304,6 +312,7 @@ const discountPrice = computed(
 const form = reactive({
   startDate: "",
   patientId: patientId.value,
+  subDepartmentId: null as number | null,
   items: [
     {
       serviceId: "",
@@ -322,10 +331,26 @@ const selectedDepartment = ref<any>(null);
 
 // Department tanlanganda ishlaydi
 const changeDepartment = () => {
-  const dep = departments.value.find((d) => d.id === departmentId.value);
+  const dep = departments.value.find((d: any) => d.id === departmentId.value);
   selectedDepartment.value = dep || null;
   subDepartments.value = dep?.subDepartments || [];
 
+  // Subdepartment ni tozalaymiz
+  form.subDepartmentId = null;
+
+  getServices();
+  getDoctors();
+
+  form.items.forEach((item) => {
+    item.serviceId = "";
+    item.doctorId = "";
+  });
+
+  itemsValidator();
+};
+
+// Subdepartment tanlanganda ishlaydi
+const changeSubDepartment = () => {
   getServices();
   getDoctors();
 
@@ -340,7 +365,7 @@ const changeDepartment = () => {
 const getDepartments = (queryData?: { searchKey: string }) => {
   selectLoading.value = true;
   (<AxiosInstance>$axios)
-    .post("/api/department/list", { ...queryData, showAll: true, size: 500 })
+    .post("/api/department/list", { ...queryData, showAll: false, size: 500 })
     .then((res: IBaseResponseModel<IDepartmentListItem[]>) => {
       console.log("getDepartments response:", res);
       departments.value = res?.data?.payload?.list || [];
@@ -352,7 +377,7 @@ const getDepartments = (queryData?: { searchKey: string }) => {
 
 const formRef = ref<FormInstance>();
 
-const submitForm = (formEl: FormInstance | undefined, tur: string) => {
+const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate(async (valid) => {
     if (!valid) return;
@@ -374,12 +399,15 @@ function itemsValidator() {
         validator: (_: any, value: any, callback: any) => {
           if (value === "" || value === null || value === undefined) {
             callback(new Error(t("ENTER_QUANTITY")));
-          } else if (!Number.isInteger(value)) {
-            callback(new Error(t("QUANTITY_MUST_BE_INTEGER")));
-          } else if (value <= 0) {
-            callback(new Error(t("QUANTITY_MUST_BE_POSITIVE")));
           } else {
-            callback();
+            const numValue = Number(value);
+            if (!Number.isInteger(numValue)) {
+              callback(new Error(t("QUANTITY_MUST_BE_INTEGER")));
+            } else if (numValue <= 0) {
+              callback(new Error(t("QUANTITY_MUST_BE_POSITIVE")));
+            } else {
+              callback();
+            }
           }
         },
         trigger: "blur",
@@ -402,12 +430,12 @@ function normalizeQuantity(index: number) {
 
   if (value === null || value === undefined || value === "") return;
 
-  value = Number(value);
+  const numValue = Number(value);
 
-  if (isNaN(value) || value <= 0) {
-    form.items[index].quantity = null;
+  if (isNaN(numValue) || numValue <= 0) {
+    form.items[index].quantity = "";
   } else {
-    form.items[index].quantity = Math.floor(value);
+    form.items[index].quantity = Math.floor(numValue).toString();
   }
 }
 
@@ -472,10 +500,15 @@ const remoteDoctorMethod = debounce((query: string) => {
 const getDoctors = async (queryData?: { searchKey: string }) => {
   try {
     selectLoading.value = true;
+
+    // Agar subdepartment tanlangan bo'lsa, subDepartmentId ni ishlatamiz, aks holda departmentId ni
+    const targetDepartmentId = form.subDepartmentId || departmentId.value;
+
     const response = await (<Axios>$axios).post("/api/user/list", {
       ...queryData,
       role: "DOCTOR",
       status: "AVAILABLE",
+      departmentId: targetDepartmentId || undefined,
     });
     const data = response?.data?.payload?.list;
     doctors.value = data.map((elem: any) => {
@@ -496,14 +529,18 @@ const getDoctors = async (queryData?: { searchKey: string }) => {
 const getServices = async (queryData?: { searchKey: string }) => {
   try {
     selectLoading.value = true;
+
+    // Agar subdepartment tanlangan bo'lsa, subDepartmentId ni ishlatamiz, aks holda departmentId ni
+    const targetDepartmentId = form.subDepartmentId || departmentId.value;
+
     const response = await (<Axios>$axios).post("/api/service/list", {
       ...queryData,
-      departmentId: departmentId.value || undefined,
+      departmentId: targetDepartmentId || undefined,
     });
     const data = response?.data?.payload?.list;
     services.value = data;
     services.value.forEach((elem: any) => {
-      if (!allServices.value.find((service) => service.id === elem.id))
+      if (!allServices.value.find((service: any) => service.id === elem.id))
         allServices.value.push(elem);
     });
   } catch (error: any) {
@@ -528,10 +565,12 @@ const getDepartmentById = async () => {
   (<Axios>$axios).get(`/api/visit/summary/${visitId.value}`).then((res) => {
     form.startDate = res.data.payload.startDate;
     form.items = res.data.payload.items.map((elem: any) => {
-      const findDoc = doctors.value.find((doc) => doc.id === elem.doctor.id);
+      const findDoc = doctors.value.find(
+        (doc: any) => doc.id === elem.doctor.id
+      );
       if (!findDoc && elem.doctor) doctors.value.push(elem.doctor);
       const findService = services.value.find(
-        (service) => service.id === elem.service.id
+        (service: any) => service.id === elem.service.id
       );
       if (!findService && elem.service) services.value.push(elem.service);
       return {
@@ -541,7 +580,7 @@ const getDepartmentById = async () => {
         doctorId: elem.doctor.id,
       };
     });
-    form.paymentType = res.data.payload.paymentType;
+    // form.paymentType = res.data.payload.paymentType;
   });
 };
 
