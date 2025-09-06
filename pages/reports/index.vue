@@ -45,7 +45,20 @@
           }}</span>
         </div>
         <div v-if="expandedSections.revenue" class="section-content">
-          <!-- Revenue details can be added here -->
+          <div class="employee-table">
+            <div class="table-header">
+              <span class="table-header-cell">Services</span>
+              <span class="table-header-cell">Amount</span>
+            </div>
+            <div
+              v-for="(revenue, index) in revenueData"
+              :key="index"
+              class="table-row"
+            >
+              <span class="table-cell">{{ revenue.name }}</span>
+              <span class="table-cell salary-col">{{ revenue.amount }}</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -103,7 +116,20 @@
           <span class="section-amount">{{ formatAmount(expenses) }}</span>
         </div>
         <div v-if="expandedSections.expenses" class="section-content">
-          <!-- Expense details can be added here -->
+          <div class="employee-table">
+            <div class="table-header">
+              <span class="table-header-cell">Expenses</span>
+              <span class="table-header-cell">Amount</span>
+            </div>
+            <div
+              v-for="(expence, index) in expencesData"
+              :key="index"
+              class="table-row"
+            >
+              <span class="table-cell">{{ expence.name }}</span>
+              <span class="table-cell salary-col">{{ expence.amount }}</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -207,6 +233,44 @@ const doctorData = ref([
     name: "Doctor 4",
     commission: 400000,
     basicSalary: 20,
+  },
+]);
+
+const revenueData = ref([
+  {
+    name: "Service A",
+    amount: 400000,
+  },
+  {
+    name: "Service B",
+    amount: 300000,
+  },
+  {
+    name: "Service C",
+    amount: 500000,
+  },
+  {
+    name: "Service D",
+    amount: 1000000,
+  },
+]);
+
+const expencesData = ref([
+  {
+    name: "E0001",
+    amount: 50000,
+  },
+  {
+    name: "E0002",
+    amount: 300000,
+  },
+  {
+    name: "E0003",
+    amount: 400000,
+  },
+  {
+    name: "E0004",
+    amount: 50000,
   },
 ]);
 
