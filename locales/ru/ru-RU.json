@@ -270,5 +270,8 @@
   "PARENT_DEPARTMENT": "Родительский отдел",
   "SELECT_PARENT_DEPARTMENT": "Выберите родительский отдел",
   "SUB_DEPARTMENT": "Подотдел",
-  "PARENT": "Основной"
+  "PARENT": "Основной",
+  "REPORTS": "Отчеты",
+  "DOCTOR_SALARY": "Зарплата Врача",
+  "CASHIER_REPORTS": "Отчеты Kассира"
 }

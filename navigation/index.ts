@@ -53,6 +53,24 @@ export default [
     to: "/payments",
     roles: ["CASHIER", "ADMIN"],
   },
+  {
+    title: "REPORTS",
+    // icon: "credit-card",
+    to: "/reports",
+    roles: ["RECEPTION", "DOCTOR", "ADMIN", "CASHIER"],
+  },
+  {
+    title: "DOCTOR_SALARY",
+    // icon: "credit-card",
+    to: "/doctor-salary",
+    roles: ["RECEPTION", "DOCTOR", "ADMIN", "CASHIER"],
+  },
+  {
+    title: "CASHIER_REPORTS",
+    // icon: "credit-card",
+    to: "/cashier-reports",
+    roles: ["RECEPTION", "DOCTOR", "ADMIN", "CASHIER"],
+  },
   // {
   //   title: "INVENTORY",
   //   icon: "cube",

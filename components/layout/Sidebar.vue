@@ -230,7 +230,7 @@ const setLanguage = (lang: { value: string; label: string }) => {
 
 const sectionMap = {
   registration: ["APPOINTMENTS", "FOLLOW_UP", "PATIENTS", "DOCTOR_SCHEDULE"],
-  accounting: [],
+  accounting: ["REPORTS", "DOCTOR_SALARY", "CASHIER_REPORTS"],
   company: ["EMPLOYEE", "SERVICES", "DEPARTMENTS"],
 };
 

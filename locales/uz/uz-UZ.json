@@ -270,5 +270,8 @@
   "PARENT_DEPARTMENT": "Asosiy bo‘lim",
   "SELECT_PARENT_DEPARTMENT": "Asosiy bo‘limni tanlang",
   "SUB_DEPARTMENT": "Qo‘shimcha bo‘lim",
-  "PARENT": "Yuqori"
+  "PARENT": "Yuqori",
+  "REPORTS": "Hisobotlar",
+  "DOCTOR_SALARY": "Doktor Maoshi",
+  "CASHIER_REPORTS": "Kassir Hisobotlari"
 }

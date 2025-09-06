@@ -269,5 +269,8 @@
   "PARENT_DEPARTMENT": "Parent Department",
   "SELECT_PARENT_DEPARTMENT": "Select Parent Department",
   "SUB_DEPARTMENT": "Sub Department",
-  "PARENT": "Parent"
+  "PARENT": "Parent",
+  "REPORTS": "Reports",
+  "DOCTOR_SALARY": "Doctor Salary",
+  "CASHIER_REPORTS": "Cashier Reports"
 }
