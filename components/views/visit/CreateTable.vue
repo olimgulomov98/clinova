@@ -48,40 +48,60 @@
         <el-form-item class="!mb-0" prop="items">
           <el-table :data="form.items" :key="tableIndex" style="width: 99%">
             <el-table-column :label="t('DEPARTMENT')">
-              <el-form-item>
-                <v-select
-                  filterable
-                  v-model="departmentId"
-                  :options="departments"
-                  label-key="name"
-                  value-key="id"
-                  :placeholder="t('DEPARTMENT')"
-                  class="form_select"
-                  @change="changeDepartment"
-                  :remote-method="remoteDepartmentMethod"
-                  :loading="selectLoading"
-                  :disabled="!!visitId"
-                  :suffix-icon="Search"
-                  remote-show-suffix
-                />
-              </el-form-item>
+              <template #default="scope">
+                <el-form-item
+                  :prop="
+                    scope.$index + 1 !== form.items.length || scope.$index == 0
+                      ? `items.${scope.$index}.departmentId`
+                      : ''
+                  "
+                >
+                  <v-select
+                    filterable
+                    v-model="scope.row.departmentId"
+                    :options="departments"
+                    label-key="name"
+                    value-key="id"
+                    :placeholder="t('DEPARTMENT')"
+                    class="form_select"
+                    @change="(value) => changeDepartment(value, scope.$index)"
+                    :remote-method="remoteDepartmentMethod"
+                    :loading="selectLoading"
+                    :disabled="!!visitId"
+                    :suffix-icon="Search"
+                    remote-show-suffix
+                  />
+                </el-form-item>
+              </template>
             </el-table-column>
             <el-table-column :label="t('SUB_DEPARTMENT')">
-              <el-form-item>
-                <v-select
-                  filterable
-                  v-model="form.subDepartmentId"
-                  :options="subDepartments"
-                  label-key="name"
-                  value-key="id"
-                  :placeholder="t('SUB_DEPARTMENT')"
-                  class="form_select"
-                  :disabled="!subDepartments.length || !!visitId"
-                  :suffix-icon="Search"
-                  remote-show-suffix
-                  @change="changeSubDepartment"
-                />
-              </el-form-item>
+              <template #default="scope">
+                <el-form-item
+                  :prop="
+                    scope.$index + 1 !== form.items.length || scope.$index == 0
+                      ? `items.${scope.$index}.subDepartmentId`
+                      : ''
+                  "
+                >
+                  <v-select
+                    filterable
+                    v-model="scope.row.subDepartmentId"
+                    :options="getSubDepartmentsForRow(scope.$index)"
+                    label-key="name"
+                    value-key="id"
+                    :placeholder="t('SUB_DEPARTMENT')"
+                    class="form_select"
+                    :disabled="
+                      !getSubDepartmentsForRow(scope.$index).length || !!visitId
+                    "
+                    :suffix-icon="Search"
+                    remote-show-suffix
+                    @change="
+                      (value) => changeSubDepartment(value, scope.$index)
+                    "
+                  />
+                </el-form-item>
+              </template>
             </el-table-column>
             <el-table-column :label="t('SERVICE')">
               <template #default="scope">
@@ -94,12 +114,12 @@
                 >
                   <v-select
                     v-model="scope.row.serviceId"
-                    :options="services"
+                    :options="getServicesForRow(scope.$index)"
                     filterable
                     label-key="name"
                     value-key="id"
                     remote
-                    :remote-method="remoteServiceMethod"
+                    :remote-method="(query: string) => remoteServiceMethod(query, scope.$index)"
                     :loading="selectLoading"
                     :disabled="!!visitId"
                     :suffix-icon="Search"
@@ -120,12 +140,12 @@
                 >
                   <v-select
                     v-model="scope.row.doctorId"
-                    :options="doctors"
+                    :options="getDoctorsForRow(scope.$index)"
                     filterable
                     label-key="name"
                     value-key="id"
                     remote
-                    :remote-method="remoteDoctorMethod"
+                    :remote-method="(query: string) => remoteDoctorMethod(query, scope.$index)"
                     :loading="selectLoading"
                     :disabled="!!visitId"
                     :suffix-icon="Search"
@@ -269,7 +289,10 @@ const services = ref<any>([]);
 const patients = ref<any>([]);
 const selectLoading = ref(false);
 const departments = ref<any>([]);
-const departmentId = ref(null);
+const subDepartments = ref<any[]>([]);
+const rowSubDepartments = ref<any[]>([]);
+const rowServices = ref<any[]>([]);
+const rowDoctors = ref<any[]>([]);
 const rules: any = {
   startDate: [{ required: true, message: "", trigger: "change" }],
   // items: [{ validator: validateItems, trigger: "blur" }],
@@ -312,9 +335,10 @@ const discountPrice = computed(
 const form = reactive({
   startDate: "",
   patientId: patientId.value,
-  subDepartmentId: null as number | null,
   items: [
     {
+      departmentId: "",
+      subDepartmentId: "",
       serviceId: "",
       quantity: "",
       discount: "",
@@ -326,38 +350,49 @@ const form = reactive({
 
 // itemsValidator();
 
-const subDepartments = ref<any[]>([]);
-const selectedDepartment = ref<any>(null);
+// Computed properties for per-row data
+const getSubDepartmentsForRow = (rowIndex: number) => {
+  const departmentId = form.items[rowIndex]?.departmentId;
+  if (!departmentId) return [];
+  const department = departments.value.find((d: any) => d.id === departmentId);
+  return department?.subDepartments || [];
+};
+
+const getServicesForRow = (rowIndex: number) => {
+  return rowServices.value[rowIndex] || [];
+};
+
+const getDoctorsForRow = (rowIndex: number) => {
+  return rowDoctors.value[rowIndex] || [];
+};
 
 // Department tanlanganda ishlaydi
-const changeDepartment = () => {
-  const dep = departments.value.find((d: any) => d.id === departmentId.value);
-  selectedDepartment.value = dep || null;
-  subDepartments.value = dep?.subDepartments || [];
+const changeDepartment = (departmentId: any, rowIndex: number) => {
+  const dep = departments.value.find((d: any) => d.id === departmentId);
 
-  // Subdepartment ni tozalaymiz
-  form.subDepartmentId = null;
+  // Update the specific row's data
+  form.items[rowIndex].subDepartmentId = "";
+  form.items[rowIndex].serviceId = "";
+  form.items[rowIndex].doctorId = "";
 
-  getServices();
-  getDoctors();
-
-  form.items.forEach((item) => {
-    item.serviceId = "";
-    item.doctorId = "";
-  });
+  // Get services and doctors for this specific row
+  getServicesForRowIndex(rowIndex, departmentId);
+  getDoctorsForRowIndex(rowIndex, departmentId);
 
   itemsValidator();
 };
 
 // Subdepartment tanlanganda ishlaydi
-const changeSubDepartment = () => {
-  getServices();
-  getDoctors();
+const changeSubDepartment = (subDepartmentId: any, rowIndex: number) => {
+  const departmentId = form.items[rowIndex].departmentId;
 
-  form.items.forEach((item) => {
-    item.serviceId = "";
-    item.doctorId = "";
-  });
+  // Update the specific row's data
+  form.items[rowIndex].serviceId = "";
+  form.items[rowIndex].doctorId = "";
+
+  // Get services for this specific row
+  getServicesForRowIndex(rowIndex, departmentId, subDepartmentId);
+  getDoctorsForRowIndex(rowIndex, departmentId);
 
   itemsValidator();
 };
@@ -387,6 +422,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
 function itemsValidator() {
   form.items.forEach((_, index) => {
+    rules[`items.${index}.departmentId`] = [
+      { required: true, message: t("SELECT_DEPARTMENT"), trigger: "change" },
+    ];
     rules[`items.${index}.serviceId`] = [
       { required: true, message: t("SELECT_SERVICE"), trigger: "change" },
     ];
@@ -439,18 +477,27 @@ function normalizeQuantity(index: number) {
   }
 }
 
+const createEmptyItem = () => ({
+  departmentId: "",
+  subDepartmentId: "",
+  serviceId: "",
+  doctorId: "",
+  quantity: "",
+  discount: "",
+});
+
 const createFormItem = () => {
-  form.items.push({
-    serviceId: "",
-    quantity: "",
-    discount: "",
-    doctorId: "",
-  });
+  form.items.push(createEmptyItem()); // har safar fresh obyekt
+  // Initialize empty arrays for the new row
+  rowServices.value.push([]);
+  rowDoctors.value.push([]);
   itemsValidator();
 };
 
 const deleteItem = (index: number) => {
   form.items = form.items.filter((_, i) => i !== index);
+  rowServices.value = rowServices.value.filter((_, i) => i !== index);
+  rowDoctors.value = rowDoctors.value.filter((_, i) => i !== index);
   itemsValidator();
 };
 
@@ -487,28 +534,31 @@ const remoteDepartmentMethod = debounce((query: string) => {
   if (query.length > 0) getDepartments(queryData);
 }, 300);
 
-const remoteServiceMethod = debounce((query: string) => {
+const remoteServiceMethod = debounce((query: string, rowIndex: number) => {
   const queryData = { searchKey: query };
-  if (query.length > 0) getServices(queryData);
+  if (query.length > 0) {
+    const departmentId = form.items[rowIndex]?.departmentId;
+    const subDepartmentId = form.items[rowIndex]?.subDepartmentId;
+    getServicesForRowIndex(rowIndex, departmentId, subDepartmentId);
+  }
 }, 300);
 
-const remoteDoctorMethod = debounce((query: string) => {
+const remoteDoctorMethod = debounce((query: string, rowIndex: number) => {
   const queryData = { searchKey: query };
-  if (query.length > 0) getDoctors(queryData);
+  if (query.length > 0) {
+    const departmentId = form.items[rowIndex]?.departmentId;
+    getDoctorsForRowIndex(rowIndex, departmentId);
+  }
 }, 300);
 
 const getDoctors = async (queryData?: { searchKey: string }) => {
   try {
     selectLoading.value = true;
 
-    // Agar subdepartment tanlangan bo'lsa, subDepartmentId ni ishlatamiz, aks holda departmentId ni
-    const targetDepartmentId = form.subDepartmentId || departmentId.value;
-
     const response = await (<Axios>$axios).post("/api/user/list", {
       ...queryData,
       role: "DOCTOR",
       status: "AVAILABLE",
-      departmentId: targetDepartmentId || undefined,
     });
     const data = response?.data?.payload?.list;
     doctors.value = data.map((elem: any) => {
@@ -530,12 +580,8 @@ const getServices = async (queryData?: { searchKey: string }) => {
   try {
     selectLoading.value = true;
 
-    // Agar subdepartment tanlangan bo'lsa, subDepartmentId ni ishlatamiz, aks holda departmentId ni
-    const targetDepartmentId = form.subDepartmentId || departmentId.value;
-
     const response = await (<Axios>$axios).post("/api/service/list", {
       ...queryData,
-      departmentId: targetDepartmentId || undefined,
     });
     const data = response?.data?.payload?.list;
     services.value = data;
@@ -545,6 +591,68 @@ const getServices = async (queryData?: { searchKey: string }) => {
     });
   } catch (error: any) {
     console.error("Failed to fetch data:", error?.message || error);
+  } finally {
+    selectLoading.value = false;
+  }
+};
+
+// Per-row service fetching
+const getServicesForRowIndex = async (
+  rowIndex: number,
+  departmentId: any,
+  subDepartmentId?: any
+) => {
+  try {
+    selectLoading.value = true;
+
+    const targetDepartmentId = subDepartmentId || departmentId;
+
+    const response = await (<Axios>$axios).post("/api/service/list", {
+      departmentId: targetDepartmentId || undefined,
+    });
+    const data = response?.data?.payload?.list;
+
+    // Update the specific row's services
+    rowServices.value[rowIndex] = data || [];
+
+    // Add to all services for price calculation
+    data?.forEach((elem: any) => {
+      if (!allServices.value.find((service: any) => service.id === elem.id))
+        allServices.value.push(elem);
+    });
+  } catch (error: any) {
+    console.error("Failed to fetch data:", error?.message || error);
+    rowServices.value[rowIndex] = [];
+  } finally {
+    selectLoading.value = false;
+  }
+};
+
+// Per-row doctor fetching
+const getDoctorsForRowIndex = async (rowIndex: number, departmentId: any) => {
+  try {
+    selectLoading.value = true;
+
+    const response = await (<Axios>$axios).post("/api/user/list", {
+      role: "DOCTOR",
+      status: "AVAILABLE",
+      departmentId: departmentId,
+    });
+    const data = response?.data?.payload?.list;
+
+    // Update the specific row's doctors
+    rowDoctors.value[rowIndex] =
+      data?.map((elem: any) => {
+        return {
+          name: `${elem.firstName ?? ""} ${elem.lastName ?? ""} ${
+            elem.middleName ?? ""
+          }`.trim(),
+          ...elem,
+        };
+      }) || [];
+  } catch (error: any) {
+    console.error("Failed to fetch data:", error?.message || error);
+    rowDoctors.value[rowIndex] = [];
   } finally {
     selectLoading.value = false;
   }
@@ -563,6 +671,8 @@ const getPatientById = async () => {
 };
 const getDepartmentById = async () => {
   (<Axios>$axios).get(`/api/visit/summary/${visitId.value}`).then((res) => {
+    console.log("Visit data from API:", res.data.payload);
+    console.log("Items from API:", res.data.payload.items);
     form.startDate = res.data.payload.startDate;
     form.items = res.data.payload.items.map((elem: any) => {
       const findDoc = doctors.value.find(
@@ -574,27 +684,57 @@ const getDepartmentById = async () => {
       );
       if (!findService && elem.service) services.value.push(elem.service);
       return {
+        departmentId: elem.department?.id || "",
+        subDepartmentId: elem.subDepartment?.id || "",
         serviceId: elem.service.id,
         quantity: elem.quantity,
         discount: elem.discount,
         doctorId: elem.doctor.id,
       };
     });
+    console.log("Mapped form.items:", form.items);
+    console.log("Form.items length after mapping:", form.items.length);
+    // Reinitialize row data arrays after loading visit data
+    rowServices.value = Array.from({ length: form.items.length }, () => []);
+    rowDoctors.value = Array.from({ length: form.items.length }, () => []);
     // form.paymentType = res.data.payload.paymentType;
   });
 };
 
 onMounted(() => {
+  console.log("Initial form.items length:", form.items.length);
+  console.log("Initial form.items:", form.items);
+
   getDepartments();
-  if (visitId.value) getDepartmentById();
+
+  // Initialize row data arrays
+  rowServices.value = Array.from({ length: form.items.length }, () => []);
+  rowDoctors.value = Array.from({ length: form.items.length }, () => []);
+
+  if (visitId.value) {
+    console.log("Loading existing visit data");
+    getDepartmentById();
+  }
   if (tabStore.getData(route.fullPath)) {
-    Object.assign(form, tabStore.getData(route.fullPath));
-    getDoctors();
-    getServices();
+    const tabData = tabStore.getData(route.fullPath);
+    console.log("Tab store data:", tabData);
+    // Only load tab data if it has items and we're not editing an existing visit
+    if (tabData.items && tabData.items.length > 0 && !visitId.value) {
+      console.log("Loading tab data, items length:", tabData.items.length);
+      Object.assign(form, tabData);
+      // Reinitialize row data arrays after loading from tab store
+      rowServices.value = Array.from({ length: form.items.length }, () => []);
+      rowDoctors.value = Array.from({ length: form.items.length }, () => []);
+      getDoctors();
+      getServices();
+    }
   }
   if (!form.startDate) form.startDate = new Date().toDateString();
   tableIndex.value++;
   getPatientById();
+
+  console.log("Final form.items length:", form.items.length);
+  console.log("Final form.items:", form.items);
 });
 onUnmounted(() => {
   tabStore.updateData(route.fullPath, form);
