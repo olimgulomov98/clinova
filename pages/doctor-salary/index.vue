@@ -27,7 +27,14 @@
 
     <!-- Financial Report -->
     <div class="financial-report">
-      <!-- Doctor salaries -->
+      <!-- Loading indicator -->
+      <div v-if="loading" class="loading-container">
+        <el-icon class="is-loading">
+          <Loading />
+        </el-icon>
+      </div>
+
+      <!-- Doctor salaries summary -->
       <div class="report-section">
         <div class="section-header" @click="toggleSection('salary1')">
           <div class="flex items-center gap-[10px]">
@@ -37,16 +44,20 @@
             <el-icon v-else class="arrow-icon">
               <ArrowUp />
             </el-icon>
-            <span class="section-title">Doctor salaries</span>
+            <span class="section-title">{{
+              doctorData[0]?.name || t("DOCTOR_SALARIES")
+            }}</span>
           </div>
 
-          <span class="section-amount">{{ formatAmount(doctorSalaries) }}</span>
+          <span class="section-amount">{{
+            formatAmount(doctorData[0]?.amount || 0)
+          }}</span>
         </div>
         <div v-if="expandedSections.salary1" class="section-content">
           <div class="employee-table">
             <div class="table-header">
-              <span class="table-header-cell">Service</span>
-              <span class="table-header-cell">Amount</span>
+              <span class="table-header-cell">{{ t("SERVICES") }}</span>
+              <span class="table-header-cell">{{ t("AMOUNTS") }}</span>
             </div>
             <div
               v-for="(doctor, index) in doctorData"
@@ -55,144 +66,64 @@
             >
               <span class="table-cell">{{ doctor.name }}</span>
               <span class="table-cell salary-col">{{
-                doctor.basicSalary
+                formatAmount(doctor.amount || 0)
               }}</span>
             </div>
           </div>
         </div>
       </div>
-      <!-- Doctor salaries -->
-      <div class="report-section">
-        <div class="section-header" @click="toggleSection('salary2')">
+      <!-- Doctor Services Details -->
+      <div
+        v-for="(doctor, doctorIndex) in doctorData"
+        :key="doctor.id || doctorIndex"
+        class="report-section"
+      >
+        <div
+          class="section-header"
+          @click="toggleSection(`doctor-${doctorIndex}`)"
+        >
           <div class="flex items-center gap-[10px]">
-            <el-icon v-if="!expandedSections.salary2" class="arrow-icon">
+            <el-icon
+              v-if="!expandedSections[`doctor-${doctorIndex}`]"
+              class="arrow-icon"
+            >
               <ArrowDown />
             </el-icon>
             <el-icon v-else class="arrow-icon">
               <ArrowUp />
             </el-icon>
-            <span class="section-title">Doctor salaries</span>
+            <span class="section-title">{{ doctor.name }}</span>
           </div>
 
-          <span class="section-amount">{{ formatAmount(doctorSalaries) }}</span>
+          <span class="section-amount">{{
+            formatAmount(doctor.amount || 0)
+          }}</span>
         </div>
-        <div v-if="expandedSections.salary2" class="section-content">
+        <div
+          v-if="expandedSections[`doctor-${doctorIndex}`]"
+          class="section-content"
+        >
           <div class="employee-table">
             <div class="table-header">
-              <span class="table-header-cell">Service</span>
-              <span class="table-header-cell">Amount</span>
+              <span class="table-header-cell">{{ t("SERVICES") }}</span>
+              <span class="table-header-cell">{{ t("AMOUNTS") }}</span>
             </div>
             <div
-              v-for="(doctor, index) in doctorData"
-              :key="index"
+              v-for="(service, serviceIndex) in doctor.services || []"
+              :key="serviceIndex"
               class="table-row"
             >
-              <span class="table-cell">{{ doctor.name }}</span>
+              <span class="table-cell">{{ service.name }}</span>
               <span class="table-cell salary-col">{{
-                doctor.basicSalary
+                formatAmount(service.amount || 0)
               }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Doctor salaries -->
-      <div class="report-section">
-        <div class="section-header" @click="toggleSection('salary3')">
-          <div class="flex items-center gap-[10px]">
-            <el-icon v-if="!expandedSections.salary3" class="arrow-icon">
-              <ArrowDown />
-            </el-icon>
-            <el-icon v-else class="arrow-icon">
-              <ArrowUp />
-            </el-icon>
-            <span class="section-title">Doctor salaries</span>
-          </div>
-
-          <span class="section-amount">{{ formatAmount(doctorSalaries) }}</span>
-        </div>
-        <div v-if="expandedSections.salary3" class="section-content">
-          <div class="employee-table">
-            <div class="table-header">
-              <span class="table-header-cell">Service</span>
-              <span class="table-header-cell">Amount</span>
             </div>
             <div
-              v-for="(doctor, index) in doctorData"
-              :key="index"
+              v-if="!doctor.services || doctor.services.length === 0"
               class="table-row"
             >
-              <span class="table-cell">{{ doctor.name }}</span>
-              <span class="table-cell salary-col">{{
-                doctor.basicSalary
-              }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Doctor salaries -->
-      <div class="report-section">
-        <div class="section-header" @click="toggleSection('salary4')">
-          <div class="flex items-center gap-[10px]">
-            <el-icon v-if="!expandedSections.salary4" class="arrow-icon">
-              <ArrowDown />
-            </el-icon>
-            <el-icon v-else class="arrow-icon">
-              <ArrowUp />
-            </el-icon>
-            <span class="section-title">Doctor salaries</span>
-          </div>
-
-          <span class="section-amount">{{ formatAmount(doctorSalaries) }}</span>
-        </div>
-        <div v-if="expandedSections.salary4" class="section-content">
-          <div class="employee-table">
-            <div class="table-header">
-              <span class="table-header-cell">Service</span>
-              <span class="table-header-cell">Amount</span>
-            </div>
-            <div
-              v-for="(doctor, index) in doctorData"
-              :key="index"
-              class="table-row"
-            >
-              <span class="table-cell">{{ doctor.name }}</span>
-              <span class="table-cell salary-col">{{
-                doctor.basicSalary
-              }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Doctor salaries -->
-      <div class="report-section">
-        <div class="section-header" @click="toggleSection('salary5')">
-          <div class="flex items-center gap-[10px]">
-            <el-icon v-if="!expandedSections.salary5" class="arrow-icon">
-              <ArrowDown />
-            </el-icon>
-            <el-icon v-else class="arrow-icon">
-              <ArrowUp />
-            </el-icon>
-            <span class="section-title">Doctor salaries</span>
-          </div>
-
-          <span class="section-amount">{{ formatAmount(doctorSalaries) }}</span>
-        </div>
-        <div v-if="expandedSections.salary5" class="section-content">
-          <div class="employee-table">
-            <div class="table-header">
-              <span class="table-header-cell">Service</span>
-              <span class="table-header-cell">Amount</span>
-            </div>
-            <div
-              v-for="(doctor, index) in doctorData"
-              :key="index"
-              class="table-row"
-            >
-              <span class="table-cell">{{ doctor.name }}</span>
-              <span class="table-cell salary-col">{{
-                doctor.basicSalary
-              }}</span>
+              <span class="table-cell">{{ t("NO_SERVICES") }}</span>
+              <span class="table-cell salary-col">-</span>
             </div>
           </div>
         </div>
@@ -205,7 +136,7 @@
 import type { Axios } from "axios";
 import { getFormatAmount } from "~/utils";
 import dayjs from "dayjs";
-import { ArrowDown, ArrowUp } from "@element-plus/icons-vue";
+import { ArrowDown, ArrowUp, Loading } from "@element-plus/icons-vue";
 
 const { t } = useI18n();
 const { $axios } = useNuxtApp();
@@ -215,37 +146,16 @@ const dateRange = ref<[string, string] | undefined>(undefined);
 const datePickerRef = ref();
 
 // Financial data
-const revenueByServices = ref(2200000);
-const doctorSalaries = ref(1000000);
-const expenses = ref(500000);
+const doctorSalaries = ref(0);
+const loading = ref(false);
 
-// Doctor data for dropdown table
-const doctorData = ref([
-  {
-    name: "Service 1",
-    basicSalary: 100000,
-  },
-  {
-    name: "Service 2",
-    basicSalary: 200000,
-  },
-  {
-    name: "Service 3",
-    basicSalary: 300000,
-  },
-  {
-    name: "Service 4",
-    basicSalary: 400000,
-  },
-]);
+// Doctor data from API
+const doctorData = ref<any[]>([]);
+const totalCommission = ref(0);
 
 // Expandable sections
-const expandedSections = ref({
+const expandedSections = ref<Record<string, boolean>>({
   salary1: false,
-  salary2: false,
-  salary3: false,
-  salary4: false,
-  salary5: false,
 });
 
 // Methods
@@ -277,22 +187,32 @@ const onChangeDatePicker = (values: [string, string] | undefined) => {
 
 const fetchFinancialData = async (startDate: string, endDate: string) => {
   try {
-    // Here you would call your API to fetch financial data
-    // For now, using mock data
-    console.log("Fetching data for:", startDate, "to", endDate);
+    loading.value = true;
+    console.log("Fetching commission data for:", startDate, "to", endDate);
 
-    // Example API call:
-    // const response = await (<Axios>$axios).post('/api/reports/financial', {
-    //   startDate,
-    //   endDate
-    // });
-    //
-    // revenueByServices.value = response.data.revenueByServices;
-    // doctorSalaries.value = response.data.doctorSalaries;
-    // expenses.value = response.data.expenses;
-    // paymentBreakdown.value = response.data.paymentBreakdown;
-  } catch (error) {
-    console.error("Failed to fetch financial data:", error);
+    const response = await (<Axios>$axios).post(
+      `/api/report/commission?startDate=${startDate}&endDate=${endDate}`
+    );
+
+    if (response.data && response.data.payload) {
+      doctorData.value = response.data.payload;
+
+      // Calculate total commission
+      // totalCommission.value = doctorData.value.reduce((total, doctor) => {
+      //   return total + (doctor.amount || 0);
+      // }, 0);
+
+      // doctorSalaries.value = totalCommission.value;
+
+      console.log("Commission data loaded successfully:", response.data);
+    }
+  } catch (error: any) {
+    console.error("Failed to fetch commission data:", error);
+    console.error("Error response:", error.response?.data);
+    console.error("Error status:", error.response?.status);
+    console.error("Error message:", error.message);
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -325,6 +245,16 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+  color: #666;
+  font-size: 14px;
 }
 
 .report-section {

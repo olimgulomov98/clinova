@@ -273,5 +273,13 @@
   "PARENT": "Yuqori",
   "REPORTS": "Hisobotlar",
   "DOCTOR_SALARY": "Doktor Maoshi",
-  "CASHIER_REPORTS": "Kassir Hisobotlari"
+  "CASHIER_REPORTS": "Kassir Hisobotlari",
+  "REVENUE_BY_SERVICES": "Xizmatlar bo‘yicha daromad",
+  "AMOUNTS": "Miqdor",
+  "DOCTOR_SALARIES": "Shifokor maoshi",
+  "COMMISSION": "Komissiya",
+  "BASIC_SALARY": "Asosiy maosh",
+  "EXPENSES": "Xarajatlar",
+  "GROSS_PROFIT": "Umumiy foyda",
+  "DOCTORS_SALARIES": "Shifokorlar maoshi"
 }

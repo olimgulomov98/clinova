@@ -272,5 +272,13 @@
   "PARENT": "Parent",
   "REPORTS": "Reports",
   "DOCTOR_SALARY": "Doctor Salary",
-  "CASHIER_REPORTS": "Cashier Reports"
+  "CASHIER_REPORTS": "Cashier Reports",
+  "REVENUE_BY_SERVICES": "Revenue by services",
+  "AMOUNTS": "Amount",
+  "DOCTOR_SALARIES": "Doctor salaries",
+  "COMMISSION": "Commission",
+  "BASIC_SALARY": "Basic salary",
+  "EXPENSES": "Expenses",
+  "GROSS_PROFIT": "Gross profit",
+  "DOCTORS_SALARIES": "Doctors' salaries"
 }

@@ -273,5 +273,13 @@
   "PARENT": "Основной",
   "REPORTS": "Отчеты",
   "DOCTOR_SALARY": "Зарплата Врача",
-  "CASHIER_REPORTS": "Отчеты Kассира"
+  "CASHIER_REPORTS": "Отчеты Kассира",
+  "REVENUE_BY_SERVICES": "Доход по услугам",
+  "AMOUNTS": "Сумма",
+  "DOCTOR_SALARIES": "Зарплата врача",
+  "COMMISSION": "Комиссия",
+  "BASIC_SALARY": "Базовая зарплата",
+  "EXPENSES": "Расходы",
+  "GROSS_PROFIT": "Валовая прибыль",
+  "DOCTORS_SALARIES": "Зарплаты врачей"
 }

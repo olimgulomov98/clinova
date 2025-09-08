@@ -2,19 +2,12 @@
   <div class="page-container">
     <div class="page-title">{{ t("REPORTS") }}</div>
 
-    <!-- Date Range Picker -->
-    <div class="date-picker-container">
-      <el-date-picker
-        v-model="dateRange"
-        type="daterange"
-        unlink-panels
-        range-separator="-"
-        start-placeholder="Start date"
-        end-placeholder="End date"
-        format="DD MMM YYYY"
-        value-format="YYYY-MM-DD"
-        @change="onChangeDatePicker"
-        ref="datePickerRef"
+    <!-- Month Selector -->
+    <div class="month-selector-container">
+      <el-select
+        v-model="selectedMonth"
+        placeholder="Select month"
+        @change="onChangeMonth"
         style="
           border-radius: 8px;
           background: #eaf2f8;
@@ -22,11 +15,25 @@
           height: 30px;
           width: 220px;
         "
-      />
+      >
+        <el-option
+          v-for="month in monthOptions"
+          :key="month.value"
+          :label="month.label"
+          :value="month.value"
+        />
+      </el-select>
+    </div>
+
+    <!-- Loading indicator -->
+    <div v-if="loading" class="loading-container">
+      <el-icon class="is-loading">
+        <Loading />
+      </el-icon>
     </div>
 
     <!-- Financial Report -->
-    <div class="financial-report">
+    <div v-else class="financial-report">
       <!-- Revenue by services -->
       <div class="report-section">
         <div class="section-header" @click="toggleSection('revenue')">
@@ -37,18 +44,18 @@
             <el-icon v-else class="arrow-icon">
               <ArrowUp />
             </el-icon>
-            <span class="section-title">Revenue by services</span>
+            <span class="section-title">{{ t("REVENUE_BY_SERVICES") }}</span>
           </div>
 
           <span class="section-amount">{{
-            formatAmount(revenueByServices)
+            formatAmount(servicesTotalAmount)
           }}</span>
         </div>
         <div v-if="expandedSections.revenue" class="section-content">
           <div class="employee-table">
             <div class="table-header">
-              <span class="table-header-cell">Services</span>
-              <span class="table-header-cell">Amount</span>
+              <span class="table-header-cell">{{ t("SERVICES") }}</span>
+              <span class="table-header-cell">{{ t("AMOUNTS") }}</span>
             </div>
             <div
               v-for="(revenue, index) in revenueData"
@@ -72,17 +79,19 @@
             <el-icon v-else class="arrow-icon">
               <ArrowUp />
             </el-icon>
-            <span class="section-title">Doctor salaries</span>
+            <span class="section-title">{{ t("DOCTOR_SALARIES") }}</span>
           </div>
 
-          <span class="section-amount">{{ formatAmount(doctorSalaries) }}</span>
+          <span class="section-amount">{{
+            formatAmount(doctorSalariesTotalAmount)
+          }}</span>
         </div>
         <div v-if="expandedSections.salaries" class="section-content">
           <div class="employee-table">
             <div class="table-header">
-              <span class="table-header-cell">Employee</span>
-              <span class="table-header-cell">Commission</span>
-              <span class="table-header-cell">Basic salary</span>
+              <span class="table-header-cell">{{ t("EMPLOYEE") }}</span>
+              <span class="table-header-cell">{{ t("COMMISSION") }}</span>
+              <span class="table-header-cell">{{ t("BASIC_SALARY") }}</span>
             </div>
             <div
               v-for="(doctor, index) in doctorData"
@@ -111,15 +120,17 @@
             <el-icon v-else class="arrow-icon">
               <ArrowUp />
             </el-icon>
-            <span class="section-title">Expenses</span>
+            <span class="section-title">{{ t("EXPENSES") }}</span>
           </div>
-          <span class="section-amount">{{ formatAmount(expenses) }}</span>
+          <span class="section-amount">{{
+            formatAmount(expensesTotalAmount)
+          }}</span>
         </div>
         <div v-if="expandedSections.expenses" class="section-content">
           <div class="employee-table">
             <div class="table-header">
-              <span class="table-header-cell">Expenses</span>
-              <span class="table-header-cell">Amount</span>
+              <span class="table-header-cell">{{ t("EXPENSES") }}</span>
+              <span class="table-header-cell">{{ t("AMOUNTS") }}</span>
             </div>
             <div
               v-for="(expence, index) in expencesData"
@@ -143,18 +154,20 @@
             <el-icon v-else class="arrow-icon">
               <ArrowUp />
             </el-icon>
-            <span class="section-title">Gross profit</span>
+            <span class="section-title">{{ t("GROSS_PROFIT") }}</span>
           </div>
-          <span class="section-amount">{{ formatAmount(grossProfit) }}</span>
+          <span class="section-amount">{{
+            formatAmount(totalPaymentAmount)
+          }}</span>
         </div>
         <div v-if="expandedSections.grossProfit" class="section-content">
           <div class="employee-table">
             <div class="table-header">
-              <span class="table-header-cell">Payment type</span>
-              <span class="table-header-cell">Amount</span>
+              <span class="table-header-cell">{{ t("PAYMENT_TYPE") }}</span>
+              <span class="table-header-cell">{{ t("AMOUNTS") }}</span>
             </div>
             <div
-              v-for="(service, index) in serviceData"
+              v-for="(service, index) in grossProfitData"
               :key="index"
               class="table-row"
             >
@@ -168,16 +181,20 @@
       <!-- Doctors' salaries -->
       <div class="report-section">
         <div class="section-header">
-          <span class="section-title ml-[28px]">Doctors' salaries</span>
-          <span class="section-amount">{{ formatAmount(doctorSalaries) }}</span>
+          <span class="section-title ml-[28px]">{{
+            t("DOCTORS_SALARIES")
+          }}</span>
+          <span class="section-amount">{{
+            formatAmount(employeesSalaries)
+          }}</span>
         </div>
       </div>
 
       <!-- Expenses -->
       <div class="report-section">
         <div class="section-header">
-          <span class="section-title ml-[28px]">Expenses</span>
-          <span class="section-amount">{{ formatAmount(expenses) }}</span>
+          <span class="section-title ml-[28px]">{{ t("EXPENSES") }}</span>
+          <span class="section-amount">{{ formatAmount(expensesTotal) }}</span>
         </div>
       </div>
 
@@ -185,9 +202,7 @@
       <div class="report-section">
         <div class="section-header">
           <span class="section-title ml-[28px]">Revenue</span>
-          <span class="section-amount">{{
-            formatAmount(revenueByServices)
-          }}</span>
+          <span class="section-amount">{{ formatAmount(revenue) }}</span>
         </div>
       </div>
     </div>
@@ -198,101 +213,93 @@
 import type { Axios } from "axios";
 import { getFormatAmount } from "~/utils";
 import dayjs from "dayjs";
-import { ArrowDown, ArrowUp } from "@element-plus/icons-vue";
+import { ArrowDown, ArrowUp, Loading } from "@element-plus/icons-vue";
 
 const { t } = useI18n();
 const { $axios } = useNuxtApp();
 
-// Date range picker
-const dateRange = ref<[string, string] | undefined>(undefined);
-const datePickerRef = ref();
+// Month selector
+const selectedMonth = ref<string>("");
+const monthOptions = ref<Array<{ label: string; value: string }>>([]);
 
-// Financial data
-const revenueByServices = ref(2200000);
-const doctorSalaries = ref(1000000);
-const expenses = ref(500000);
+// API response data
+const employees = ref<any[]>([]);
+const services = ref<any[]>([]);
+const expenses = ref<any[]>([]);
+const cashTotal = ref(0);
+const terminalTotal = ref(0);
+const multicardTotal = ref(0);
+const total = ref(0);
+const employeesSalaries = ref(0);
+const expensesTotal = ref(0);
+const revenue = ref(0);
 
-// Doctor data for dropdown table
-const doctorData = ref([
-  {
-    name: "Doctor 1",
-    commission: 100000,
-    basicSalary: 10,
-  },
-  {
-    name: "Doctor 2",
-    commission: 200000,
-    basicSalary: 15,
-  },
-  {
-    name: "Doctor 3",
-    commission: 300000,
-    basicSalary: 10,
-  },
-  {
-    name: "Doctor 4",
-    commission: 400000,
-    basicSalary: 20,
-  },
-]);
+// Loading state
+const loading = ref(false);
 
-const revenueData = ref([
-  {
-    name: "Service A",
-    amount: 400000,
-  },
-  {
-    name: "Service B",
-    amount: 300000,
-  },
-  {
-    name: "Service C",
-    amount: 500000,
-  },
-  {
-    name: "Service D",
-    amount: 1000000,
-  },
-]);
+// Computed data for display
+const doctorData = computed(() => {
+  return employees.value.map((emp) => ({
+    name: emp.name,
+    commission: emp.amount,
+    basicSalary: emp.basicSalary,
+  }));
+});
 
-const expencesData = ref([
-  {
-    name: "E0001",
-    amount: 50000,
-  },
-  {
-    name: "E0002",
-    amount: 300000,
-  },
-  {
-    name: "E0003",
-    amount: 400000,
-  },
-  {
-    name: "E0004",
-    amount: 50000,
-  },
-]);
+const doctorSalariesTotalAmount = computed(() => {
+  return employees.value.reduce(
+    (total, employees) => total + (employees.commission || 0),
+    0
+  );
+});
 
-// Service data for Gross profit dropdown
-const serviceData = ref([
-  {
-    name: "Cash",
-    amount: 1000000,
-  },
-  {
-    name: "Terminal",
-    amount: 500000,
-  },
-  {
-    name: "Multicard",
-    amount: 700000,
-  },
-]);
+const revenueData = computed(() => {
+  return services.value.map((service) => ({
+    name: service.name,
+    amount: service.amount,
+  }));
+});
 
-// Computed values
-const grossProfit = computed(() => {
-  return revenueByServices.value - doctorSalaries.value - expenses.value;
+const servicesTotalAmount = computed(() => {
+  return services.value.reduce(
+    (total, service) => total + (service.amount || 0),
+    0
+  );
+});
+
+const expencesData = computed(() => {
+  return expenses.value.map((expense) => ({
+    name: expense.name,
+    amount: expense.amount,
+  }));
+});
+
+const expensesTotalAmount = computed(() => {
+  return expenses.value.reduce(
+    (total, expense) => total + (expense.amount || 0),
+    0
+  );
+});
+
+const grossProfitData = computed(() => {
+  return [
+    {
+      name: "Cash",
+      amount: cashTotal.value,
+    },
+    {
+      name: "Terminal",
+      amount: terminalTotal.value,
+    },
+    {
+      name: "Multicard",
+      amount: multicardTotal.value,
+    },
+  ];
+});
+
+const totalPaymentAmount = computed(() => {
+  return cashTotal.value + terminalTotal.value + multicardTotal.value;
 });
 
 // Expandable sections
@@ -312,67 +319,162 @@ const toggleSection = (section: keyof typeof expandedSections.value) => {
   expandedSections.value[section] = !expandedSections.value[section];
 };
 
-const formatDateRange = (range: [string, string] | undefined) => {
-  if (!range || !range[0] || !range[1]) {
-    return "Select date range";
+const onChangeMonth = (month: string) => {
+  if (month) {
+    console.log("Month selected:", month);
+
+    // Check if the month is in the future before setting it
+    const selectedDate = dayjs(month);
+    const currentDate = dayjs();
+
+    if (selectedDate.isAfter(currentDate, "month")) {
+      console.warn(
+        "Selected month is in the future, using current month instead"
+      );
+      const currentMonth = currentDate.format("YYYY-MM");
+      selectedMonth.value = currentMonth;
+      fetchFinancialData(currentMonth);
+    } else {
+      selectedMonth.value = month;
+      fetchFinancialData(month);
+    }
   }
-
-  const startDate = dayjs(range[0]);
-  const endDate = dayjs(range[1]);
-
-  return `${startDate.format("D MMM")} - ${endDate.format("D MMM YYYY")}`;
 };
 
-const onChangeDatePicker = (values: [string, string] | undefined) => {
-  if (values) {
-    // Fetch data for the selected date range
-    fetchFinancialData(values[0], values[1]);
+// Generate month options for the last 12 months (up to current month)
+const generateMonthOptions = () => {
+  const options = [];
+  const today = dayjs();
+
+  for (let i = 0; i < 12; i++) {
+    const month = today.subtract(i, "month");
+
+    // Only include months that are not in the future
+    if (!month.isAfter(today, "month")) {
+      const monthOption = {
+        label: month.format("MMMM YYYY"),
+        value: month.format("YYYY-MM"),
+      };
+      options.push(monthOption);
+    }
   }
+
+  return options;
 };
 
-const fetchFinancialData = async (startDate: string, endDate: string) => {
+const fetchFinancialData = async (month: string) => {
   try {
-    // Here you would call your API to fetch financial data
-    // For now, using mock data
-    console.log("Fetching data for:", startDate, "to", endDate);
+    loading.value = true;
 
-    // Example API call:
-    // const response = await (<Axios>$axios).post('/api/reports/financial', {
-    //   startDate,
-    //   endDate
-    // });
-    //
-    // revenueByServices.value = response.data.revenueByServices;
-    // doctorSalaries.value = response.data.doctorSalaries;
-    // expenses.value = response.data.expenses;
-    // paymentBreakdown.value = response.data.paymentBreakdown;
-  } catch (error) {
-    console.error("Failed to fetch financial data:", error);
+    // Validate month parameter
+    if (!month || month === "" || !dayjs(month).isValid()) {
+      const currentMonth = dayjs().format("YYYY-MM");
+      selectedMonth.value = currentMonth;
+      month = currentMonth;
+    }
+
+    // Check if the month is in the future
+    const selectedDate = dayjs(month);
+    const currentDate = dayjs();
+
+    if (selectedDate.isAfter(currentDate, "month")) {
+      const currentMonth = currentDate.format("YYYY-MM");
+      selectedMonth.value = currentMonth;
+      month = currentMonth;
+    }
+
+    // Based on testing, URL parameters work best
+
+    const response = await (<Axios>$axios).post(
+      `/api/report/revenue?month=${month}`,
+      {}
+    );
+
+    if (response.data && response.data.payload) {
+      const data = response.data.payload;
+
+      // Update detailed data
+      employees.value = data.employees || [];
+      services.value = data.services || [];
+      expenses.value = data.expenses || [];
+
+      // Update payment totals
+      cashTotal.value = data.cashTotal || 0;
+      terminalTotal.value = data.terminalTotal || 0;
+      multicardTotal.value = data.multicardTotal || 0;
+      total.value = data.total || 0;
+      employeesSalaries.value = data.employeesSalaries || 0;
+      expensesTotal.value = data.expensesTotal || 0;
+      revenue.value = data.revenue || 0;
+    }
+  } catch (error: any) {
+    console.log("Failed to fetch financial data:", error);
+    console.log("Error message:", error.message);
+
+    // Show more detailed error information
+    if (error.response?.data) {
+      console.log(
+        "API Error Details:",
+        JSON.stringify(error.response.data, null, 2)
+      );
+    }
+
+    // You might want to show a notification to the user here
+  } finally {
+    loading.value = false;
   }
 };
 
 // Initialize with current month
-onMounted(() => {
+onMounted(async () => {
   const today = dayjs();
-  const startOfMonth = today.startOf("month").format("YYYY-MM-DD");
-  const endOfMonth = today.endOf("month").format("YYYY-MM-DD");
+  const currentMonth = today.format("YYYY-MM");
 
-  dateRange.value = [startOfMonth, endOfMonth];
-  fetchFinancialData(startOfMonth, endOfMonth);
+  // Generate month options first
+  monthOptions.value = generateMonthOptions();
+
+  // Set current month as default
+  selectedMonth.value = currentMonth;
+
+  // Fetch data with current month
+  await fetchFinancialData(currentMonth);
 });
 </script>
 
 <style scoped lang="scss">
-.date-picker-container {
+.month-selector-container {
   margin-bottom: 24px;
   position: relative;
 
-  .hidden-date-picker {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-    width: 0;
-    height: 0;
+  :deep(.el-select__wrapper) {
+    background-color: #eaf2f8 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  :deep(.el-select__placeholder) {
+    color: #666;
+    font-family: "SourceSans3", sans-serif;
+  }
+
+  :deep(.el-select__selected-item) {
+    color: #333;
+    font-family: "SourceSans3", sans-serif;
+  }
+}
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  font-size: 16px;
+  color: #666;
+  font-family: "SourceSans3", sans-serif;
+
+  .el-icon {
+    font-size: 20px;
   }
 }
 
