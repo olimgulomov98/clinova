@@ -35,8 +35,8 @@
       </div>
 
       <!-- Doctor salaries summary -->
-      <div class="report-section">
-        <div class="section-header" @click="toggleSection('salary1')">
+      <!-- <div class="report-section"> -->
+      <!-- <div class="section-header" @click="toggleSection('salary1')">
           <div class="flex items-center gap-[10px]">
             <el-icon v-if="!expandedSections.salary1" class="arrow-icon">
               <ArrowDown />
@@ -52,8 +52,8 @@
           <span class="section-amount">{{
             formatAmount(doctorData[0]?.amount || 0)
           }}</span>
-        </div>
-        <div v-if="expandedSections.salary1" class="section-content">
+        </div> -->
+      <!-- <div v-if="expandedSections.salary1" class="section-content">
           <div class="employee-table">
             <div class="table-header">
               <span class="table-header-cell">{{ t("SERVICES") }}</span>
@@ -70,8 +70,8 @@
               }}</span>
             </div>
           </div>
-        </div>
-      </div>
+        </div> -->
+      <!-- </div> -->
       <!-- Doctor Services Details -->
       <div
         v-for="(doctor, doctorIndex) in doctorData"

@@ -2,7 +2,7 @@
   <div class="page-container">
     <div class="page-title">{{ t("CASHIER_REPORTS") }}</div>
 
-    <!-- Date Range Picker -->
+    <!-- Date Range Picker and Add Button -->
     <div class="date-picker-container">
       <el-date-picker
         v-model="dateRange"
@@ -23,10 +23,30 @@
           width: 220px;
         "
       />
+      <el-button
+        type="primary"
+        @click="onAddClick"
+        style="
+          margin-left: 12px;
+          height: 30px;
+          border-radius: 8px;
+          background: #409eff;
+          border: none;
+        "
+      >
+        Add
+      </el-button>
+    </div>
+
+    <!-- Loading indicator -->
+    <div v-if="loading" class="loading-container">
+      <el-icon class="is-loading">
+        <Loading />
+      </el-icon>
     </div>
 
     <!-- Cashier Reports Table -->
-    <div>
+    <div v-else>
       <table class="cashier-table">
         <thead>
           <tr>
@@ -150,7 +170,7 @@
 import type { Axios } from "axios";
 import { getFormatAmount } from "~/utils";
 import dayjs from "dayjs";
-import { ArrowDown, ArrowUp } from "@element-plus/icons-vue";
+import { ArrowDown, ArrowUp, Loading } from "@element-plus/icons-vue";
 
 const { t } = useI18n();
 const { $axios } = useNuxtApp();
@@ -160,83 +180,8 @@ const dateRange = ref<[string, string] | undefined>(undefined);
 const datePickerRef = ref();
 
 // Cashier reports data
-const cashierReports = ref([
-  {
-    date: "29/08/2025",
-    cashier: "Muhammad",
-    cashTotal: 999999999,
-    terminalTotal: 999999999,
-    multicardTotal: 999999999,
-    cashActual: 999999999,
-    terminalActual: 999999999,
-    multicardActual: 999999999,
-    cashExpense: 999999999,
-    terminalExpense: 999999999,
-    multicardExpense: 999999999,
-    cashLoss: 999999999,
-    reason: "More expances",
-  },
-  {
-    date: "29/08/2025",
-    cashier: "Abdulloh",
-    cashTotal: 999999999,
-    terminalTotal: 999999999,
-    multicardTotal: 999999999,
-    cashActual: 999999999,
-    terminalActual: 999999999,
-    multicardActual: 999999999,
-    cashExpense: 999999999,
-    terminalExpense: 999999999,
-    multicardExpense: 999999999,
-    cashLoss: 999999999,
-    reason: "More expances",
-  },
-  {
-    date: "29/08/2025",
-    cashier: "Ulug'bek",
-    cashTotal: 999999999,
-    terminalTotal: 999999999,
-    multicardTotal: 999999999,
-    cashActual: 999999999,
-    terminalActual: 999999999,
-    multicardActual: 999999999,
-    cashExpense: 999999999,
-    terminalExpense: 999999999,
-    multicardExpense: 999999999,
-    cashLoss: 999999999,
-    reason: "More expances",
-  },
-  {
-    date: "29/08/2025",
-    cashier: "Samandar",
-    cashTotal: 999999999,
-    terminalTotal: 999999999,
-    multicardTotal: 999999999,
-    cashActual: 999999999,
-    terminalActual: 999999999,
-    multicardActual: 999999999,
-    cashExpense: 999999999,
-    terminalExpense: 999999999,
-    multicardExpense: 999999999,
-    cashLoss: 999999999,
-    reason: "More expances",
-  },
-  {
-    date: "29/08/2025",
-    cashier: "Abdurahim",
-    cashTotal: 999999999,
-    terminalTotal: 999999999,
-    multicardTotal: 999999999,
-    cashActual: 999999999,
-    terminalActual: 999999999,
-    multicardActual: 999999999,
-    cashExpense: 999999999,
-    terminalExpense: 999999999,
-    multicardExpense: 999999999,
-    cashLoss: 999999999,
-    reason: "More expances",
-  },
-]);
+const cashierReports = ref<any[]>([]);
+const loading = ref(false);
 
 // Sorting state
 const sortField = ref<string | null>(null);
@@ -281,19 +226,45 @@ const onChangeDatePicker = (values: [string, string] | undefined) => {
   }
 };
 
+const onAddClick = () => {
+  // Navigate to cashier close page
+  navigateTo("/cashier-reports/close");
+};
+
 const fetchCashierData = async (startDate: string, endDate: string) => {
   try {
-    // Here you would call your API to fetch cashier data
-    console.log("Fetching cashier data for:", startDate, "to", endDate);
+    loading.value = true;
 
-    // Example API call:
-    // const response = await (<Axios>$axios).post('/api/cashier-reports', {
-    //   startDate,
-    //   endDate
-    // });
-    // cashierReports.value = response.data.reports;
-  } catch (error) {
+    // API works without any parameters - get all data
+    const response = await (<Axios>$axios).post("/api/cashier/list", {});
+
+    if (response.data?.payload?.list) {
+      // Map API response to our table format
+      cashierReports.value = response.data.payload.list.map((item: any) => ({
+        id: item.id,
+        date: item.date,
+        cashier: item.cashier?.name || "Unknown",
+        cashTotal: item.cashTotal || 0,
+        terminalTotal: item.terminalTotal || 0,
+        multicardTotal: item.multicardTotal || 0,
+        cashActual: item.cashActual || 0,
+        terminalActual: item.terminalActual || 0,
+        multicardActual: item.multicardActual || 0,
+        cashExpense: item.cashExpense || 0,
+        terminalExpense: item.terminalExpense || 0,
+        multicardExpense: item.multicardExpense || 0,
+        cashLoss: item.cashLoss || 0,
+        reason: item.lossReason || "",
+      }));
+    } else {
+      cashierReports.value = [];
+    }
+  } catch (error: any) {
     console.error("Failed to fetch cashier data:", error);
+    console.error("Error response:", error.response?.data);
+    cashierReports.value = [];
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -312,6 +283,18 @@ onMounted(() => {
 .date-picker-container {
   margin-bottom: 24px;
   position: relative;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+
+  .is-loading {
+    font-size: 24px;
+    color: #409eff;
+  }
 }
 
 .cashier-table {
