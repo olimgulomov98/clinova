@@ -290,5 +290,20 @@
   "COMMISSION": "Commission",
   "BASIC_SALARY": "Basic salary",
   "GROSS_PROFIT": "Gross profit",
-  "DOCTORS_SALARIES": "Doctors' salaries"
+  "DOCTORS_SALARIES": "Doctors' salaries",
+  "TERMINAL": "Terminal",
+  "MULTICARD": "Multicard",
+  "EXPENSE_CASH": "Expense (cash)",
+  "EXPENSE_TERMINAL": "Expense (terminal)",
+  "EXPENSE_MULTICARD": "Expense (multicard)",
+  "EXPENSE_TOTAL": "Expense total",
+  "ADD_EXPENSE": "Add Expense",
+  "TYPE": "Type",
+  "SELECT_EXPENSE_TYPE": "Select expense type",
+  "ACTUAL_CASH": "Actual Cash",
+  "ACTUAL_TERMINAL": "Actual Terminal",
+  "ACTUAL_MULTICARD": "Actual Multicard",
+  "LOST": "Lost",
+  "LOST_REASON": "Lost Reason",
+  "ADD": "Add"
 }

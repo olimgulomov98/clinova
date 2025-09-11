@@ -2,229 +2,177 @@
   <div class="page-container">
     <div class="page-title">{{ t("CASHIER_CLOSE") }}</div>
 
-    <!-- Summary Cards -->
-    <div class="summary-cards">
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">{{ t("CASH") }}</span>
-          <span class="card-amount">{{ formatAmount(cashTotal) }}</span>
-        </div>
-        <!-- <div class="card-comparison">
-          <span class="comparison-text">
-            {{ formatAmount(cashDifference) }} {{ t("MORE_THAN_YESTERDAY") }}
-          </span>
-          <span
-            class="comparison-percentage"
-            :class="cashPercentage >= 0 ? 'positive' : 'negative'"
-          >
-            {{ cashPercentage >= 0 ? "+" : "" }}{{ cashPercentage.toFixed(1) }}%
-          </span>
-        </div> -->
-      </div>
-
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">{{ t("TERMINAL") }}</span>
-          <span class="card-amount">{{ formatAmount(terminalTotal) }}</span>
-        </div>
-        <!-- <div class="card-comparison">
-          <span class="comparison-text">
-            {{ formatAmount(terminalDifference) }}
-            {{ t("MORE_THAN_YESTERDAY") }}
-          </span>
-          <span
-            class="comparison-percentage"
-            :class="terminalPercentage >= 0 ? 'positive' : 'negative'"
-          >
-            {{ terminalPercentage >= 0 ? "+" : ""
-            }}{{ terminalPercentage.toFixed(1) }}%
-          </span>
-        </div> -->
-      </div>
-
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">{{ t("MULTICARD") }}</span>
-          <span class="card-amount">{{ formatAmount(multicardTotal) }}</span>
-        </div>
-        <!-- <div class="card-comparison">
-          <span class="comparison-text">
-            {{ formatAmount(multicardDifference) }}
-            {{ t("MORE_THAN_YESTERDAY") }}
-          </span>
-          <span
-            class="comparison-percentage"
-            :class="multicardPercentage >= 0 ? 'positive' : 'negative'"
-          >
-            {{ multicardPercentage >= 0 ? "+" : ""
-            }}{{ multicardPercentage.toFixed(1) }}%
-          </span>
-        </div> -->
-      </div>
-
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">{{ t("TOTAL") }}</span>
-          <span class="card-amount">{{ formatAmount(totalAmount) }}</span>
-        </div>
-        <!-- <div class="card-comparison">
-          <span class="comparison-text">
-            {{ formatAmount(totalDifference) }} {{ t("MORE_THAN_YESTERDAY") }}
-          </span>
-          <span
-            class="comparison-percentage"
-            :class="totalPercentage >= 0 ? 'positive' : 'negative'"
-          >
-            {{ totalPercentage >= 0 ? "+" : ""
-            }}{{ totalPercentage.toFixed(1) }}%
-          </span>
-        </div> -->
-      </div>
+    <!-- Date Picker and Add Button -->
+    <div class="date-picker-container">
+      <el-date-picker
+        v-model="selectedDate"
+        type="date"
+        placeholder="Select date"
+        format="DD MMM YYYY"
+        value-format="YYYY-MM-DD"
+        @change="onChangeDatePicker"
+        ref="datePickerRef"
+        :clearable="false"
+        :editable="false"
+        :teleported="true"
+        :disabled="false"
+        :readonly="false"
+        :append-to-body="true"
+        popper-class="custom-date-picker-popper"
+        :picker-options="pickerOptions"
+        class="custom-date-picker"
+      />
     </div>
 
     <!-- Summary Cards -->
     <div class="summary-cards">
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">Expense Cash</span>
-          <span class="card-amount">{{ formatAmount(cashTotal) }}</span>
-        </div>
+      <div v-if="loading" class="loading-container">
+        <el-icon class="is-loading"><Loading /></el-icon>
       </div>
+      <template v-else>
+        <div class="summary-card">
+          <div class="card-header">
+            <span class="card-title">{{ t("CASH") }}</span>
+            <span class="card-amount">{{ formatAmount(cashTotal) }}</span>
+          </div>
+        </div>
 
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">Expense Terminal</span>
-          <span class="card-amount">{{ formatAmount(terminalTotal) }}</span>
+        <div class="summary-card">
+          <div class="card-header">
+            <span class="card-title">{{ t("TERMINAL") }}</span>
+            <span class="card-amount">{{ formatAmount(terminalTotal) }}</span>
+          </div>
         </div>
-      </div>
 
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">Expense Multicard</span>
-          <span class="card-amount">{{ formatAmount(multicardTotal) }}</span>
+        <div class="summary-card">
+          <div class="card-header">
+            <span class="card-title">{{ t("MULTICARD") }}</span>
+            <span class="card-amount">{{ formatAmount(multicardTotal) }}</span>
+          </div>
         </div>
-      </div>
 
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">Expense Total</span>
-          <span class="card-amount">{{ formatAmount(totalAmount) }}</span>
+        <div class="summary-card">
+          <div class="card-header">
+            <span class="card-title">{{ t("TOTAL") }}</span>
+            <span class="card-amount">{{ formatAmount(totalAmount) }}</span>
+          </div>
         </div>
-      </div>
+      </template>
     </div>
 
-    <!-- Summary Cards -->
+    <!-- Summary Expense Cards -->
     <div class="summary-cards">
       <div class="summary-card">
         <div class="card-header">
-          <div class="input-group">
-            <label class="input-label">{{ t("CASH") }}</label>
-            <el-input
-              v-model="countedCash"
-              type="number"
-              :placeholder="t('ENTER_AMOUNT')"
-              class="amount-input"
-            />
-          </div>
+          <span class="card-title">{{ t("EXPENSE_CASH") }}</span>
+          <span class="card-amount">{{ formatAmount(cashExpense) }}</span>
         </div>
       </div>
 
       <div class="summary-card">
         <div class="card-header">
-          <div class="input-group">
-            <label class="input-label">{{ t("TERMINAL") }}</label>
-            <el-input
-              v-model="countedTerminal"
-              type="number"
-              :placeholder="t('ENTER_AMOUNT')"
-              class="amount-input"
-            />
-          </div>
+          <span class="card-title">{{ t("EXPENSE_TERMINAL") }}</span>
+          <span class="card-amount">{{ formatAmount(terminalExpense) }}</span>
         </div>
       </div>
 
       <div class="summary-card">
         <div class="card-header">
-          <div class="input-group">
-            <label class="input-label">{{ t("MULTICARD") }}</label>
-            <el-input
-              v-model="countedMulticard"
-              type="number"
-              :placeholder="t('ENTER_AMOUNT')"
-              class="amount-input"
-            />
-          </div>
+          <span class="card-title">{{ t("EXPENSE_MULTICARD") }}</span>
+          <span class="card-amount">{{ formatAmount(multicardExpense) }}</span>
         </div>
       </div>
 
       <div class="summary-card">
         <div class="card-header">
-          <span class="card-title">{{ t("TOTAL") }}</span>
-          <span class="card-amount">{{ formatAmount(totalAmount) }}</span>
+          <span class="card-title">{{ t("EXPENSE_TOTAL") }}</span>
+          <span class="card-amount">{{ formatAmount(totalExpense) }}</span>
         </div>
       </div>
     </div>
 
-    <!-- Summary Cards -->
-    <div class="summaryy-cards">
-      <div class="summary-card">
-        <div class="card-header">
-          <div class="input-group">
-            <label class="input-label">Lost</label>
-            <el-input
-              v-model="countedCash"
-              type="number"
-              :placeholder="t('ENTER_AMOUNT')"
-              class="amount-input"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="summary-card">
-        <div class="card-header">
-          <div class="input-group">
-            <label class="input-label">Lost Reason</label>
-            <el-input
-              v-model="countedTerminal"
-              type="number"
-              :placeholder="t('ENTER_AMOUNT')"
-              class="amount-input"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- <div class="summary-card">
-        <div class="card-header">
-          <div class="input-group">
-            <label class="input-label">{{ t("MULTICARD") }}</label>
-            <el-input
-              v-model="countedMulticard"
-              type="number"
-              :placeholder="t('ENTER_AMOUNT')"
-              class="amount-input"
-            />
-          </div>
-        </div>
-      </div> -->
-
-      <!-- <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">{{ t("TOTAL") }}</span>
-          <span class="card-amount">{{ formatAmount(totalAmount) }}</span>
-        </div>
-      </div> -->
+    <div style="display: flex; justify-content: flex-end">
+      <el-button
+        type="primary"
+        style="
+          width: fit-content;
+          border-radius: 8px;
+          background: #1f2937;
+          border: none;
+        "
+        @click="showExpenseDialog = true"
+      >
+        {{ t("ADD_EXPENSE") }}
+      </el-button>
     </div>
+
+    <!-- Expense Dialog -->
+    <el-dialog
+      v-model="showExpenseDialog"
+      width="500px"
+      :before-close="handleCloseDialog"
+    >
+      <template #title>
+        <div
+          style="
+            text-align: center;
+            width: 100%;
+            margin-bottom: 12px;
+
+            font-size: 22px;
+          "
+        >
+          {{ t("EXPENSE") }}
+        </div>
+      </template>
+      <el-form :model="expenseForm" label-width="120px">
+        <el-form-item :label="$t('TYPE')">
+          <el-select
+            v-model="expenseForm.type"
+            :placeholder="$t('SELECT_EXPENSE_TYPE')"
+            style="width: 100%"
+          >
+            <el-option :label="$t('CASH')" value="CASH" />
+            <el-option :label="$t('TERMINAL')" value="TERMINAL" />
+            <el-option :label="$t('MULTICARD')" value="MULTICARD" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item :label="$t('AMOUNTS')">
+          <el-input
+            v-model="expenseForm.amount"
+            type="number"
+            :placeholder="$t('ENTER_AMOUNT')"
+          />
+        </el-form-item>
+
+        <el-form-item :label="$t('DESCRIPTION')">
+          <el-input
+            v-model="expenseForm.description"
+            type="textarea"
+            :rows="3"
+            :placeholder="$t('ENTER_DESCRIPTION')"
+          />
+        </el-form-item>
+      </el-form>
+
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="showExpenseDialog = false">{{
+            t("CANCEL")
+          }}</el-button>
+          <el-button type="primary" @click="addExpense">{{
+            t("SAVE")
+          }}</el-button>
+        </div>
+      </template>
+    </el-dialog>
 
     <!-- Counted Amounts Section -->
-    <!-- <div class="counted-amounts-section">
-      <h3 class="section-title">{{ t("COUNTED_AMOUNTS") }}</h3>
-
-
+    <div class="counted-amounts-section">
       <div class="input-row">
         <div class="input-group">
-          <label class="input-label">{{ t("CASH") }}</label>
+          <label class="input-label">{{ t("ACTUAL_CASH") }}</label>
           <el-input
             v-model="countedCash"
             type="number"
@@ -234,7 +182,7 @@
         </div>
 
         <div class="input-group">
-          <label class="input-label">{{ t("TERMINAL") }}</label>
+          <label class="input-label">{{ t("ACTUAL_TERMINAL") }}</label>
           <el-input
             v-model="countedTerminal"
             type="number"
@@ -244,7 +192,7 @@
         </div>
 
         <div class="input-group">
-          <label class="input-label">{{ t("MULTICARD") }}</label>
+          <label class="input-label">{{ t("ACTUAL_MULTICARD") }}</label>
           <el-input
             v-model="countedMulticard"
             type="number"
@@ -254,11 +202,10 @@
         </div>
       </div>
 
-
       <div class="expenses-section">
         <div class="expenses-row">
           <div class="expense-amount-group">
-            <h4 class="expenses-title">{{ t("EXPENSES") }}</h4>
+            <h4 class="expenses-title">{{ t("LOST") }}</h4>
             <el-input
               v-model="expenseAmount"
               type="number"
@@ -268,7 +215,7 @@
           </div>
 
           <div class="expense-description-group">
-            <h4 class="expenses-title">{{ t("EXPENSE_DESCRIPTION") }}</h4>
+            <h4 class="expenses-title">{{ t("LOST_REASON") }}</h4>
             <el-input
               v-model="expenseDescription"
               type="textarea"
@@ -279,7 +226,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
 
     <!-- Action Buttons -->
     <div class="action-buttons">
@@ -291,211 +238,277 @@
       >
         {{ t("CLOSE_SHIFT") }}
       </el-button>
-
-      <!-- <el-button
-        size="large"
-        @click="onPrintPDF"
-        :disabled="submitting"
-        class="print-pdf-btn"
-      >
-        {{ t("PRINT_PDF") }}
-      </el-button>
-
-      <el-button
-        size="large"
-        @click="onSaveDraft"
-        :loading="submitting"
-        :disabled="submitting"
-        class="save-draft-btn"
-      >
-        {{ submitting ? "Saving Draft..." : t("SAVE_DRAFT") }}
-      </el-button> -->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { getFormatAmount } from "~/utils";
+import dayjs from "dayjs";
+import { Loading } from "@element-plus/icons-vue";
 
 const { t } = useI18n();
 
-// Summary data
-const cashTotal = ref(1000000);
-const terminalTotal = ref(500000);
-const multicardTotal = ref(700000);
+// Date picker
+const selectedDate = ref<string | undefined>(undefined);
+const datePickerRef = ref();
+
+// Picker options
+const pickerOptions = {
+  disabledDate: (time: Date) => {
+    // Disable future dates
+    return time.getTime() > Date.now();
+  },
+};
+
+// Summary data from API
+const cashTotal = ref(0);
+const terminalTotal = ref(0);
+const multicardTotal = ref(0);
 const totalAmount = computed(
   () => cashTotal.value + terminalTotal.value + multicardTotal.value
 );
-
-// Yesterday's data for comparison
-const yesterdayCash = ref(600000);
-const yesterdayTerminal = ref(426000);
-const yesterdayMulticard = ref(660000);
-const yesterdayTotal = computed(
-  () => yesterdayCash.value + yesterdayTerminal.value + yesterdayMulticard.value
+const cashExpense = ref(0);
+const terminalExpense = ref(0);
+const multicardExpense = ref(0);
+const totalExpense = computed(
+  () => cashExpense.value + terminalExpense.value + multicardExpense.value
 );
 
-// Differences and percentages
-const cashDifference = computed(() => cashTotal.value - yesterdayCash.value);
-const terminalDifference = computed(
-  () => terminalTotal.value - yesterdayTerminal.value
-);
-const multicardDifference = computed(
-  () => multicardTotal.value - yesterdayMulticard.value
-);
-const totalDifference = computed(
-  () => totalAmount.value - yesterdayTotal.value
-);
+// Loading state
+const loading = ref(false);
 
-const cashPercentage = computed(
-  () => (cashDifference.value / yesterdayCash.value) * 100
-);
-const terminalPercentage = computed(
-  () => (terminalDifference.value / yesterdayTerminal.value) * 100
-);
-const multicardPercentage = computed(
-  () => (multicardDifference.value / yesterdayMulticard.value) * 100
-);
-const totalPercentage = computed(
-  () => (totalDifference.value / yesterdayTotal.value) * 100
-);
+// Dialog state
+const showExpenseDialog = ref(false);
 
-// Counted amounts
+// Expense form
+const expenseForm = ref({
+  type: "",
+  amount: "",
+  description: "",
+});
+
+// Counted amounts for the form
 const countedCash = ref("");
 const countedTerminal = ref("");
 const countedMulticard = ref("");
 
-// Expenses
+// Expenses for the form
 const expenseAmount = ref("");
 const expenseDescription = ref("");
-
-// Loading state
-const loading = ref(false);
-const submitting = ref(false);
 
 // Methods
 const formatAmount = (amount: number) => {
   return getFormatAmount(amount);
 };
 
-const onCloseShift = () => {
-  // Navigate back to cashier reports
-  navigateTo("/cashier-reports");
-};
-
-const onPrintPDF = () => {
-  console.log("Print PDF clicked");
-  // Implement print PDF logic
-};
-
-const onSaveDraft = async () => {
+const onCloseShift = async () => {
   try {
-    submitting.value = true;
+    loading.value = true;
 
     // Validate required fields
-    if (
-      !countedCash.value ||
-      !countedTerminal.value ||
-      !countedMulticard.value
-    ) {
-      ElMessage.error("Please fill all required fields");
+    if (!selectedDate.value) {
+      console.error("Please select a date");
       return;
     }
 
-    // Prepare API data
-    const requestData = {
-      cashTotal: parseFloat(countedCash.value) || 0,
-      terminalTotal: parseFloat(countedTerminal.value) || 0,
-      multicardTotal: parseFloat(countedMulticard.value) || 0,
+    // Prepare request body
+    const requestBody = {
+      date: selectedDate.value,
       cashActual: parseFloat(countedCash.value) || 0,
       terminalActual: parseFloat(countedTerminal.value) || 0,
       multicardActual: parseFloat(countedMulticard.value) || 0,
-      cashExpense: parseFloat(expenseAmount.value) || 0,
-      terminalExpense: 0,
-      multicardExpense: 0,
-      cashLoss: 0,
+      cashLoss: parseFloat(expenseAmount.value) || 0,
       lossReason: expenseDescription.value || "",
+      cashTotal: cashTotal.value,
+      terminalTotal: terminalTotal.value,
+      multicardTotal: multicardTotal.value,
+      cashExpense: cashExpense.value,
+      terminalExpense: terminalExpense.value,
+      multicardExpense: multicardExpense.value,
     };
 
-    console.log("Submitting cashier close data:", requestData);
-
-    // Call API
     const { $axios } = useNuxtApp();
-    const response = await $axios.post("/api/cashier/close", requestData);
+    const response = await ($axios as any).post(
+      "/api/cashier/close",
+      requestBody
+    );
 
-    console.log("Cashier close response:", response.data);
-
-    ElMessage.success("Shift closed successfully");
-
-    // Reset form
-    resetForm();
+    // Navigate back to cashier reports on success
+    navigateTo("/cashier-reports");
   } catch (error: any) {
     console.error("Failed to close shift:", error);
-    console.error("Error response:", error.response?.data);
-    console.error("Error status:", error.response?.status);
-
-    ElMessage.error("Failed to close shift");
+    console.error("Failed to close shift. Please try again.");
   } finally {
-    submitting.value = false;
+    loading.value = false;
   }
 };
 
-const resetForm = () => {
-  countedCash.value = "";
-  countedTerminal.value = "";
-  countedMulticard.value = "";
-  expenseAmount.value = "";
-  expenseDescription.value = "";
+const handleCloseDialog = () => {
+  showExpenseDialog.value = false;
+  resetExpenseForm();
 };
 
-const loadDraft = () => {
+const onChangeDatePicker = (value: string | undefined) => {
+  if (value) {
+    // Extract month from selected date and fetch data
+    const month = dayjs(value).format("YY-MM-DD");
+    fetchCashierEvaluateData(month);
+  }
+};
+
+const fetchCashierEvaluateData = async (month: string) => {
   try {
-    const draftData = localStorage.getItem("cashierCloseDraft");
-    if (draftData) {
-      const parsed = JSON.parse(draftData);
-      countedCash.value = parsed.countedCash || "";
-      countedTerminal.value = parsed.countedTerminal || "";
-      countedMulticard.value = parsed.countedMulticard || "";
-      expenseAmount.value = parsed.expenseAmount || "";
-      expenseDescription.value = parsed.expenseDescription || "";
+    loading.value = true;
+
+    // Convert YY-MM-DD to YYYY-MM-DD format for API
+    const dateFormatted = dayjs(month, "YY-MM-DD").format("YYYY-MM-DD");
+    console.log("Formatted date for API:", dateFormatted);
+
+    const { $axios } = useNuxtApp();
+    const response = await ($axios as any).get("/api/cashier/evaluate", {
+      params: {
+        date: dateFormatted,
+      },
+    });
+
+    if (response.data && response.data.payload) {
+      const data = response.data.payload;
+
+      // Update summary data
+      cashTotal.value = data.cashTotal || 0;
+      terminalTotal.value = data.terminalTotal || 0;
+      multicardTotal.value = data.multicardTotal || 0;
+      cashExpense.value = data.cashExpense || 0;
+      terminalExpense.value = data.terminalExpense || 0;
+      multicardExpense.value = data.multicardExpense || 0;
     }
-  } catch (error) {
-    console.error("Failed to load draft:", error);
+  } catch (error: any) {
+    console.error("Failed to fetch cashier evaluate data:", error);
+    console.error("Failed to fetch data");
+  } finally {
+    loading.value = false;
   }
 };
 
-// Load draft on mount
+const resetExpenseForm = () => {
+  expenseForm.value = {
+    type: "",
+    amount: "",
+    description: "",
+  };
+};
+
+const addExpense = async () => {
+  if (!expenseForm.value.type || !expenseForm.value.amount) {
+    console.error("Please fill in all required fields");
+    return;
+  }
+
+  if (!selectedDate.value) {
+    console.error("Please select a date");
+    return;
+  }
+
+  try {
+    loading.value = true;
+
+    const requestBody = {
+      date: selectedDate.value,
+      description: expenseForm.value.description || "",
+      amount: parseFloat(expenseForm.value.amount) || 0,
+      type: expenseForm.value.type,
+    };
+
+    const { $axios } = useNuxtApp();
+    const response = await ($axios as any).post(
+      "/api/expense/create",
+      requestBody
+    );
+
+    showExpenseDialog.value = false;
+    resetExpenseForm();
+
+    // Refresh the data after successful expense creation
+    if (selectedDate.value) {
+      const month = dayjs(selectedDate.value).format("YY-MM-DD");
+      fetchCashierEvaluateData(month);
+    }
+  } catch (error: any) {
+    console.error("Failed to create expense:", error);
+    console.error("Failed to create expense. Please try again.");
+  } finally {
+    loading.value = false;
+  }
+};
+
+// Initialize with current date
 onMounted(() => {
-  loadDraft();
+  const today = dayjs();
+  const currentDate = today.format("YYYY-MM-DD");
+
+  selectedDate.value = currentDate;
+
+  // Fetch data for current month
+  const month = today.format("YY-MM-DD");
+  fetchCashierEvaluateData(month);
 });
 </script>
 
 <style scoped lang="scss">
 .page-container {
-  padding: 24px;
-  max-width: 1200px;
+  padding: 0 14px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 
 .page-title {
   font-size: 24px;
   font-weight: 600;
-  color: #3a4e63;
-  margin-bottom: 24px;
+}
+
+.date-picker-container {
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.custom-date-picker {
+  width: 220px !important;
+}
+
+.custom-date-picker :deep(.el-input__wrapper) {
+  background: #eaf2f8 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  height: 40px !important;
+  box-shadow: none !important;
+}
+
+/* Global styles for date picker */
+:global(.custom-date-picker .el-input__wrapper) {
+  background: #eaf2f8 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  height: 40px !important;
+  box-shadow: none !important;
 }
 
 .summary-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 14px;
 }
 
-.summaryy-cards {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(250px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
+.loading-container {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 40px;
+  color: #6b7280;
+  font-size: 16px;
 }
 
 .summary-card {
@@ -523,30 +536,6 @@ onMounted(() => {
       color: #3a4e63;
     }
   }
-
-  .card-comparison {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .comparison-text {
-      font-size: 12px;
-      color: #6b7280;
-    }
-
-    .comparison-percentage {
-      font-size: 12px;
-      font-weight: 600;
-
-      &.positive {
-        color: #10b981;
-      }
-
-      &.negative {
-        color: #ef4444;
-      }
-    }
-  }
 }
 
 .counted-amounts-section {
@@ -556,13 +545,6 @@ onMounted(() => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid #e5e7eb;
   margin-bottom: 24px;
-
-  .section-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #3a4e63;
-    margin-bottom: 20px;
-  }
 
   .input-row {
     display: flex;
@@ -626,9 +608,9 @@ onMounted(() => {
         flex: 1;
 
         .expenses-title {
-          font-size: 16px;
-          font-weight: 600;
-          color: #3a4e63;
+          font-size: 14px;
+          font-weight: 500;
+          color: #374151;
           margin-bottom: 8px;
         }
 
@@ -672,9 +654,9 @@ onMounted(() => {
         flex: 2;
 
         .expenses-title {
-          font-size: 16px;
-          font-weight: 600;
-          color: #3a4e63;
+          font-size: 14px;
+          font-weight: 500;
+          color: #374151;
           margin-bottom: 8px;
         }
 
@@ -687,7 +669,7 @@ onMounted(() => {
             background-color: #f8f9fa;
             border: 1px solid #e5e7eb;
             box-shadow: none;
-            padding: 12px 16px;
+            padding: 16px;
             font-size: 16px;
             color: #374151;
             resize: none;
@@ -718,23 +700,9 @@ onMounted(() => {
 
   .close-shift-btn {
     background: #1f2937;
-    border-color: #1f2937;
     color: white;
     font-weight: 600;
-  }
-
-  .print-pdf-btn {
-    background: #f3f4f6;
-    border-color: #d1d5db;
-    color: #374151;
-    font-weight: 500;
-  }
-
-  .save-draft-btn {
-    background: white;
-    border-color: #d1d5db;
-    color: #374151;
-    font-weight: 500;
+    border-radius: 8px;
   }
 }
 

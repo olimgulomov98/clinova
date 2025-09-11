@@ -291,5 +291,20 @@
   "COMMISSION": "Komissiya",
   "BASIC_SALARY": "Asosiy maosh",
   "GROSS_PROFIT": "Umumiy foyda",
-  "DOCTORS_SALARIES": "Shifokorlar maoshi"
+  "DOCTORS_SALARIES": "Shifokorlar maoshi",
+  "TERMINAL": "Terminal",
+  "MULTICARD": "Multikarta",
+  "EXPENSE_CASH": "Xarajat (naqd)",
+  "EXPENSE_TERMINAL": "Xarajat (terminal)",
+  "EXPENSE_MULTICARD": "Xarajat (multikarta)",
+  "EXPENSE_TOTAL": "Umumiy xarajat",
+  "ADD_EXPENSE": "Xarajat qo‘shish",
+  "TYPE": "Turi",
+  "SELECT_EXPENSE_TYPE": "Xarajat turini tanlang",
+  "ACTUAL_CASH": "Haqiqiy naqd",
+  "ACTUAL_TERMINAL": "Haqiqiy terminal",
+  "ACTUAL_MULTICARD": "Haqiqiy multikarta",
+  "LOST": "Yo‘qotilgan",
+  "LOST_REASON": "Yo‘qotilish sababi",
+  "ADD": "Qo‘shish"
 }

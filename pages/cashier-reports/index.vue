@@ -20,21 +20,21 @@
           background: #eaf2f8;
           border: none;
           height: 30px;
-          width: 220px;
         "
       />
       <el-button
         type="primary"
         @click="onAddClick"
         style="
-          margin-left: 12px;
           height: 30px;
           border-radius: 8px;
-          background: #409eff;
+          background: #1f2937;
           border: none;
+          position: absolute;
+          right: 0;
         "
       >
-        Add
+        {{ t("ADD") }}
       </el-button>
     </div>
 

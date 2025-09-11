@@ -291,5 +291,20 @@
   "COMMISSION": "Комиссия",
   "BASIC_SALARY": "Базовая зарплата",
   "GROSS_PROFIT": "Валовая прибыль",
-  "DOCTORS_SALARIES": "Зарплаты врачей"
+  "DOCTORS_SALARIES": "Зарплаты врачей",
+  "TERMINAL": "Терминал",
+  "MULTICARD": "Мультикарта",
+  "EXPENSE_CASH": "Расход (наличные)",
+  "EXPENSE_TERMINAL": "Расход (терминал)",
+  "EXPENSE_MULTICARD": "Расход (мультикарта)",
+  "EXPENSE_TOTAL": "Общий расход",
+  "ADD_EXPENSE": "Добавить расход",
+  "TYPE": "Тип",
+  "SELECT_EXPENSE_TYPE": "Выберите тип расхода",
+  "ACTUAL_CASH": "Фактические наличные",
+  "ACTUAL_TERMINAL": "Фактический терминал",
+  "ACTUAL_MULTICARD": "Фактическая мультикарта",
+  "LOST": "Потеря",
+  "LOST_REASON": "Причина потери",
+  "ADD": "Добавить"
 }
