@@ -133,7 +133,7 @@
             style="width: 100%"
           >
             <el-option :label="$t('CASH')" value="CASH" />
-            <el-option :label="$t('TERMINAL')" value="TERMINAL" />
+            <el-option :label="$t('TERMINAL')" value="CARD" />
             <el-option :label="$t('MULTICARD')" value="MULTICARD" />
           </el-select>
         </el-form-item>
