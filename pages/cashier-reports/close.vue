@@ -320,9 +320,13 @@ const onCloseShift = async () => {
       multicardActual: parseFloat(countedMulticard.value) || 0,
       cashLoss: parseFloat(expenseAmount.value) || 0,
       lossReason: expenseDescription.value || "",
-      cashTotal: cashTotal.value,
-      terminalTotal: terminalTotal.value,
-      multicardTotal: multicardTotal.value,
+      cashTotal:
+        cashExpense.value +
+        parseFloat(countedCash.value) +
+        parseFloat(expenseAmount.value),
+      terminalTotal: terminalExpense.value + parseFloat(countedTerminal.value),
+      multicardTotal:
+        multicardExpense.value + parseFloat(countedMulticard.value),
       cashExpense: cashExpense.value,
       terminalExpense: terminalExpense.value,
       multicardExpense: multicardExpense.value,
