@@ -305,5 +305,6 @@
   "ACTUAL_MULTICARD": "Actual Multicard",
   "LOST": "Lost",
   "LOST_REASON": "Lost Reason",
-  "ADD": "Add"
+  "ADD": "Add",
+  "EXPENSES_LIST": "Expenses List"
 }

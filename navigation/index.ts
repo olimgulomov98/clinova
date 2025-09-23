@@ -71,6 +71,12 @@ export default [
     to: "/cashier-reports",
     roles: ["RECEPTION", "DOCTOR", "ADMIN", "CASHIER"],
   },
+  {
+    title: "EXPENSES_LIST",
+    // icon: "credit-card",
+    to: "/expenses",
+    roles: ["RECEPTION", "DOCTOR", "ADMIN", "CASHIER"],
+  },
   // {
   //   title: "INVENTORY",
   //   icon: "cube",
