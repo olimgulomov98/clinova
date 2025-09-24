@@ -1,173 +1,176 @@
 <template>
-  <div class="page-container">
-    <div class="page-title">{{ t("CASHIER_REPORTS") }}</div>
+  <CashierReportsLayout>
+    <div class="page-container">
+      <div class="page-title">{{ t("CASHIER_REPORTS") }}</div>
 
-    <!-- Date Range Picker and Add Button -->
-    <div class="date-picker-container">
-      <el-date-picker
-        v-model="dateRange"
-        type="daterange"
-        unlink-panels
-        range-separator="-"
-        start-placeholder="Start date"
-        end-placeholder="End date"
-        format="DD MMM YYYY"
-        value-format="YYYY-MM-DD"
-        @change="onChangeDatePicker"
-        ref="datePickerRef"
-        style="
-          border-radius: 8px;
-          background: #eaf2f8;
-          border: none;
-          height: 30px;
-        "
-      />
-      <el-button
-        type="primary"
-        @click="onAddClick"
-        style="
-          height: 30px;
-          border-radius: 8px;
-          background: #1f2937;
-          border: none;
-          position: absolute;
-          right: 0;
-        "
-      >
-        {{ t("ADD") }}
-      </el-button>
+      <!-- Date Range Picker and Add Button -->
+      <div class="date-picker-container">
+        <el-date-picker
+          v-model="dateRange"
+          type="daterange"
+          unlink-panels
+          range-separator="-"
+          start-placeholder="Start date"
+          end-placeholder="End date"
+          format="DD MMM YYYY"
+          value-format="YYYY-MM-DD"
+          @change="onChangeDatePicker"
+          ref="datePickerRef"
+          style="
+            border-radius: 8px;
+            background: #eaf2f8;
+            border: none;
+            height: 30px;
+          "
+        />
+        <el-button
+          type="primary"
+          @click="onAddClick"
+          style="
+            height: 30px;
+            border-radius: 8px;
+            background: #1f2937;
+            border: none;
+            position: absolute;
+            right: 0;
+          "
+        >
+          {{ t("ADD") }}
+        </el-button>
+      </div>
+
+      <!-- Loading indicator -->
+      <div v-if="loading" class="loading-container">
+        <el-icon class="is-loading">
+          <Loading />
+        </el-icon>
+      </div>
+
+      <!-- Cashier Reports Table -->
+      <div v-else>
+        <table class="cashier-table">
+          <thead>
+            <tr>
+              <th class="sortable" @click="sortTable('date')">
+                <div>Date</div>
+
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('cashier')">
+                Cashier
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('cashTotal')">
+                Cash Total
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('terminalTotal')">
+                Terminal Total
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('multicardTotal')">
+                Multicard Total
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('cashActual')">
+                Cash Actual
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('terminalActual')">
+                Terminal Actual
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('multicardActual')">
+                Multicard Actual
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('cashExpense')">
+                Cash Expense
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('terminalExpense')">
+                Terminal Expence
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('multicardExpense')">
+                Multicard Expence
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('cashLoss')">
+                Cash loss
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+              <th class="sortable" @click="sortTable('reason')">
+                Reason
+                <div class="sort-icons">
+                  <el-icon class="sort-icon"><ArrowUp /></el-icon>
+                  <el-icon class="sort-icon"><ArrowDown /></el-icon>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(report, index) in cashierReports" :key="index">
+              <td>{{ report.date }}</td>
+              <td>{{ report.cashier }}</td>
+              <td>{{ formatAmount(report.cashTotal) }}</td>
+              <td>{{ formatAmount(report.terminalTotal) }}</td>
+              <td>{{ formatAmount(report.multicardTotal) }}</td>
+              <td>{{ formatAmount(report.cashActual) }}</td>
+              <td>{{ formatAmount(report.terminalActual) }}</td>
+              <td>{{ formatAmount(report.multicardActual) }}</td>
+              <td>{{ formatAmount(report.cashExpense) }}</td>
+              <td>{{ formatAmount(report.terminalExpense) }}</td>
+              <td>{{ formatAmount(report.multicardExpense) }}</td>
+              <td>{{ formatAmount(report.cashLoss) }}</td>
+              <td>{{ report.reason }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    <!-- Loading indicator -->
-    <div v-if="loading" class="loading-container">
-      <el-icon class="is-loading">
-        <Loading />
-      </el-icon>
-    </div>
-
-    <!-- Cashier Reports Table -->
-    <div v-else>
-      <table class="cashier-table">
-        <thead>
-          <tr>
-            <th class="sortable" @click="sortTable('date')">
-              <div>Date</div>
-
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('cashier')">
-              Cashier
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('cashTotal')">
-              Cash Total
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('terminalTotal')">
-              Terminal Total
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('multicardTotal')">
-              Multicard Total
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('cashActual')">
-              Cash Actual
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('terminalActual')">
-              Terminal Actual
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('multicardActual')">
-              Multicard Actual
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('cashExpense')">
-              Cash Expense
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('terminalExpense')">
-              Terminal Expence
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('multicardExpense')">
-              Multicard Expence
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('cashLoss')">
-              Cash loss
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-            <th class="sortable" @click="sortTable('reason')">
-              Reason
-              <div class="sort-icons">
-                <el-icon class="sort-icon"><ArrowUp /></el-icon>
-                <el-icon class="sort-icon"><ArrowDown /></el-icon>
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(report, index) in cashierReports" :key="index">
-            <td>{{ report.date }}</td>
-            <td>{{ report.cashier }}</td>
-            <td>{{ formatAmount(report.cashTotal) }}</td>
-            <td>{{ formatAmount(report.terminalTotal) }}</td>
-            <td>{{ formatAmount(report.multicardTotal) }}</td>
-            <td>{{ formatAmount(report.cashActual) }}</td>
-            <td>{{ formatAmount(report.terminalActual) }}</td>
-            <td>{{ formatAmount(report.multicardActual) }}</td>
-            <td>{{ formatAmount(report.cashExpense) }}</td>
-            <td>{{ formatAmount(report.terminalExpense) }}</td>
-            <td>{{ formatAmount(report.multicardExpense) }}</td>
-            <td>{{ formatAmount(report.cashLoss) }}</td>
-            <td>{{ report.reason }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  </CashierReportsLayout>
 </template>
 
 <script setup lang="ts">
 import type { Axios } from "axios";
+import CashierReportsLayout from "~/components/layout/CashierReportsLayout.vue";
 import { getFormatAmount } from "~/utils";
 import dayjs from "dayjs";
 import { ArrowDown, ArrowUp, Loading } from "@element-plus/icons-vue";
@@ -226,9 +229,13 @@ const onChangeDatePicker = (values: [string, string] | undefined) => {
   }
 };
 
+const router = useRouter();
+const route = useRoute();
+const cashierTab = useCashierTabStore();
 const onAddClick = () => {
-  // Navigate to cashier close page
-  navigateTo("/cashier-reports/close");
+  const url = "/cashier-reports/close";
+  cashierTab.setUrl({ name: "cashier-close", url });
+  router.push({ path: url, query: { ...route.query } });
 };
 
 const fetchCashierData = async (startDate: string, endDate: string) => {
@@ -243,7 +250,7 @@ const fetchCashierData = async (startDate: string, endDate: string) => {
       cashierReports.value = response.data.payload.list.map((item: any) => ({
         id: item.id,
         date: item.date,
-        cashier: item.cashier?.name || "Unknown",
+        cashier: item?.cashier?.name || "-",
         cashTotal: item.cashTotal || 0,
         terminalTotal: item.terminalTotal || 0,
         multicardTotal: item.multicardTotal || 0,

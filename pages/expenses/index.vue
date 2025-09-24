@@ -315,8 +315,10 @@ const fetchExpenseData = async () => {
     let params: any = {};
 
     if (dateRange.value && dateRange.value.length === 2) {
-      params.startDate = dateRange.value[0];
-      params.endDate = dateRange.value[1];
+      const start = dayjs(dateRange.value[0]).startOf("day").toISOString();
+      const end = dayjs(dateRange.value[1]).endOf("day").toISOString();
+      params.startDate = start;
+      params.endDate = end;
     }
 
     const response = await (<Axios>$axios).post("/api/expense/list", params);

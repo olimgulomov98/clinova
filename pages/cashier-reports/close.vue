@@ -1,248 +1,255 @@
 <template>
-  <div class="page-container">
-    <div class="page-title">{{ t("CASHIER_CLOSE") }}</div>
+  <CashierReportsLayout>
+    <div class="page-container">
+      <div class="page-title">{{ t("CASHIER_CLOSE") }}</div>
 
-    <!-- Date Picker and Add Button -->
-    <div class="date-picker-container">
-      <el-date-picker
-        v-model="selectedDate"
-        type="date"
-        placeholder="Select date"
-        format="DD MMM YYYY"
-        value-format="YYYY-MM-DD"
-        @change="onChangeDatePicker"
-        ref="datePickerRef"
-        :clearable="false"
-        :editable="false"
-        :teleported="true"
-        :disabled="false"
-        :readonly="false"
-        :append-to-body="true"
-        popper-class="custom-date-picker-popper"
-        :picker-options="pickerOptions"
-        class="custom-date-picker"
-      />
-    </div>
-
-    <!-- Summary Cards -->
-    <div class="summary-cards">
-      <div v-if="loading" class="loading-container">
-        <el-icon class="is-loading"><Loading /></el-icon>
+      <!-- Date Picker and Add Button -->
+      <div class="date-picker-container">
+        <el-date-picker
+          v-model="selectedDate"
+          type="date"
+          placeholder="Select date"
+          format="DD MMM YYYY"
+          value-format="YYYY-MM-DD"
+          @change="onChangeDatePicker"
+          ref="datePickerRef"
+          :clearable="false"
+          :editable="false"
+          :teleported="true"
+          :disabled="false"
+          :readonly="false"
+          :append-to-body="true"
+          popper-class="custom-date-picker-popper"
+          :picker-options="pickerOptions"
+          class="custom-date-picker"
+        />
       </div>
-      <template v-else>
+
+      <!-- Summary Cards -->
+      <div class="summary-cards">
+        <div v-if="loading" class="loading-container">
+          <el-icon class="is-loading"><Loading /></el-icon>
+        </div>
+        <template v-else>
+          <div class="summary-card">
+            <div class="card-header">
+              <span class="card-title">{{ t("CASH") }}</span>
+              <span class="card-amount">{{ formatAmount(cashTotal) }}</span>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="card-header">
+              <span class="card-title">{{ t("TERMINAL") }}</span>
+              <span class="card-amount">{{ formatAmount(terminalTotal) }}</span>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="card-header">
+              <span class="card-title">{{ t("MULTICARD") }}</span>
+              <span class="card-amount">{{
+                formatAmount(multicardTotal)
+              }}</span>
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="card-header">
+              <span class="card-title">{{ t("TOTAL") }}</span>
+              <span class="card-amount">{{ formatAmount(totalAmount) }}</span>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Summary Expense Cards -->
+      <div class="summary-cards">
         <div class="summary-card">
           <div class="card-header">
-            <span class="card-title">{{ t("CASH") }}</span>
-            <span class="card-amount">{{ formatAmount(cashTotal) }}</span>
+            <span class="card-title">{{ t("EXPENSE_CASH") }}</span>
+            <span class="card-amount">{{ formatAmount(cashExpense) }}</span>
           </div>
         </div>
 
         <div class="summary-card">
           <div class="card-header">
-            <span class="card-title">{{ t("TERMINAL") }}</span>
-            <span class="card-amount">{{ formatAmount(terminalTotal) }}</span>
+            <span class="card-title">{{ t("EXPENSE_TERMINAL") }}</span>
+            <span class="card-amount">{{ formatAmount(terminalExpense) }}</span>
           </div>
         </div>
 
         <div class="summary-card">
           <div class="card-header">
-            <span class="card-title">{{ t("MULTICARD") }}</span>
-            <span class="card-amount">{{ formatAmount(multicardTotal) }}</span>
+            <span class="card-title">{{ t("EXPENSE_MULTICARD") }}</span>
+            <span class="card-amount">{{
+              formatAmount(multicardExpense)
+            }}</span>
           </div>
         </div>
 
         <div class="summary-card">
           <div class="card-header">
-            <span class="card-title">{{ t("TOTAL") }}</span>
-            <span class="card-amount">{{ formatAmount(totalAmount) }}</span>
+            <span class="card-title">{{ t("EXPENSE_TOTAL") }}</span>
+            <span class="card-amount">{{ formatAmount(totalExpense) }}</span>
           </div>
         </div>
-      </template>
-    </div>
-
-    <!-- Summary Expense Cards -->
-    <div class="summary-cards">
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">{{ t("EXPENSE_CASH") }}</span>
-          <span class="card-amount">{{ formatAmount(cashExpense) }}</span>
-        </div>
       </div>
 
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">{{ t("EXPENSE_TERMINAL") }}</span>
-          <span class="card-amount">{{ formatAmount(terminalExpense) }}</span>
-        </div>
-      </div>
-
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">{{ t("EXPENSE_MULTICARD") }}</span>
-          <span class="card-amount">{{ formatAmount(multicardExpense) }}</span>
-        </div>
-      </div>
-
-      <div class="summary-card">
-        <div class="card-header">
-          <span class="card-title">{{ t("EXPENSE_TOTAL") }}</span>
-          <span class="card-amount">{{ formatAmount(totalExpense) }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div style="display: flex; justify-content: flex-end">
-      <el-button
-        type="primary"
-        style="
-          width: fit-content;
-          border-radius: 8px;
-          background: #1f2937;
-          border: none;
-        "
-        @click="showExpenseDialog = true"
-      >
-        {{ t("ADD_EXPENSE") }}
-      </el-button>
-    </div>
-
-    <!-- Expense Dialog -->
-    <el-dialog
-      v-model="showExpenseDialog"
-      width="500px"
-      :before-close="handleCloseDialog"
-    >
-      <template #title>
-        <div
+      <div style="display: flex; justify-content: flex-end">
+        <el-button
+          type="primary"
           style="
-            text-align: center;
-            width: 100%;
-            margin-bottom: 12px;
-
-            font-size: 22px;
+            width: fit-content;
+            border-radius: 8px;
+            background: #1f2937;
+            border: none;
           "
+          @click="showExpenseDialog = true"
         >
-          {{ t("EXPENSE") }}
-        </div>
-      </template>
-      <el-form :model="expenseForm" label-width="120px">
-        <el-form-item :label="$t('TYPE')">
-          <el-select
-            v-model="expenseForm.type"
-            :placeholder="$t('SELECT_EXPENSE_TYPE')"
-            style="width: 100%"
-          >
-            <el-option :label="$t('CASH')" value="CASH" />
-            <el-option :label="$t('TERMINAL')" value="CARD" />
-            <el-option :label="$t('MULTICARD')" value="MULTICARD" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item :label="$t('AMOUNTS')">
-          <el-input
-            v-model="expenseForm.amount"
-            type="number"
-            :placeholder="$t('ENTER_AMOUNT')"
-          />
-        </el-form-item>
-
-        <el-form-item :label="$t('DESCRIPTION')">
-          <el-input
-            v-model="expenseForm.description"
-            type="textarea"
-            :rows="3"
-            :placeholder="$t('ENTER_DESCRIPTION')"
-          />
-        </el-form-item>
-      </el-form>
-
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="showExpenseDialog = false">{{
-            t("CANCEL")
-          }}</el-button>
-          <el-button type="primary" @click="addExpense">{{
-            t("SAVE")
-          }}</el-button>
-        </div>
-      </template>
-    </el-dialog>
-
-    <!-- Counted Amounts Section -->
-    <div class="counted-amounts-section">
-      <div class="input-row">
-        <div class="input-group">
-          <label class="input-label">{{ t("ACTUAL_CASH") }}</label>
-          <el-input
-            v-model="countedCash"
-            type="number"
-            :placeholder="t('ENTER_AMOUNT')"
-            class="amount-input"
-          />
-        </div>
-
-        <div class="input-group">
-          <label class="input-label">{{ t("ACTUAL_TERMINAL") }}</label>
-          <el-input
-            v-model="countedTerminal"
-            type="number"
-            :placeholder="t('ENTER_AMOUNT')"
-            class="amount-input"
-          />
-        </div>
-
-        <div class="input-group">
-          <label class="input-label">{{ t("ACTUAL_MULTICARD") }}</label>
-          <el-input
-            v-model="countedMulticard"
-            type="number"
-            :placeholder="t('ENTER_AMOUNT')"
-            class="amount-input"
-          />
-        </div>
+          {{ t("ADD_EXPENSE") }}
+        </el-button>
       </div>
 
-      <div class="expenses-section">
-        <div class="expenses-row">
-          <div class="expense-amount-group">
-            <h4 class="expenses-title">{{ t("LOST") }}</h4>
+      <!-- Expense Dialog -->
+      <el-dialog
+        v-model="showExpenseDialog"
+        width="500px"
+        :before-close="handleCloseDialog"
+      >
+        <template #title>
+          <div
+            style="
+              text-align: center;
+              width: 100%;
+              margin-bottom: 12px;
+
+              font-size: 22px;
+            "
+          >
+            {{ t("EXPENSE") }}
+          </div>
+        </template>
+        <el-form :model="expenseForm" label-width="120px">
+          <el-form-item :label="$t('TYPE')">
+            <el-select
+              v-model="expenseForm.type"
+              :placeholder="$t('SELECT_EXPENSE_TYPE')"
+              style="width: 100%"
+            >
+              <el-option :label="$t('CASH')" value="CASH" />
+              <el-option :label="$t('TERMINAL')" value="CARD" />
+              <el-option :label="$t('MULTICARD')" value="MULTICARD" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item :label="$t('AMOUNTS')">
             <el-input
-              v-model="expenseAmount"
+              v-model="expenseForm.amount"
+              type="number"
+              :placeholder="$t('ENTER_AMOUNT')"
+            />
+          </el-form-item>
+
+          <el-form-item :label="$t('DESCRIPTION')">
+            <el-input
+              v-model="expenseForm.description"
+              type="textarea"
+              :rows="3"
+              :placeholder="$t('ENTER_DESCRIPTION')"
+            />
+          </el-form-item>
+        </el-form>
+
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="showExpenseDialog = false">{{
+              t("CANCEL")
+            }}</el-button>
+            <el-button type="primary" @click="addExpense">{{
+              t("SAVE")
+            }}</el-button>
+          </div>
+        </template>
+      </el-dialog>
+
+      <!-- Counted Amounts Section -->
+      <div class="counted-amounts-section">
+        <div class="input-row">
+          <div class="input-group">
+            <label class="input-label">{{ t("ACTUAL_CASH") }}</label>
+            <el-input
+              v-model="countedCash"
               type="number"
               :placeholder="t('ENTER_AMOUNT')"
-              class="expense-amount-input"
+              class="amount-input"
             />
           </div>
 
-          <div class="expense-description-group">
-            <h4 class="expenses-title">{{ t("LOST_REASON") }}</h4>
+          <div class="input-group">
+            <label class="input-label">{{ t("ACTUAL_TERMINAL") }}</label>
             <el-input
-              v-model="expenseDescription"
-              type="textarea"
-              :placeholder="t('ENTER_DESCRIPTION')"
-              class="expense-description-input"
-              :rows="3"
+              v-model="countedTerminal"
+              type="number"
+              :placeholder="t('ENTER_AMOUNT')"
+              class="amount-input"
+            />
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">{{ t("ACTUAL_MULTICARD") }}</label>
+            <el-input
+              v-model="countedMulticard"
+              type="number"
+              :placeholder="t('ENTER_AMOUNT')"
+              class="amount-input"
             />
           </div>
         </div>
+
+        <div class="expenses-section">
+          <div class="expenses-row">
+            <div class="expense-amount-group">
+              <h4 class="expenses-title">{{ t("LOST") }}</h4>
+              <el-input
+                v-model="expenseAmount"
+                type="number"
+                :placeholder="t('ENTER_AMOUNT')"
+                class="expense-amount-input"
+              />
+            </div>
+
+            <div class="expense-description-group">
+              <h4 class="expenses-title">{{ t("LOST_REASON") }}</h4>
+              <el-input
+                v-model="expenseDescription"
+                type="textarea"
+                :placeholder="t('ENTER_DESCRIPTION')"
+                class="expense-description-input"
+                :rows="3"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <el-button
+          type="primary"
+          size="large"
+          @click="onCloseShift"
+          class="close-shift-btn"
+        >
+          {{ t("CLOSE_SHIFT") }}
+        </el-button>
       </div>
     </div>
-
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-      <el-button
-        type="primary"
-        size="large"
-        @click="onCloseShift"
-        class="close-shift-btn"
-      >
-        {{ t("CLOSE_SHIFT") }}
-      </el-button>
-    </div>
-  </div>
+  </CashierReportsLayout>
 </template>
 
 <script setup lang="ts">
+import CashierReportsLayout from "~/components/layout/CashierReportsLayout.vue";
 import { getFormatAmount } from "~/utils";
 import dayjs from "dayjs";
 import { Loading } from "@element-plus/icons-vue";
