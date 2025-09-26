@@ -63,7 +63,9 @@
               class="table-row"
             >
               <span class="table-cell">{{ revenue.name }}</span>
-              <span class="table-cell salary-col">{{ revenue.amount }}</span>
+              <span class="table-cell salary-col">{{
+                formatAmount(revenue.amount)
+              }}</span>
             </div>
           </div>
         </div>
@@ -102,8 +104,8 @@
               <span class="table-cell w-[47%]">{{
                 formatAmount(doctor.commission)
               }}</span>
-              <span class="table-cell salary-col">{{
-                doctor.basicSalary
+              <span class="table-cell salary-col w-[8%] text-right">{{
+                formatAmount(doctor.basicSalary)
               }}</span>
             </div>
           </div>
@@ -138,7 +140,9 @@
               class="table-row"
             >
               <span class="table-cell">{{ expence.name }}</span>
-              <span class="table-cell salary-col">{{ expence.amount }}</span>
+              <span class="table-cell salary-col">{{
+                formatAmount(expence.amount)
+              }}</span>
             </div>
           </div>
         </div>
