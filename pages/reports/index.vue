@@ -98,8 +98,8 @@
               :key="index"
               class="table-row"
             >
-              <span class="table-cell">{{ doctor.name }}</span>
-              <span class="table-cell">{{
+              <span class="table-cell w-[47%]">{{ doctor.name }}</span>
+              <span class="table-cell w-[47%]">{{
                 formatAmount(doctor.commission)
               }}</span>
               <span class="table-cell salary-col">{{
@@ -248,7 +248,8 @@ const doctorData = computed(() => {
 
 const doctorSalariesTotalAmount = computed(() => {
   return employees.value.reduce(
-    (total, employees) => total + (employees.commission || 0),
+    (total, employee) =>
+      total + (employee.commission || 0) + (employee.basicSalary || 0),
     0
   );
 });
@@ -540,7 +541,7 @@ onMounted(async () => {
 
   .table-row {
     display: flex;
-    flex-direction: row;
+    align-items: center;
     justify-content: space-between;
     padding: 12px 36px;
     border-bottom: 1px solid #e6e6e7;
