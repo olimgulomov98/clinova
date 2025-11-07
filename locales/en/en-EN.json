@@ -306,5 +306,17 @@
   "LOST": "Lost",
   "LOST_REASON": "Lost Reason",
   "ADD": "Add",
-  "EXPENSES_LIST": "Expenses List"
+  "EXPENSES_LIST": "Expenses List",
+  "CASHIER": "Cashier",
+  "CASH_TOTAL": "Cash Total",
+  "TERMINAL_TOTAL": "Terminal Total",
+  "MULTICARD_TOTAL": "Multicard Total",
+  "CASH_ACTUAL": "Cash Actual",
+  "TERMINAL_ACTUAL": "Terminal Actual",
+  "MULTICARD_ACTUAL": "Multicard Actual",
+  "CASH_EXPENSE": "Cash Expense",
+  "TERMINAL_EXPENSE": "Terminal Expense",
+  "MULTICARD_EXPENSE": "Multicard Expense",
+  "CASH_LOSS": "Cash loss",
+  "REASON": "Reason"
 }

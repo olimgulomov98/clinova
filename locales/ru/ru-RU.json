@@ -307,5 +307,17 @@
   "LOST": "Потеря",
   "LOST_REASON": "Причина потери",
   "ADD": "Добавить",
-  "EXPENSES_LIST": "Список расходов"
+  "EXPENSES_LIST": "Список расходов",
+  "CASHIER": "Кассир",
+  "CASH_TOTAL": "Общая сумма наличных",
+  "TERMINAL_TOTAL": "Общая сумма по терминалу",
+  "MULTICARD_TOTAL": "Общая сумма по мультикарте",
+  "CASH_ACTUAL": "Фактические наличные",
+  "TERMINAL_ACTUAL": "Фактическая сумма по терминалу",
+  "MULTICARD_ACTUAL": "Фактическая сумма по мультикарте",
+  "CASH_EXPENSE": "Расход наличных",
+  "TERMINAL_EXPENSE": "Расход по терминалу",
+  "MULTICARD_EXPENSE": "Расход по мультикарте",
+  "CASH_LOSS": "Потеря наличных",
+  "REASON": "Причина"
 }

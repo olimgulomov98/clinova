@@ -61,7 +61,7 @@
             <el-date-picker
               v-model="expenseForm.date"
               type="date"
-              placeholder="Select date"
+              :placeholder="$t('SELECT_DATE')"
               format="DD MMM YYYY"
               value-format="YYYY-MM-DD"
               style="width: 100%"
@@ -129,7 +129,7 @@
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
-                Date
+                {{ t("DATE") }}
               </div>
             </th>
             <th class="sortable" @click="sortTable('cashier')">
@@ -138,7 +138,7 @@
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
-                Code
+                {{ t("CODE") }}
               </div>
             </th>
             <th class="sortable" @click="sortTable('cashTotal')">
@@ -147,7 +147,7 @@
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
-                Type
+                {{ t("TYPE") }}
               </div>
             </th>
             <th class="sortable" @click="sortTable('terminalTotal')">
@@ -156,7 +156,7 @@
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
-                Amount
+                {{ t("AMOUNT") }}
               </div>
             </th>
             <th class="sortable" @click="sortTable('multicardTotal')">
@@ -165,7 +165,7 @@
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
-                Description
+                {{ t("DESCRIPTION") }}
               </div>
             </th>
           </tr>

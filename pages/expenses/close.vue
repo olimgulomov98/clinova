@@ -7,7 +7,7 @@
       <el-date-picker
         v-model="selectedDate"
         type="date"
-        placeholder="Select date"
+        :placeholder="$t('SELECT_DATE')"
         format="DD MMM YYYY"
         value-format="YYYY-MM-DD"
         @change="onChangeDatePicker"

@@ -52,7 +52,7 @@
           <thead>
             <tr>
               <th class="sortable" @click="sortTable('date')">
-                <div>Date</div>
+                <div>{{ t("DATE") }}</div>
 
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
@@ -60,84 +60,84 @@
                 </div>
               </th>
               <th class="sortable" @click="sortTable('cashier')">
-                Cashier
+                {{ t("CASHIER") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
               </th>
               <th class="sortable" @click="sortTable('cashTotal')">
-                Cash Total
+                {{ t("CASH_TOTAL") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
               </th>
               <th class="sortable" @click="sortTable('terminalTotal')">
-                Terminal Total
+                {{ t("TERMINAL_TOTAL") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
               </th>
               <th class="sortable" @click="sortTable('multicardTotal')">
-                Multicard Total
+                {{ t("MULTICARD_TOTAL") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
               </th>
               <th class="sortable" @click="sortTable('cashActual')">
-                Cash Actual
+                {{ t("CASH_ACTUAL") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
               </th>
               <th class="sortable" @click="sortTable('terminalActual')">
-                Terminal Actual
+                {{ t("TERMINAL_ACTUAL") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
               </th>
               <th class="sortable" @click="sortTable('multicardActual')">
-                Multicard Actual
+                {{ t("MULTICARD_ACTUAL") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
               </th>
               <th class="sortable" @click="sortTable('cashExpense')">
-                Cash Expense
+                {{ t("CASH_EXPENSE") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
               </th>
               <th class="sortable" @click="sortTable('terminalExpense')">
-                Terminal Expence
+                {{ t("TERMINAL_EXPENSE") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
               </th>
               <th class="sortable" @click="sortTable('multicardExpense')">
-                Multicard Expence
+                {{ t("MULTICARD_EXPENSE") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
               </th>
               <th class="sortable" @click="sortTable('cashLoss')">
-                Cash loss
+                {{ t("CASH_LOSS") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>
                 </div>
               </th>
               <th class="sortable" @click="sortTable('reason')">
-                Reason
+                {{ t("REASON") }}
                 <div class="sort-icons">
                   <el-icon class="sort-icon"><ArrowUp /></el-icon>
                   <el-icon class="sort-icon"><ArrowDown /></el-icon>

@@ -307,5 +307,17 @@
   "LOST": "Yo‘qotilgan",
   "LOST_REASON": "Yo‘qotilish sababi",
   "ADD": "Qo‘shish",
-  "EXPENSES_LIST": "Xarajatlar roʻyxati"
+  "EXPENSES_LIST": "Xarajatlar roʻyxati",
+  "CASHIER": "Kassir",
+  "CASH_TOTAL": "Naqd jami summa",
+  "TERMINAL_TOTAL": "Terminal bo‘yicha jami summa",
+  "MULTICARD_TOTAL": "Multikarta bo‘yicha jami summa",
+  "CASH_ACTUAL": "Haqiqiy naqd summa",
+  "TERMINAL_ACTUAL": "Haqiqiy terminal summa",
+  "MULTICARD_ACTUAL": "Haqiqiy multikarta summa",
+  "CASH_EXPENSE": "Naqd xarajat",
+  "TERMINAL_EXPENSE": "Terminal xarajati",
+  "MULTICARD_EXPENSE": "Multikarta xarajati",
+  "CASH_LOSS": "Naqd yo‘qotish",
+  "REASON": "Sabab"
 }
