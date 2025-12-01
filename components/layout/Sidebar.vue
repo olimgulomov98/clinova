@@ -2,7 +2,7 @@
   <el-aside
     class="h-[100vh] flex flex-col justify-between app-sidebar sticky top-0 bg-[#fff] border"
   >
-    <div class="flex flex-col gap-5">
+    <div class="flex flex-col">
       <div class="flex gap-[10px] py-[10px] p-5 md:p-5">
         <h4
           class="overflow-hidden transition-all duration-300 font-semibold text-[22px] leading-[26px] w-full"
@@ -283,7 +283,7 @@ watch(
 
 <style lang="css" scoped>
 .el-aside {
-  width: auto;
+  /* width: auto; */
 }
 .app-sidebar::-webkit-scrollbar {
   width: 5px;
