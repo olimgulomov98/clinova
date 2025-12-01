@@ -1,8 +1,8 @@
 [app_hosts]
-app ansible_host=89.116.23.180
+app ansible_host=168.231.74.163
 
 [infra_hosts]
-infra ansible_host=89.116.23.180
+infra ansible_host=168.231.74.163
 
 [prod:children]
 app_hosts

@@ -4,9 +4,9 @@ node:
   version: 18
 
 app:
-  name: Clinix Frontend
-  host: clinix-frontend-dev
+  name: Clinova Frontend
+  host: clinova-frontend-dev
   port: 3006
-  domain: app-dev.clinix.uz
-  service_name: clinix-frontend-dev.service
-  home: /mnt/clinix-frontend-dev
+  domain: app-dev.clinova.uz
+  service_name: clinova-frontend-dev.service
+  home: /mnt/clinova-frontend-dev
