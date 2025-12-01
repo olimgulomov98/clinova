@@ -5,11 +5,9 @@ import ru from "element-plus/dist/locale/ru.min.mjs";
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "Clinix HMS",
-      link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
-      ]
-    }
+      title: "Clinova HMS",
+      link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
+    },
   },
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
@@ -107,5 +105,5 @@ export default defineNuxtConfig({
 
   pinia: {
     storesDirs: ["./store/**"],
-  }
+  },
 });
