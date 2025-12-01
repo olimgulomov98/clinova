@@ -56,7 +56,7 @@ onMounted(() => {
 
 <style scoped>
 .active {
-  background-color: #f3f8fbcc;
+  background-color: #f1d4d4;
   border-bottom: 1px solid var(--color-blue-dark);
 }
 </style>

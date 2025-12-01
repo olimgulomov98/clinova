@@ -6,19 +6,19 @@
 
 // el button
 
-// el pagination 
+// el pagination
 div.el-pagination.is-background .btn-next.is-active,
 div.el-pagination.is-background .btn-prev.is-active,
 div.el-pagination.is-background .el-pager li.is-active {
   font-weight: 500;
-  background: #233955;
+  background: #ef4444;
 }
 
 div.el-pagination.is-background .btn-next,
 div.el-pagination.is-background .btn-prev,
 div.el-pagination.is-background .el-pager li {
   font-weight: 500;
-  background: #F0F0F0;
+  background: #f0f0f0;
 }
 
 .el-pager li {
@@ -26,7 +26,7 @@ div.el-pagination.is-background .el-pager li {
 }
 
 .el-pagination__sizes .el-select__wrapper {
-  background: #F0F0F0;
+  background: #f0f0f0;
 
   box-shadow: none;
   font-size: 16px !important;
@@ -34,8 +34,7 @@ div.el-pagination.is-background .el-pager li {
   color: var(--color-stone-600);
 }
 
-
-// el pagination 
+// el pagination
 
 // el badge
 .el-badge .el-badge__content {
@@ -76,14 +75,14 @@ div.el-pagination.is-background .el-pager li {
   width: 20px !important;
   height: 20px !important;
   border-radius: 2px !important;
-  background: #F0F0F0;
+  background: #f0f0f0;
   outline: none;
-  border: 1px solid #C3C4C4
+  border: 1px solid #c3c4c4;
 }
 
 .is-checked {
   border-radius: 2px !important;
-  background: #233955 !important;
+  background: #ef4444 !important;
 }
 
 .el-checkbox__inner::after {
@@ -91,26 +90,25 @@ div.el-pagination.is-background .el-pager li {
   height: 10px !important;
   left: 5.5px !important;
   border-width: 2px !important;
-  border-color: #A2F2EE !important;
+  border-color: #a2f2ee !important;
 }
 
 .el-checkbox__inner::before {
   top: 8px !important;
-  background: #A2F2EE !important;
-  border-color: #A2F2EE !important;
+  background: #a2f2ee !important;
+  border-color: #a2f2ee !important;
 }
-
 
 .is-indeterminate {
   border-radius: 2px !important;
   outline: none !important;
   top: 50% !important;
-  background: #233955 !important;
+  background: #ef4444 !important;
 }
 
 .el-checkbox .is-checked {
   outline: none !important;
-  border: 1px solid #C3C4C4 !important;
+  border: 1px solid #c3c4c4 !important;
 }
 
 // date picker
@@ -136,7 +134,7 @@ div.el-pagination.is-background .el-pager li {
 .icon-date-picker .el-range-separator {
   display: none !important;
 }
-.date-picker-close .el-range__icon{
+.date-picker-close .el-range__icon {
   display: none !important;
 }
 .icon-date-picker.date-picker-close .el-range__close-icon--hidden {
@@ -144,7 +142,7 @@ div.el-pagination.is-background .el-pager li {
   visibility: visible !important;
   display: flex !important;
 }
-.icon-date-picker:not(.date-picker-close)  .el-range__close-icon--hidden {
+.icon-date-picker:not(.date-picker-close) .el-range__close-icon--hidden {
   opacity: 0 !important;
   visibility: hidden !important;
   display: none !important;

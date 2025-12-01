@@ -1,70 +1,75 @@
 <template>
-  <VueApexCharts width="100%" height="300" :type="type" :options="chartOptions" :series="series"/>
+  <VueApexCharts
+    width="100%"
+    height="300"
+    :type="type"
+    :options="chartOptions"
+    :series="series"
+  />
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import { ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = withDefaults(
-    defineProps<{
-      legend?: boolean
-      series: any[];
-      categories?: any;
-      colors?: any;
-      type?: string;
-    }>(),
-    {
-      categories: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-      colors: ["#233955", "#D6EBF8"],
-      type: "line",
-      legend: true
-    }
+  defineProps<{
+    legend?: boolean;
+    series: any[];
+    categories?: any;
+    colors?: any;
+    type?: string;
+  }>(),
+  {
+    categories: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    colors: ["#ef4444", "#D6EBF8"],
+    type: "line",
+    legend: true,
+  }
 );
 
 const chartOptions = computed(() => {
-
   return {
     chart: {
-      toolbar: {show: false},
-      zoom: {enabled: false}
+      toolbar: { show: false },
+      zoom: { enabled: false },
     },
     stroke: {
       curve: "smooth",
-      width: props.type === "bar" ? 0 : 3
+      width: props.type === "bar" ? 0 : 3,
     },
     plotOptions: {
       bar: {
         borderRadius: 8,
         borderRadiusApplication: "end",
         columnWidth: "50%",
-        endingShape: "flat"
-      }
+        endingShape: "flat",
+      },
     },
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     colors: props.colors,
     xaxis: {
-      categories: props.categories
+      categories: props.categories,
     },
     yaxis: {
       // min: 0,
       // max: 1600,
-      tickAmount: 4
+      tickAmount: 4,
     },
     markers: {
       size: 5,
       colors: props.colors,
       strokeColors: props.colors,
-      strokeWidth: 3
+      strokeWidth: 3,
     },
     tooltip: {
       shared: true,
       intersect: false,
       y: {
-        formatter: (val: number) => val
-      }
+        formatter: (val: number) => val,
+      },
     },
     legend: {
       show: props.legend,
@@ -73,13 +78,13 @@ const chartOptions = computed(() => {
       markers: {
         width: 12,
         height: 12,
-        shape: 'circle',
+        shape: "circle",
       },
     },
     grid: {
-      strokeDashArray: 4
-    }
-  }
+      strokeDashArray: 4,
+    },
+  };
 });
 </script>
 

@@ -235,17 +235,17 @@ const currentEvents = ref([]);
 }
 
 :deep(.fc-col-header-cell) {
-  background-color: #eaf2f8;
+  background-color: #f1d4d4;
   padding-top: 10px;
   padding-bottom: 10px;
   color: var(--color-gray-20);
-  border-left: 1px solid #eaf2f8;
-  border-right: 1px solid #eaf2f8;
+  border-left: 1px solid #f1d4d4;
+  border-right: 1px solid #f1d4d4;
 }
 
 :deep(.fc-prev-button),
 :deep(.fc-next-button) {
-  background: #eaf2f8;
+  background: #f1d4d4;
   color: #5d586c !important;
   border: none !important;
   box-shadow: none !important;
@@ -272,7 +272,7 @@ const currentEvents = ref([]);
 
 :deep(.fc-prev-button:hover),
 :deep(.fc-next-button:hover) {
-  background: #eaf2f8;
+  background: #f1d4d4;
   transition: 0.4s;
 }
 
@@ -298,7 +298,7 @@ const currentEvents = ref([]);
 }
 
 :deep(.fc-button-group) {
-  background-color: #eaf2f8;
+  background-color: #f1d4d4;
   padding: 2px;
   border-radius: 8px;
   display: flex;
@@ -307,7 +307,7 @@ const currentEvents = ref([]);
 
 :deep(.fc-button-group > button) {
   border: none;
-  background: #eaf2f8;
+  background: #f1d4d4;
   font-family: var(--font-family) !important;
   font-size: 12px !important;
   font-weight: 400 !important;

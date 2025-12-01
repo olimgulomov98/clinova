@@ -5,8 +5,8 @@ import ru from "element-plus/dist/locale/ru.min.mjs";
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "Clinova HMS",
-      link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
+      title: "Clinova",
+      link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.ico" }],
     },
   },
   compatibilityDate: "2024-11-01",

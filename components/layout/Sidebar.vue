@@ -11,12 +11,15 @@
             class="flex gap-2 items-center cursor-pointer justify-center"
             @click="setToggleCollapse"
           >
-            <icon-logo-cyrcle class="w-[40px] h-[40px]" />
+            <!-- <icon-logo-cyrcle class="w-[40px] h-[40px]" /> -->
             <div class="flex flex-col" v-if="!isCollapse">
-              <icon-logo-text class="w-[70px] h-[30px]" />
-              <p class="whitespace-wrap text-[11px] leading-4 text-[#64748B]">
-                Hospital Management System
+              <!-- <icon-logo-text class="w-[70px] h-[30px]" /> -->
+              <p class="whitespace-wrap leading-4 text-[22px] text-[#fd4245]">
+                CLINOVA
               </p>
+              <!-- <p class="whitespace-wrap text-[11px] leading-4 text-[#fd4245]">
+                Hospital Management System
+              </p> -->
             </div>
             <!-- <icon-logo @click="setToggleCollapse"/> -->
             <!-- <div
@@ -399,7 +402,7 @@ watch(
   font-family: "SourceSans3", sans-serif;
   font-size: 20px;
   font-weight: 600;
-  color: #233955;
+  color: #ef4444;
 }
 
 @media (min-width: 360px) and (max-width: 767px) {

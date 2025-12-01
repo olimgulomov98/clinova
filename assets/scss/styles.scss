@@ -70,7 +70,7 @@ body {
 
 .filter-search_light .el-input__wrapper,
 .filter-search_light .el-textarea__inner {
-  background-color: #eaf2f8;
+  background-color: #f1d4d4;
 }
 .filter-search_light .el-input__wrapper input::placeholder {
   color: #3a4e63;
@@ -85,9 +85,9 @@ body {
 .filter_select .el-select__wrapper {
   max-height: 30px;
   min-height: 30px !important;
-  background-color: #eaf2f8;
+  // background-color: #eaf2f8;
   color: #05080b;
-  border: none;
+  border: 1px solid #e6e6e7;
   box-shadow: none;
   padding: 6px 8px !important;
 }
@@ -119,7 +119,7 @@ body {
   font-size: 12px;
   line-height: 100%;
   text-align: center;
-  background: #233955;
+  background: #ef4444;
   color: white;
 }
 .el-button.small_btn:hover {
@@ -138,7 +138,7 @@ body {
   font-size: 16px;
   line-height: 100%;
   text-align: center;
-  background: #233955;
+  background: #ef4444;
   color: white;
   border: none;
 }

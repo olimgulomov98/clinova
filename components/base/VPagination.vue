@@ -37,7 +37,9 @@
       <div class="left-controls flex gap-[10px] items-center">
         <div>
           <span class="text-[#87888A] text-xs">
-            {{t('SHOWING')}} {{ modelValue.size > totalPage ? totalPage : modelValue.size }} {{t("OUT_OF")}} {{ totalPage || 0 }}
+            {{ t("SHOWING") }}
+            {{ modelValue.size > totalPage ? totalPage : modelValue.size }}
+            {{ t("OUT_OF") }} {{ totalPage || 0 }}
           </span>
         </div>
         <el-pagination
@@ -67,10 +69,13 @@
 <script setup lang="ts">
 const { t } = useI18n();
 const emit = defineEmits(["updateQuery"]);
-const props = withDefaults(defineProps<{ totalPage?: number; totalPageHide?: boolean }>(), {
-  totalPageHide: false,
-  totalPage: 0,
-});
+const props = withDefaults(
+  defineProps<{ totalPage?: number; totalPageHide?: boolean }>(),
+  {
+    totalPageHide: false,
+    totalPage: 0,
+  }
+);
 
 const modelValue = defineModel() as Ref<{ page: number; size: number }>;
 const page_sizes = [5, 10, 20, 30, 40, 50];
@@ -88,7 +93,7 @@ const handleCurrentChange = () => {
   width: 80px;
 }
 .el-pagination__sizes .el-select__wrapper {
-  background: #eaf2f8 !important;
+  background: #f1d4d4 !important;
   height: 30px;
   min-height: 30px;
   padding: 6px;

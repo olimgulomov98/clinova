@@ -6,7 +6,9 @@
         <nuxt-link
           to="/payments"
           class="px-3 py-[6px] text-base"
-          :class="{ 'active pointer-events-none': route.fullPath === '/payments' }"
+          :class="{
+            'active pointer-events-none': route.fullPath === '/payments',
+          }"
         >
           {{ $t("PAYMENTS") }}
         </nuxt-link>
@@ -47,7 +49,7 @@ const removeAction = async (url: string) => {
 
 <style scoped>
 .active {
-  background-color: #f3f8fbcc;
+  background-color: #f1d4d4;
   border-bottom: 1px solid var(--color-blue-dark);
 }
 </style>

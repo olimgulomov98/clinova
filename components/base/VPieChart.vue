@@ -1,11 +1,23 @@
 <template>
   <div class="donut-chart-wrapper mx-auto">
-    <VueApexCharts type="donut" width="300" :options="chartOptions" :series="series" />
+    <VueApexCharts
+      type="donut"
+      width="300"
+      :options="chartOptions"
+      :series="series"
+    />
     <div class="chart-center-content">
       <div class="dropdown">
-        <select v-model="modelValue" @change="emit('change-period', modelValue)">
-          <option v-for="option in options" :key="option.value" :value="option.value">
-          {{option.label}}
+        <select
+          v-model="modelValue"
+          @change="emit('change-period', modelValue)"
+        >
+          <option
+            v-for="option in options"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.label }}
           </option>
         </select>
       </div>
@@ -44,7 +56,7 @@ const chartOptions = ref({
     toolbar: { show: false },
   },
   labels: props.labels || ["Male", "Female", "Other", "Unknown"],
-  colors: props.colors || ["#233955", "#A2F2EE", "#4CAF50", "#FF9800"],
+  colors: props.colors || ["#ef4444", "#A2F2EE", "#4CAF50", "#FF9800"],
   dataLabels: {
     enabled: false,
     formatter: function (val: number) {
@@ -136,6 +148,6 @@ const chartOptions = ref({
   line-height: 100%;
   letter-spacing: 1%;
   text-align: center;
-  color: #3A4E63 !important;
+  color: #3a4e63 !important;
 }
 </style>

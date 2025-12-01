@@ -18,7 +18,7 @@
           ref="datePickerRef"
           style="
             border-radius: 8px;
-            background: #eaf2f8;
+            background: #f1d4d4;
             border: none;
             height: 30px;
           "
@@ -29,7 +29,7 @@
           style="
             height: 30px;
             border-radius: 8px;
-            background: #1f2937;
+            background: #fd4245;
             border: none;
             position: absolute;
             right: 0;
@@ -309,7 +309,7 @@ onMounted(() => {
   font-family: "SourceSans3", sans-serif;
 
   thead {
-    background: #eaf2f8;
+    background: #f1d4d4;
 
     th {
       padding: 8px;
@@ -318,7 +318,7 @@ onMounted(() => {
       font-size: 14px;
       color: #3a4e63;
       position: relative;
-      background: #eaf2f8 !important;
+      background: #f1d4d4 !important;
 
       &:first-child {
         border-top-left-radius: 12px;

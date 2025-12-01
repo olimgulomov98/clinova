@@ -34,7 +34,7 @@
           end-placeholder="End date"
           style="
             border-radius: 8px;
-            background: #eaf2f8;
+            background: #f1d4d4;
             border: 0;
             height: 30px;
           "
@@ -361,12 +361,12 @@ onMounted(async () => {
     display: flex;
     align-items: center;
     border-radius: 16px;
-    background: #f3f8fb;
+    background: #f1d4d4;
     padding: 14px 12px;
     gap: 12px;
 
     .total-card-logo {
-      background: #233955;
+      background: #ef4444;
       width: 36px;
       height: 36px;
       display: flex;
@@ -423,7 +423,7 @@ onMounted(async () => {
     font-family: "SourceSans3", sans-serif;
     color: white;
     border-radius: 8px;
-    background: #233955;
+    background: #ef4444;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -435,7 +435,7 @@ onMounted(async () => {
 .status-btn {
   padding: 0 12px;
   font-size: 11px;
-  color: #233955;
+  color: #ef4444;
   font-family: "SourceSans3", sans-serif;
   font-weight: 400;
   border: 1px solid #ddd;
@@ -445,7 +445,7 @@ onMounted(async () => {
 
 .refresh-btn {
   border-radius: 8px;
-  background: #eaf2f8;
+  background: #f1d4d4;
   border: 1px solid #ddd;
   height: 30px;
   color: #bbb;

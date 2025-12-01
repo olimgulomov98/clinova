@@ -68,7 +68,7 @@
           end-placeholder="End date"
           style="
             border-radius: 8px;
-            background: #eaf2f8;
+            background: #f1d4d4;
             border: 0;
             height: 30px;
             width: 220px;
@@ -538,7 +538,7 @@ onMounted(async () => {
     font-family: "SourceSans3", sans-serif;
     color: white;
     border-radius: 8px;
-    background: #233955;
+    background: #ef4444;
     display: flex;
     align-items: center;
     justify-content: center;

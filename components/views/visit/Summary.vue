@@ -252,7 +252,7 @@ const downloadPrintInvoice = async () => {
       border: none !important;
 
       button {
-        color: #233955;
+        color: #ef4444;
         font-family: "SourceSans3", sans-serif;
         font-size: 18px;
       }

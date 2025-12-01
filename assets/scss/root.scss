@@ -1,23 +1,24 @@
 :root {
-  --color-primary: #233955;
-  --color-blue-dark: #233955;
-  --color-blue-light: #2B95D6;
-  --color-blue-subtle: #DFF8F9;
-  --color-red-30: #FD4245;
-  --color-red-20: #FEBBBC;
-  --color-red-10: #FFE1E1;
-  --color-red-subtle: #FFF4F4;
-  --color-black: #05080B;
-  --color-gray-30: #4B4D4F;
-  --color-gray-20: #87888A;
-  --color-gray-10: #C3C4C4;
-  --color-gray-line: #E6E6E7;
-  --color-gray-bg: #F0F0F0;
-  --color-gray-light-bg: #F2F3F4;;
-  --color-gray-bg-subtle: #F5F5F5;
-  --color-gray-bg-sidebar:#F3F8FB;
-  --color-profile-bg: #A2F2EE;
-  --color-gray-hover: #F3F9F9;
+  /* Primary theme color switched from blue to red */
+  --color-primary: #fd4245;
+  --color-blue-dark: #b91c1c;
+  --color-blue-light: #ef4444;
+  --color-blue-subtle: #fee2e2;
+  --color-red-30: #fd4245;
+  --color-red-20: #febbbc;
+  --color-red-10: #ffe1e1;
+  --color-red-subtle: #fff4f4;
+  --color-black: #05080b;
+  --color-gray-30: #4b4d4f;
+  --color-gray-20: #87888a;
+  --color-gray-10: #c3c4c4;
+  --color-gray-line: #e6e6e7;
+  --color-gray-bg: #f0f0f0;
+  --color-gray-light-bg: #f2f3f4;
+  --color-gray-bg-subtle: #f5f5f5;
+  --color-gray-bg-sidebar: #f1d4d4;
+  --color-profile-bg: #fd4245;
+  --color-gray-hover: #f3f9f9;
 
   //fullcalendar
   --fc-today-bg-color: transparent;
@@ -43,24 +44,34 @@
   --el-index-top: 1000;
   --el-index-popper: 2000;
   --el-border-radius-base: 4px;
-  --el-border-radius-standart:6px;
+  --el-border-radius-standart: 6px;
   --el-border-radius-small: 2px;
   --el-border-radius-round: 20px;
   --el-border-radius-circle: 100%;
   --el-transition-duration: 0.3s;
   --el-transition-duration-fast: 0.2s;
-  --el-transition-function-ease-in-out-bezier: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --el-transition-function-ease-in-out-bezier: cubic-bezier(
+    0.645,
+    0.045,
+    0.355,
+    1
+  );
   --el-transition-function-fast-bezier: cubic-bezier(0.23, 1, 0.32, 1);
-  --el-transition-all: all var(--el-transition-duration) var(--el-transition-function-ease-in-out-bezier);
-  --el-transition-fade: opacity var(--el-transition-duration) var(--el-transition-function-fast-bezier);
-  --el-transition-md-fade: transform var(--el-transition-duration) var(--el-transition-function-fast-bezier),
-    opacity var(--el-transition-duration) var(--el-transition-function-fast-bezier);
+  --el-transition-all: all var(--el-transition-duration)
+    var(--el-transition-function-ease-in-out-bezier);
+  --el-transition-fade: opacity var(--el-transition-duration)
+    var(--el-transition-function-fast-bezier);
+  --el-transition-md-fade: transform var(--el-transition-duration)
+      var(--el-transition-function-fast-bezier),
+    opacity var(--el-transition-duration)
+      var(--el-transition-function-fast-bezier);
   --el-transition-fade-linear: opacity var(--el-transition-duration-fast) linear;
   --el-transition-border: border-color var(--el-transition-duration-fast)
     var(--el-transition-function-ease-in-out-bezier);
   --el-transition-box-shadow: box-shadow var(--el-transition-duration-fast)
     var(--el-transition-function-ease-in-out-bezier);
-  --el-transition-color: color var(--el-transition-duration-fast) var(--el-transition-function-ease-in-out-bezier);
+  --el-transition-color: color var(--el-transition-duration-fast)
+    var(--el-transition-function-ease-in-out-bezier);
   --el-component-size-large: 40px;
   --el-component-size: 32px;
   --el-component-size-small: 24px;
@@ -71,14 +82,14 @@
   --el-color-primary-light-7: rgb(197.7, 225.9, 255);
   --el-color-primary-light-8: rgb(216.8, 235.6, 255);
   --el-color-primary-light-9: rgb(235.9, 245.3, 255);
-  --el-color-primary-dark-2: #F0F0F0;
+  --el-color-primary-dark-2: #f0f0f0;
   --el-color-success: rgb(20, 184, 166) !important;
-  --el-color-success-light-3: rgba(20, 184, 166,0.8) !important;
+  --el-color-success-light-3: rgba(20, 184, 166, 0.8) !important;
   --el-color-success-light-5: rgb(179, 224.5, 156.5);
   --el-color-success-light-7: rgb(209.4, 236.7, 195.9);
   --el-color-success-light-8: rgb(224.6, 242.8, 215.6);
   --el-color-success-light-9: rgb(239.8, 248.9, 235.3);
-  --el-color-success-dark-2: rgba(20, 184, 166,0.9) !important;
+  --el-color-success-dark-2: rgba(20, 184, 166, 0.9) !important;
   --el-color-warning: #e6a23c;
   --el-color-warning-light-3: rgb(237.5, 189.9, 118.5);
   --el-color-warning-light-5: rgb(242.5, 208.5, 157.5);
@@ -110,8 +121,8 @@
   --el-bg-color: #ffffff;
   --el-bg-color-page: #f2f3f5;
   --el-bg-color-overlay: #ffffff;
-  --el-text-color-primary: #303133;
-  --el-text-color-regular: #303133 !important;
+  --el-text-color-primary: #fd4245;
+  --el-text-color-regular: #fd4245 !important;
   --el-text-color-secondary: #909399;
   --el-text-color-placeholder: #a8abb2;
   --el-text-color-disabled: #c0c4cc;
@@ -128,11 +139,12 @@
   --el-fill-color-dark: #ebedf0;
   --el-fill-color-darker: #e6e8eb;
   --el-fill-color-blank: #ffffff;
-  --el-box-shadow: 0px 12px 32px 4px rgba(0, 0, 0, 0.04), 0px 8px 20px rgba(0, 0, 0, 0.08);
+  --el-box-shadow: 0px 12px 32px 4px rgba(0, 0, 0, 0.04),
+    0px 8px 20px rgba(0, 0, 0, 0.08);
   --el-box-shadow-light: 0px 0px 12px rgba(0, 0, 0, 0.12);
   --el-box-shadow-lighter: 0px 0px 6px rgba(0, 0, 0, 0.12);
-  --el-box-shadow-dark: 0px 16px 48px 16px rgba(0, 0, 0, 0.08), 0px 12px 32px rgba(0, 0, 0, 0.12),
-    0px 8px 16px -8px rgba(0, 0, 0, 0.16);
+  --el-box-shadow-dark: 0px 16px 48px 16px rgba(0, 0, 0, 0.08),
+    0px 12px 32px rgba(0, 0, 0, 0.12), 0px 8px 16px -8px rgba(0, 0, 0, 0.16);
   --el-disabled-bg-color: var(--el-fill-color-light);
   --el-disabled-text-color: var(--el-text-color-placeholder);
   --el-disabled-border-color: var(--el-border-color-light);
@@ -144,15 +156,16 @@
   --el-border-width: 1px;
   --el-border-style: solid;
   --el-border-color-hover: var(--el-text-color-disabled);
-  --el-border: var(--el-border-width) var(--el-border-style) var(--el-border-color);
+  --el-border: var(--el-border-width) var(--el-border-style)
+    var(--el-border-color);
   --el-svg-monochrome-grey: var(--el-border-color);
-  --el-padding-confimed-dialog:30px 50px;
+  --el-padding-confimed-dialog: 30px 50px;
 }
 .el-drawer {
   --el-drawer-padding-primary: var(--el-dialog-padding-primary, 0) !important;
 }
 .el-checkbox {
-  --el-checkbox-outline:none;
+  --el-checkbox-outline: none;
   --el-checkbox-font-size: 14px;
   --el-checkbox-font-weight: var(--el-font-weight-primary);
   --el-checkbox-text-color: var(--el-text-color-regular);
@@ -160,18 +173,18 @@
   --el-checkbox-input-width: 20px;
   --el-checkbox-border-radius: var(--el-border-radius-small);
   --el-checkbox-bg-color: var(--el-fill-color-blank);
-  --el-checkbox-input-border:  #C3C4C4;
-  --el-checkbox-disabled-border-color:  #C3C4C4;
+  --el-checkbox-input-border: #c3c4c4;
+  --el-checkbox-disabled-border-color: #c3c4c4;
   --el-checkbox-disabled-input-fill: var(--el-fill-color-light);
   --el-checkbox-disabled-icon-color: var(--el-text-color-placeholder);
-  --el-checkbox-disabled-checked-input-fill: #C3C4C4;
-  --el-checkbox-disabled-checked-input-border-color:  #C3C4C4;
+  --el-checkbox-disabled-checked-input-fill: #c3c4c4;
+  --el-checkbox-disabled-checked-input-border-color: #c3c4c4;
   --el-checkbox-disabled-checked-icon-color: var(--el-text-color-placeholder);
   --el-checkbox-checked-text-color: var(--el-color-primary);
-  --el-checkbox-checked-input-border-color: #C3C4C4;
+  --el-checkbox-checked-input-border-color: #c3c4c4;
   --el-checkbox-checked-bg-color: var(--el-color-primary);
   --el-checkbox-checked-icon-color: var(--el-color-white);
-  --el-checkbox-input-border-color-hover:#C3C4C4;
+  --el-checkbox-input-border-color-hover: #c3c4c4;
 }
 div.el-badge {
   --el-badge-bg-color: var(--el-color-danger);

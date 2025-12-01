@@ -30,7 +30,7 @@
           end-placeholder="End date"
           style="
             border-radius: 8px;
-            background: #eaf2f8;
+            background: #f1d4d4;
             border: 0;
             height: 30px;
             width: 220px;
@@ -530,7 +530,7 @@ onMounted(() => {
 .status-btn {
   padding: 0 12px;
   font-size: 11px;
-  color: #233955;
+  color: #ef4444;
   font-family: "SourceSans3", sans-serif;
   font-weight: 400;
   border: 1px solid #ddd;

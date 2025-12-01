@@ -102,7 +102,7 @@
           style="
             width: fit-content;
             border-radius: 8px;
-            background: #1f2937;
+            background: #fd4245;
             border: none;
           "
           @click="showExpenseDialog = true"
@@ -488,7 +488,7 @@ onMounted(() => {
 }
 
 .custom-date-picker :deep(.el-input__wrapper) {
-  background: #eaf2f8 !important;
+  background: #f1d4d4 !important;
   border: none !important;
   border-radius: 8px !important;
   height: 40px !important;
@@ -497,7 +497,7 @@ onMounted(() => {
 
 /* Global styles for date picker */
 :global(.custom-date-picker .el-input__wrapper) {
-  background: #eaf2f8 !important;
+  background: #f1d4d4 !important;
   border: none !important;
   border-radius: 8px !important;
   height: 40px !important;

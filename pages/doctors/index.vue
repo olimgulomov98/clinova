@@ -1,7 +1,7 @@
 <template>
   <DoctorLayout>
     <div class="page-container">
-      <div class="bg-[#F3F8FB] -mx-4 p-4 rounded-xl">
+      <div class="bg-[#f1d4d4] -mx-4 p-4 rounded-xl">
         <VTable
           :filters="filters"
           :table-data="tableData?.list"

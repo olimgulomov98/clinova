@@ -27,7 +27,7 @@ const report_payment = ref({});
 const loading = ref(false);
 const periodType = ref('WEEK');
 const chartKey = ref(0);
-const colors = ["#233955", "#D6EBF8"]
+const colors = ["#ef4444", "#D6EBF8"]
 const categories = computed(() => report_payment.value?.breakdown?.map(item => formatAutoDate(item.label) + ''));
 const series = computed(() => {
   const breakdown = report_payment.value?.breakdown;

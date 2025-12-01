@@ -16,9 +16,15 @@
       :labels="labels"
     />
     <div class="flex flex-col gap-3 sm:gap-[14px]">
-      <div class="flex justify-between items-center" v-for="(chart, index) in chartData">
+      <div
+        class="flex justify-between items-center"
+        v-for="(chart, index) in chartData"
+      >
         <div class="flex items-center gap-1">
-          <span class="w-2 h-2 rounded-full" :style="`background-color: ${colors[index]}`"></span>
+          <span
+            class="w-2 h-2 rounded-full"
+            :style="`background-color: ${colors[index]}`"
+          ></span>
           <span class="text-[12px]">{{ chart.label }}</span>
         </div>
         <p class="font-semibold text-xs text-gray-30">{{ chart.seria }}%</p>
@@ -31,7 +37,7 @@
 import { ref } from "vue";
 
 const { t } = useI18n();
-const colors = ["#233955", "#A2F2EE", "#D6EBF8", "#E6E6E7"];
+const colors = ["#ef4444", "#A2F2EE", "#D6EBF8", "#E6E6E7"];
 const chartData = computed(() => {
   const main =
     report_department.value?.top?.map((item) => {
@@ -49,7 +55,7 @@ const chartData = computed(() => {
 const series = computed(() => {
   const main = report_department.value?.top?.map((item) => item.count) || [];
   const others = report_department.value?.others?.count || 0;
-  return [...main, others]
+  return [...main, others];
 });
 const labels = computed(() => {
   const main = report_department.value?.top?.map((item) => item.name) || [];
@@ -63,7 +69,9 @@ const report_department = ref({});
 const loading = ref(false);
 const periodType = ref("WEEK");
 const chartKey = ref(0);
-const categories = computed(() => report_department.value?.breakdown?.map((item) => item.label + ""));
+const categories = computed(() =>
+  report_department.value?.breakdown?.map((item) => item.label + "")
+);
 
 const changePeriod = (type) => {
   periodType.value = type;

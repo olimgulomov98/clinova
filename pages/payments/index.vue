@@ -88,13 +88,7 @@
               range-separator="To"
               start-placeholder="Start date"
               end-placeholder="End date"
-              style="
-                border-radius: 8px;
-                background: #eaf2f8;
-                border: 0;
-                height: 30px;
-                width: 220px;
-              "
+              style="border-radius: 8px; border: 0; height: 30px; width: 220px"
               @update:model-value="onChangeDatePicker"
               class="icon-date-picker"
               :class="{ 'date-picker-close': !!value2?.length }"
@@ -362,12 +356,12 @@ onMounted(async () => {
     display: flex;
     align-items: center;
     border-radius: 16px;
-    background: #f3f8fb;
+    background: #f1d4d4;
     padding: 14px 12px;
     gap: 12px;
 
     .total-card-logo {
-      background: #233955;
+      background: #dc2323;
       width: 36px;
       height: 36px;
       display: flex;
@@ -383,7 +377,7 @@ onMounted(async () => {
         font-family: "SourceSans3", sans-serif;
         font-weight: 400;
         font-size: 11px;
-        color: #3a4e63;
+        /* color: #3a4e63; */
       }
 
       .cost {
@@ -391,7 +385,7 @@ onMounted(async () => {
         font-weight: 600;
         line-height: 24px;
         font-size: 22px;
-        color: #05080b;
+        /* color: #05080b; */
       }
     }
   }
@@ -405,7 +399,7 @@ onMounted(async () => {
   gap: 10px;
   padding: 2px;
   cursor: pointer;
-  background: #f2f3f4;
+  background: #f1d4d4;
 
   .item-group {
     padding: 0 14px;
@@ -424,7 +418,7 @@ onMounted(async () => {
     font-family: "SourceSans3", sans-serif;
     color: white;
     border-radius: 8px;
-    background: #233955;
+    background: #f1d4d4;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -436,7 +430,7 @@ onMounted(async () => {
 .status-btn {
   padding: 0 12px;
   font-size: 11px;
-  color: #233955;
+  /* color: #233955; */
   font-family: "SourceSans3", sans-serif;
   font-weight: 400;
   border: 1px solid #ddd;
@@ -446,7 +440,7 @@ onMounted(async () => {
 
 .refresh-btn {
   border-radius: 8px;
-  background: #eaf2f8;
+  /* background: #f1d4d4; */
   border: 1px solid #ddd;
   height: 30px;
   color: #bbb;

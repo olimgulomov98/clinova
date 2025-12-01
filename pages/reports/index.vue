@@ -10,7 +10,7 @@
         @change="onChangeMonth"
         style="
           border-radius: 8px;
-          background: #eaf2f8;
+          background: #f1d4d4;
           border: none;
           height: 30px;
           width: 220px;
@@ -452,7 +452,7 @@ onMounted(async () => {
   position: relative;
 
   :deep(.el-select__wrapper) {
-    background-color: #eaf2f8 !important;
+    background-color: #f1d4d4 !important;
     border: none !important;
     box-shadow: none !important;
   }
@@ -536,7 +536,7 @@ onMounted(async () => {
     justify-content: space-between;
     padding: 12px 36px;
     border-radius: 12px;
-    background: #f3f8fb;
+    background: #f1d4d4;
     font-weight: 500;
     font-size: 14px;
     color: #3a4e63;
