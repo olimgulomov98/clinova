@@ -6,7 +6,9 @@ After=syslog.target
 Type=simple
 Environment=PORT={{ app.port }}
 WorkingDirectory={{ app.home }}
-ExecStart=node server/index.mjs
+ExecStart={{ node_bin_path }} server/index.mjs
+Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target

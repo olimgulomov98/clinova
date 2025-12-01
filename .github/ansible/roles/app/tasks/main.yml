@@ -15,6 +15,26 @@
     group: root
     mode: '0755'
 
+- name: Find full path to node
+  ansible.builtin.shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    which node || echo "NODE_NOT_FOUND"
+  args:
+    executable: /bin/bash
+  register: node_path_result
+  changed_when: false
+  failed_when: false
+
+- name: Fail if node is not found
+  ansible.builtin.fail:
+    msg: "Node.js not found via nvm."
+  when: '"NODE_NOT_FOUND" in node_path_result.stdout'
+
+- name: Set node binary path fact
+  ansible.builtin.set_fact:
+    node_bin_path: "{{ node_path_result.stdout }}"
+
 - name: "Restart the service of {{ app.name }}"
   ansible.builtin.systemd:
     name: "{{ app.service_name }}"
