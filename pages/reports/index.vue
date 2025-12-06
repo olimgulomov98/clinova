@@ -6,7 +6,7 @@
     <div class="month-selector-container">
       <el-select
         v-model="selectedMonth"
-        placeholder="Select month"
+        :placeholder="t('SELECT_MONTH')"
         @change="onChangeMonth"
         style="
           border-radius: 8px;
@@ -205,7 +205,7 @@
       <!-- Revenue -->
       <div class="report-section">
         <div class="section-header">
-          <span class="section-title ml-[28px]">Revenue</span>
+          <span class="section-title ml-[28px]">{{ t("REVENUE") }}</span>
           <span class="section-amount">{{ formatAmount(revenue) }}</span>
         </div>
       </div>
@@ -289,15 +289,15 @@ const expensesTotalAmount = computed(() => {
 const grossProfitData = computed(() => {
   return [
     {
-      name: "Cash",
+      name: t("CASH"),
       amount: cashTotal.value,
     },
     {
-      name: "Terminal",
+      name: t("TERMINAL"),
       amount: terminalTotal.value,
     },
     {
-      name: "Multicard",
+      name: t("MULTICARD"),
       amount: multicardTotal.value,
     },
   ];

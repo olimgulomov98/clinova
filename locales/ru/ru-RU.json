@@ -227,6 +227,7 @@
   "ENTER": "Войти",
   "ASSIGNED_BY": "Назначено",
   "PAID": "Оплаченный",
+  "UNPAID": "Не оплачено",
   "PARTIALLY_PAID": "Частично оплачено",
   "PAID_INVOICE": "Оплаченный счет",
   "PENDING_INVOICE": "Ожидаемый счет",
@@ -319,5 +320,6 @@
   "TERMINAL_EXPENSE": "Расход по терминалу",
   "MULTICARD_EXPENSE": "Расход по мультикарте",
   "CASH_LOSS": "Потеря наличных",
-  "REASON": "Причина"
+  "REASON": "Причина",
+  "SELECT_MONTH": "Выберите месяц"
 }
