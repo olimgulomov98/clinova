@@ -227,6 +227,7 @@
   "ENTER": "Kirish",
   "ASSIGNED_BY": "Kim tomonidan yaratilgan",
   "PAID": "To'langan",
+  "UNPAID": "To'lanmagan",
   "PARTIALLY_PAID": "Qisman to'langan",
   "PAID_INVOICE": "To'langan hisob-faktura",
   "PENDING_INVOICE": "Kutilayotgan hisob-faktura",
@@ -319,5 +320,6 @@
   "TERMINAL_EXPENSE": "Terminal xarajati",
   "MULTICARD_EXPENSE": "Multikarta xarajati",
   "CASH_LOSS": "Naqd yo‘qotish",
-  "REASON": "Sabab"
+  "REASON": "Sabab",
+  "SELECT_MONTH": "Oyni tanlang"
 }

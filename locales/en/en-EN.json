@@ -227,6 +227,7 @@
   "ENTER": "Войти",
   "ASSIGNED_BY": "Assigned by",
   "PAID": "Paid",
+  "UNPAID": "Unpaid",
   "PARTIALLY_PAID": "Partially paid",
   "PAID_INVOICE": "Paid Invoice",
   "PENDING_INVOICE": "Pending Invoice",
@@ -318,5 +319,6 @@
   "TERMINAL_EXPENSE": "Terminal Expense",
   "MULTICARD_EXPENSE": "Multicard Expense",
   "CASH_LOSS": "Cash loss",
-  "REASON": "Reason"
+  "REASON": "Reason",
+  "SELECT_MONTH": "Select month"
 }
