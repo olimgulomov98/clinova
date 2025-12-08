@@ -63,7 +63,7 @@ export default [
     title: "DOCTOR_SALARY",
     // icon: "credit-card",
     to: "/doctor-salary",
-    roles: ["RECEPTION", "DOCTOR", "ADMIN", "CASHIER"],
+    roles: ["ADMIN", "CASHIER"],
   },
   {
     title: "CASHIER_REPORTS",
@@ -75,7 +75,7 @@ export default [
     title: "EXPENSES_LIST",
     // icon: "credit-card",
     to: "/expenses",
-    roles: ["RECEPTION", "DOCTOR", "ADMIN", "CASHIER"],
+    roles: ["ADMIN", "CASHIER"],
   },
   // {
   //   title: "INVENTORY",
