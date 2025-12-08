@@ -54,6 +54,28 @@
                 </el-form-item>
               </template>
             </el-table-column>
+            <el-table-column :label="t('SUB_DEPARTMENT')">
+              <template #default="scope">
+                <el-form-item :prop="''">
+                  <v-select
+                    v-model="scope.row.subDepartmentId"
+                    :options="getSubDepartments(scope.$index)"
+                    filterable
+                    label-key="name"
+                    value-key="id"
+                    :placeholder="t('SUB_DEPARTMENT')"
+                    class="form_select"
+                    :disabled="!getSubDepartments(scope.$index).length"
+                    :suffix-icon="Search"
+                    remote-show-suffix
+                    @change="
+                      (value) => changeSubDepartment(value, scope.$index)
+                    "
+                  />
+                </el-form-item>
+              </template>
+            </el-table-column>
+
             <el-table-column :label="t('SERVICE')">
               <template #default="scope">
                 <el-form-item
@@ -269,6 +291,7 @@ const form = reactive({
       doctors: [],
       services: [],
       departmentId: "",
+      subDepartmentId: "",
       serviceId: "",
       quantity: "",
       discount: "",
@@ -286,7 +309,12 @@ const changeDepartment = (searchText: string) => {
   form.items.forEach((item) => {
     item.serviceId = "";
     item.doctorId = "";
+    item.subDepartmentId = "";
+    item.doctors = [];
   });
+
+  // Fetch doctors filtered by department for each row
+  form.items.forEach((_, idx) => getDoctors({ departmentId: searchText }, idx));
 
   itemsValidator();
 };
@@ -356,6 +384,7 @@ const createFormItem = () => {
     doctors: [],
     services: [],
     departmentId: "",
+    subDepartmentId: "",
     serviceId: "",
     quantity: "",
     discount: "",
@@ -367,6 +396,23 @@ const createFormItem = () => {
 const deleteItem = (index: number) => {
   form.items = form.items.filter((_, i) => i !== index);
   itemsValidator();
+};
+
+const getSubDepartments = (rowIndex: number) => {
+  const departmentId = form.items[rowIndex]?.departmentId;
+  if (!departmentId) return [];
+  const department = departments.value.find((d: any) => d.id === departmentId);
+  return department?.subDepartments || [];
+};
+
+const changeSubDepartment = (subDepartmentId: string, index: number) => {
+  form.items[index].serviceId = "";
+  form.items[index].doctorId = "";
+  form.items[index].doctors = [];
+
+  const departmentId = form.items[index]?.departmentId;
+  getServices({ departmentId, subDepartmentId }, index);
+  getDoctors({ departmentId }, index);
 };
 async function createVisit() {
   loading.value = true;
@@ -404,21 +450,27 @@ const remoteServiceMethod = debounce((query: string, index: number) => {
   if (query.length > 0) getServices(queryData, index);
 }, 300);
 const remoteDoctorMethod = debounce((query: string, index: number) => {
-  console.log("query", query);
-  console.log("index", index);
-  const queryData = { searchKey: query };
+  const departmentId = form.items[index]?.departmentId;
+  const queryData = { searchKey: query, departmentId };
+  if (!departmentId) {
+    form.items[index].doctors = [];
+    return;
+  }
   if (query.length > 0) getDoctors(queryData, index);
 }, 300);
 const getDoctors = async (
-  queryData?: { searchKey: string },
+  queryData?: { searchKey?: string; departmentId?: string },
   index: number = 0
 ) => {
   try {
     selectLoading.value = true;
+    const departmentId =
+      queryData?.departmentId || form.items[index]?.departmentId || undefined;
     const response = await (<Axios>$axios).post("/api/user/list", {
       ...queryData,
       role: "DOCTOR",
       status: "AVAILABLE",
+      departmentId,
       size: 999,
     });
     const data = response?.data?.payload?.list;
@@ -495,7 +547,6 @@ onMounted(() => {
   if (tabStore.getData(route.fullPath)) {
     Object.assign(form, tabStore.getData(route.fullPath));
   }
-  getDoctors();
   getServices();
   if (!form.startDate) form.startDate = new Date().toDateString();
   tableIndex.value++;
