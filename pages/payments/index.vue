@@ -162,7 +162,13 @@
             <el-table-column prop="status" :label="t('STATUS')">
               <template #default="{ row }">
                 <div v-if="row.status">
-                  <div class="status-btn">
+                  <div
+                    class="status-btn"
+                    :class="{
+                      'status-unpaid': row.status === 'UNPAID',
+                      'status-paid': row.status === 'PAID',
+                    }"
+                  >
                     {{ t(row.status) }}
                   </div>
                 </div>
@@ -436,6 +442,18 @@ onMounted(async () => {
   border: 1px solid #ddd;
   border-radius: 4px;
   width: fit-content;
+}
+
+.status-unpaid {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+.status-paid {
+  background-color: #d1fae5;
+  color: #059669;
+  border-color: #059669;
 }
 
 .refresh-btn {
