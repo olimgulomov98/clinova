@@ -83,13 +83,7 @@
 
             <el-table-column :label="t('DOCTOR')">
               <template #default="scope">
-                <el-form-item
-                  :prop="
-                    scope.$index + 1 !== form.items.length || scope.$index == 0
-                      ? `items.${scope.$index}.doctorId`
-                      : ''
-                  "
-                >
+                <el-form-item :prop="''">
                   <v-select
                     v-model="scope.row.doctorId"
                     :options="scope.row.doctors"
@@ -319,12 +313,14 @@ const submitForm = (formEl: FormInstance | undefined, tur: string) => {
 };
 
 function itemsValidator() {
+  // reset dynamic item rules (doctor optional)
+  Object.keys(rules)
+    .filter((key) => key.startsWith("items."))
+    .forEach((key) => delete rules[key]);
+
   form.items.forEach((_, index) => {
     rules[`items.${index}.serviceId`] = [
       { required: true, message: t("SELECT_SERVICE"), trigger: "change" },
-    ];
-    rules[`items.${index}.doctorId`] = [
-      { required: true, message: t("SELECT_DOCTOR"), trigger: "change" },
     ];
     rules[`items.${index}.quantity`] = [
       {
@@ -381,7 +377,7 @@ async function createVisit() {
         ...rest,
       };
     })
-    .filter((i) => i.serviceId && i.doctorId);
+    .filter((i) => i.serviceId);
   const id = visitId.value;
   const url = `/api/visit/add-service/${id}`;
   const method = "post";

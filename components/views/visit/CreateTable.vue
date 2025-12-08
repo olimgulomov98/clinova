@@ -131,13 +131,7 @@
 
             <el-table-column :label="t('DOCTOR')">
               <template #default="scope">
-                <el-form-item
-                  :prop="
-                    scope.$index + 1 !== form.items.length || scope.$index == 0
-                      ? `items.${scope.$index}.doctorId`
-                      : ''
-                  "
-                >
+                <el-form-item :prop="''">
                   <v-select
                     v-model="scope.row.doctorId"
                     :options="getDoctorsForRow(scope.$index)"
@@ -428,9 +422,6 @@ function itemsValidator() {
     rules[`items.${index}.serviceId`] = [
       { required: true, message: t("SELECT_SERVICE"), trigger: "change" },
     ];
-    rules[`items.${index}.doctorId`] = [
-      { required: true, message: t("SELECT_DOCTOR"), trigger: "change" },
-    ];
     rules[`items.${index}.quantity`] = [
       {
         required: true,
@@ -512,7 +503,7 @@ async function createVisit() {
   (<Axios>$axios)
     [method](url, {
       ...form,
-      items: form.items.filter((i) => i.serviceId && i.doctorId),
+      items: form.items.filter((i) => i.serviceId),
       id,
       startDate,
     })
