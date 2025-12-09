@@ -53,7 +53,7 @@
               font-size: 22px;
             "
           >
-            {{ t("EXPENSE") }}
+            {{ editingExpenseId ? t("UPDATE_EXPENSE") : t("EXPENSE") }}
           </div>
         </template>
         <el-form :model="expenseForm" label-width="120px">
@@ -100,12 +100,12 @@
 
         <template #footer>
           <div class="dialog-footer">
-            <el-button @click="showExpenseDialog = false">{{
-              t("CANCEL")
-            }}</el-button>
-            <el-button type="primary" @click="addExpense">{{
-              t("SAVE")
-            }}</el-button>
+            <el-button @click="handleCloseDialog">{{ t("CANCEL") }}</el-button>
+            <el-button
+              type="primary"
+              @click="editingExpenseId ? updateExpense() : addExpense()"
+              >{{ editingExpenseId ? t("UPDATE") : t("SAVE") }}</el-button
+            >
           </div>
         </template>
       </el-dialog>
@@ -168,6 +168,11 @@
                 {{ t("DESCRIPTION") }}
               </div>
             </th>
+            <th>
+              <div class="flex items-center justify-end">
+                {{ t("ACTION") }}
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -177,6 +182,16 @@
             <td>{{ report.type }}</td>
             <td>{{ formatAmount(report.amount) }}</td>
             <td>{{ report.description }}</td>
+            <td class="flex items-center justify-end">
+              <div
+                class="flex items-center justify-center cursor-pointer"
+                @click="openEditDialog(report)"
+              >
+                <icon-note-pencil
+                  class="w-5 h-5 text-blue-dark hover:text-blue-light"
+                />
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -205,6 +220,7 @@ const loading = ref(false);
 
 // Dialog state
 const showExpenseDialog = ref(false);
+const editingExpenseId = ref<number | null>(null);
 
 // Expense form
 const expenseForm = ref({
@@ -216,7 +232,19 @@ const expenseForm = ref({
 
 const handleCloseDialog = () => {
   showExpenseDialog.value = false;
+  editingExpenseId.value = null;
   resetExpenseForm();
+};
+
+const openEditDialog = (report: any) => {
+  editingExpenseId.value = report.id;
+  expenseForm.value = {
+    date: report.date,
+    type: report.type,
+    amount: report.amount.toString(),
+    description: report.description || "",
+  };
+  showExpenseDialog.value = true;
 };
 
 const resetExpenseForm = () => {
@@ -254,12 +282,52 @@ const addExpense = async () => {
     );
 
     showExpenseDialog.value = false;
+    editingExpenseId.value = null;
     resetExpenseForm();
 
     // Refresh after creation
     fetchExpenseData();
   } catch (error: any) {
     console.error("Failed to create expense:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const updateExpense = async () => {
+  if (
+    !expenseForm.value.type ||
+    !expenseForm.value.amount ||
+    !expenseForm.value.date ||
+    !editingExpenseId.value
+  ) {
+    console.error("Please fill in all required fields");
+    return;
+  }
+
+  try {
+    loading.value = true;
+
+    const requestBody = {
+      date: expenseForm.value.date,
+      description: expenseForm.value.description || "",
+      amount: parseFloat(expenseForm.value.amount) || 0,
+      type: expenseForm.value.type,
+    };
+
+    const response = await ($axios as any).put(
+      `/api/expense/${editingExpenseId.value}`,
+      requestBody
+    );
+
+    showExpenseDialog.value = false;
+    editingExpenseId.value = null;
+    resetExpenseForm();
+
+    // Refresh after update
+    fetchExpenseData();
+  } catch (error: any) {
+    console.error("Failed to update expense:", error);
   } finally {
     loading.value = false;
   }
@@ -424,6 +492,10 @@ onMounted(() => {
         font-size: 14px;
         color: #3a4e63;
         vertical-align: middle;
+
+        &:last-child {
+          text-align: center;
+        }
       }
     }
   }

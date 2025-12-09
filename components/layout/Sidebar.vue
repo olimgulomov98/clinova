@@ -96,30 +96,30 @@
         </template>
 
         <!-- 4. ACCOUNTING -->
-        <!-- <template v-if="groupedMenus.accounting.length"> -->
-        <el-sub-menu index="accounting">
-          <template #title>
-            <span class="flex items-center gap-3">
-              <el-icon>
-                <component :is="`icon-nav-${sectionIcons.accounting}`" />
-              </el-icon>
-              <span class="section-title-text">
-                {{ t(sectionTitles.accounting) }}
+        <template v-if="groupedMenus.accounting.length && canViewAccounting">
+          <el-sub-menu index="accounting">
+            <template #title>
+              <span class="flex items-center gap-3">
+                <el-icon>
+                  <component :is="`icon-nav-${sectionIcons.accounting}`" />
+                </el-icon>
+                <span class="section-title-text">
+                  {{ t(sectionTitles.accounting) }}
+                </span>
               </span>
-            </span>
-          </template>
+            </template>
 
-          <el-menu-item
-            v-for="(nav, index) in groupedMenus.accounting"
-            :key="`accounting-${index}`"
-            :index="nav.to"
-            :class="{ 'is-active': $route.path === nav.to }"
-            @click="router.push(nav.to)"
-          >
-            <span class="submenu-title"> - {{ t(nav.title) }} </span>
-          </el-menu-item>
-        </el-sub-menu>
-        <!-- </template> -->
+            <el-menu-item
+              v-for="(nav, index) in groupedMenus.accounting"
+              :key="`accounting-${index}`"
+              :index="nav.to"
+              :class="{ 'is-active': $route.path === nav.to }"
+              @click="router.push(nav.to)"
+            >
+              <span class="submenu-title"> - {{ t(nav.title) }} </span>
+            </el-menu-item>
+          </el-sub-menu>
+        </template>
 
         <!-- 5. COMPANY -->
         <template v-if="groupedMenus.company.length">
@@ -224,6 +224,11 @@ const logout = () => {
 
 const userInfo = computed(() => {
   return userStore.userInfo;
+});
+
+const canViewAccounting = computed(() => {
+  const userRoles = userStore.userRoles;
+  return userRoles.includes("ADMIN") || userRoles.includes("CASHIER");
 });
 
 const setLanguage = (lang: { value: string; label: string }) => {

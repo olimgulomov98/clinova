@@ -299,6 +299,8 @@
   "EXPENSE_MULTICARD": "Expense (multicard)",
   "EXPENSE_TOTAL": "Expense total",
   "ADD_EXPENSE": "Add Expense",
+  "UPDATE_EXPENSE": "Update Expense",
+  "UPDATE": "Update",
   "TYPE": "Type",
   "SELECT_EXPENSE_TYPE": "Select expense type",
   "ACTUAL_CASH": "Actual Cash",

@@ -300,6 +300,8 @@
   "EXPENSE_MULTICARD": "Расход (мультикарта)",
   "EXPENSE_TOTAL": "Общий расход",
   "ADD_EXPENSE": "Добавить расход",
+  "UPDATE_EXPENSE": "Обновить расход",
+  "UPDATE": "Обновить",
   "TYPE": "Тип",
   "SELECT_EXPENSE_TYPE": "Выберите тип расхода",
   "ACTUAL_CASH": "Фактические наличные",
