@@ -203,6 +203,16 @@
                       {{ t("COMPLETE_VISIT") }}
                     </span>
                   </el-dropdown-item>
+                  <el-dropdown-item
+                    v-if="hasPermission('patient', 'add_new_to_visit')"
+                    @click="deleteVisit(row.id)"
+                  >
+                    <span
+                      class="text-xs flex gap-1 items-center font-medium text-gray-400 pb-0"
+                    >
+                      {{ t("DELETE") }}
+                    </span>
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -476,6 +486,17 @@ const handleDropClick = (url: string, code?: string) => {
 const openFIleUpload = (id: number) => {
   isFileUploadVisible.value = true;
   visitId.value = id;
+};
+const deleteVisit = async (id: number) => {
+  try {
+    isLoading.value = true;
+    await (<Axios>$axios).delete(`/api/visit/${id}`);
+    getData();
+  } catch (error: any) {
+    console.error("Failed to delete visit:", error?.message || error);
+  } finally {
+    isLoading.value = false;
+  }
 };
 const visitCompleteAction = (id: number) => {
   isVisitCompleteVisible.value = true;
