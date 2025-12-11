@@ -204,6 +204,7 @@
   "STATUS_CHANGE": "Изменение статуса",
   "DELETE": "Удалить",
   "DELETE_EXPENSE_CONFIRM": "Вы уверены, что хотите удалить этот расход?",
+  "DELETE_PAYMENT_CONFIRM": "Вы уверены, что хотите удалить этот платеж?",
   "TOTAL_INVOICES": "Всего счетов",
   "TOTAL_PATIENTS": "Всего пациентов",
   "BEDROOM": "Палата",

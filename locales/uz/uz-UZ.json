@@ -204,6 +204,7 @@
   "STATUS_CHANGE": "Holatni o‘zgartirish",
   "DELETE": "O‘chirish",
   "DELETE_EXPENSE_CONFIRM": "Ushbu xarajatni o‘chirishga ishonchingiz komilmi?",
+  "DELETE_PAYMENT_CONFIRM": "Ushbu to‘lovni o‘chirishga ishonchingiz komilmi?",
   "TOTAL_INVOICES": "Umumiy hisob-fakturalar",
   "TOTAL_PATIENTS": "Umumiy bemorlar",
   "BEDROOM": "Yotoqxona",

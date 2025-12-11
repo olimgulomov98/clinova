@@ -204,6 +204,7 @@
   "STATUS_CHANGE": "Status change",
   "DELETE": "Delete",
   "DELETE_EXPENSE_CONFIRM": "Are you sure you want to delete this expense?",
+  "DELETE_PAYMENT_CONFIRM": "Are you sure you want to delete this payment?",
   "TOTAL_INVOICES": "Total Invoices",
   "TOTAL_PATIENTS": "Total Patients",
   "BEDROOM": "Bedroom",

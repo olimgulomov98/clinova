@@ -174,8 +174,38 @@
                 </div>
               </template>
             </el-table-column>
+            <el-table-column :label="t('ACTION')" width="100" align="center">
+              <template #default="{ row }">
+                <div class="flex items-center justify-center gap-2">
+                  <icon-trash
+                    class="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
+                    @click="askDelete(row.id)"
+                  />
+                </div>
+              </template>
+            </el-table-column>
           </template>
         </VTable>
+        <el-dialog
+          v-model="showDeleteConfirm"
+          width="360px"
+          :show-close="false"
+        >
+          <template #title>
+            <div class="text-base font-semibold">{{ t("DELETE") }}</div>
+          </template>
+          <div class="text-sm text-gray-600 mb-4">
+            {{ t("DELETE_PAYMENT_CONFIRM") }}
+          </div>
+          <template #footer>
+            <div class="flex justify-end gap-2">
+              <el-button @click="cancelDelete">{{ t("CANCEL") }}</el-button>
+              <el-button type="primary" @click="confirmDelete">{{
+                t("DELETE")
+              }}</el-button>
+            </div>
+          </template>
+        </el-dialog>
         <VPagination
           v-model="filters"
           total-page-hide
@@ -210,6 +240,8 @@ const statistics = ref({
 });
 const value2 = ref([]);
 const loading = ref(false);
+const showDeleteConfirm = ref(false);
+const deletingId = ref<number | null>(null);
 const statusOptions = [
   {
     id: "NEW",
@@ -336,6 +368,39 @@ const handleDropClick = (url: string, code?: string) => {
     query: { ...route.query },
   });
 };
+
+const deletePayment = async (id: number) => {
+  try {
+    loading.value = true;
+    await ($axios as any).delete(`/api/invoice/payment/${id}`);
+    await getData();
+  } catch (error: any) {
+    console.error("Failed to delete payment:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const askDelete = (id: number) => {
+  deletingId.value = id;
+  showDeleteConfirm.value = true;
+};
+
+const confirmDelete = async () => {
+  if (!deletingId.value) {
+    showDeleteConfirm.value = false;
+    return;
+  }
+  await deletePayment(deletingId.value);
+  deletingId.value = null;
+  showDeleteConfirm.value = false;
+};
+
+const cancelDelete = () => {
+  deletingId.value = null;
+  showDeleteConfirm.value = false;
+};
+
 // hooks
 
 watch(filters.value, async () => {
