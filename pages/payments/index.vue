@@ -88,6 +88,8 @@
               range-separator="To"
               start-placeholder="Start date"
               end-placeholder="End date"
+              format="DD MMM YYYY"
+              value-format="YYYY-MM-DD"
               style="border-radius: 8px; border: 0; height: 30px; width: 220px"
               @update:model-value="onChangeDatePicker"
               class="icon-date-picker"
@@ -238,7 +240,7 @@ const statistics = ref({
   paid: 0,
   partialPaid: 0,
 });
-const value2 = ref([]);
+const value2 = ref<string[]>([]);
 const loading = ref(false);
 const showDeleteConfirm = ref(false);
 const deletingId = ref<number | null>(null);
@@ -265,6 +267,7 @@ const filters = ref<any>({
   orderBy: null,
   startDate: null,
   endDate: null,
+  date: null,
   desc: null,
   status: null,
   page: 1,
@@ -329,9 +332,12 @@ const getStatistics = async () => {
 };
 
 const handleRefresh = () => {
-  value2.value = [];
-  filters.value.startDate = null;
-  filters.value.endDate = null;
+  // Bugungi kunga qaytarish
+  const today = dayjs().format("YYYY-MM-DD");
+  value2.value = [today, today];
+  filters.value.startDate = dayjs(today).startOf("day").toISOString();
+  filters.value.endDate = dayjs(today).endOf("day").toISOString();
+  filters.value.date = null;
   filters.value.page = 1;
   getData();
 };
@@ -345,9 +351,18 @@ const search = (value: string) => {
   filters.value.searchKey = value;
 };
 
-const onChangeDatePicker = (values: string[]) => {
-  filters.value.startDate = values?.[0] || null;
-  filters.value.endDate = values?.[1] || null;
+const onChangeDatePicker = (values: string[] | null) => {
+  if (values && values.length === 2) {
+    // Calendar dan tanlangan kunlar
+    filters.value.startDate = dayjs(values[0]).startOf("day").toISOString();
+    filters.value.endDate = dayjs(values[1]).endOf("day").toISOString();
+    filters.value.date = null;
+  } else {
+    // Calendar bo'sh bo'lsa, null qoldirish (barcha ma'lumotlarni ko'rsatish uchun)
+    filters.value.startDate = null;
+    filters.value.endDate = null;
+    filters.value.date = null;
+  }
 };
 
 const getStatusTheme = (status: string) => {
@@ -408,6 +423,12 @@ watch(filters.value, async () => {
 });
 
 onMounted(async () => {
+  // Default holatda bugungi kundagi ma'lumotlarni ko'rsatish
+  const today = dayjs().format("YYYY-MM-DD");
+  value2.value = [today, today];
+  filters.value.startDate = dayjs(today).startOf("day").toISOString();
+  filters.value.endDate = dayjs(today).endOf("day").toISOString();
+  filters.value.date = null;
   await getData();
 });
 </script>
