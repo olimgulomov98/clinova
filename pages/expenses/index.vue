@@ -183,18 +183,44 @@
             <td>{{ formatAmount(report.amount) }}</td>
             <td>{{ report.description }}</td>
             <td class="flex items-center justify-end">
-              <div
-                class="flex items-center justify-center cursor-pointer"
-                @click="openEditDialog(report)"
-              >
-                <icon-note-pencil
-                  class="w-5 h-5 text-blue-dark hover:text-blue-light"
-                />
+              <div class="flex items-center justify-center gap-3">
+                <div
+                  class="flex items-center justify-center cursor-pointer"
+                  @click="openEditDialog(report)"
+                >
+                  <icon-note-pencil
+                    class="w-5 h-5 text-blue-dark hover:text-blue-light"
+                  />
+                </div>
+                <div
+                  class="flex items-center justify-center cursor-pointer"
+                  @click="askDelete(report.id)"
+                >
+                  <icon-trash
+                    class="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors"
+                  />
+                </div>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
+      <el-dialog v-model="showDeleteConfirm" width="360px" :show-close="false">
+        <template #title>
+          <div class="text-base font-semibold">{{ t("DELETE") }}</div>
+        </template>
+        <div class="text-sm text-gray-600 mb-4">
+          {{ t("DELETE_EXPENSE_CONFIRM") }}
+        </div>
+        <template #footer>
+          <div class="flex justify-end gap-2">
+            <el-button @click="cancelDelete">{{ t("CANCEL") }}</el-button>
+            <el-button type="primary" @click="confirmDelete">{{
+              t("DELETE")
+            }}</el-button>
+          </div>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -217,6 +243,8 @@ const expenseReports = ref<any[]>([]);
 
 // Loading state
 const loading = ref(false);
+const showDeleteConfirm = ref(false);
+const deletingId = ref<number | null>(null);
 
 // Dialog state
 const showExpenseDialog = ref(false);
@@ -331,6 +359,38 @@ const updateExpense = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const deleteExpense = async (id: number) => {
+  try {
+    loading.value = true;
+    await ($axios as any).delete(`/api/expense/${id}`);
+    await fetchExpenseData();
+  } catch (error: any) {
+    console.error("Failed to delete expense:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const askDelete = (id: number) => {
+  deletingId.value = id;
+  showDeleteConfirm.value = true;
+};
+
+const confirmDelete = async () => {
+  if (!deletingId.value) {
+    showDeleteConfirm.value = false;
+    return;
+  }
+  await deleteExpense(deletingId.value);
+  deletingId.value = null;
+  showDeleteConfirm.value = false;
+};
+
+const cancelDelete = () => {
+  deletingId.value = null;
+  showDeleteConfirm.value = false;
 };
 
 // Sorting state

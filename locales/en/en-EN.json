@@ -203,6 +203,7 @@
   "ADD_APPOINTMENT": "Add Appointment",
   "STATUS_CHANGE": "Status change",
   "DELETE": "Delete",
+  "DELETE_EXPENSE_CONFIRM": "Are you sure you want to delete this expense?",
   "TOTAL_INVOICES": "Total Invoices",
   "TOTAL_PATIENTS": "Total Patients",
   "BEDROOM": "Bedroom",
