@@ -83,13 +83,13 @@
                       {{ t("SUMMARY") }}
                     </button>
                   </el-dropdown-item>
-                  <el-dropdown-item @click="askDelete(row.id)">
+                  <!-- <el-dropdown-item @click="askDelete(row.id)">
                     <button
                       class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
                     >
                       {{ t("DELETE") }}
                     </button>
-                  </el-dropdown-item>
+                  </el-dropdown-item> -->
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -208,7 +208,7 @@
       :total-page="tableData?.total"
       @update-query="updateQuery"
     />
-    <el-dialog v-model="showDeleteConfirm" width="360px" :show-close="false">
+    <!-- <el-dialog v-model="showDeleteConfirm" width="360px" :show-close="false">
       <template #title>
         <div class="text-base font-semibold">{{ t("DELETE") }}</div>
       </template>
@@ -223,7 +223,7 @@
           }}</el-button>
         </div>
       </template>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 

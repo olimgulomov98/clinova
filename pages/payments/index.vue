@@ -176,7 +176,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column :label="t('ACTION')" width="100" align="center">
+            <!-- <el-table-column :label="t('ACTION')" width="100" align="center">
               <template #default="{ row }">
                 <div class="flex items-center justify-center gap-2">
                   <icon-trash
@@ -185,10 +185,10 @@
                   />
                 </div>
               </template>
-            </el-table-column>
+            </el-table-column> -->
           </template>
         </VTable>
-        <el-dialog
+        <!-- <el-dialog
           v-model="showDeleteConfirm"
           width="360px"
           :show-close="false"
@@ -207,7 +207,7 @@
               }}</el-button>
             </div>
           </template>
-        </el-dialog>
+        </el-dialog> -->
         <VPagination
           v-model="filters"
           total-page-hide
