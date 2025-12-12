@@ -205,6 +205,7 @@
   "DELETE": "O‘chirish",
   "DELETE_EXPENSE_CONFIRM": "Ushbu xarajatni o‘chirishga ishonchingiz komilmi?",
   "DELETE_PAYMENT_CONFIRM": "Ushbu to‘lovni o‘chirishga ishonchingiz komilmi?",
+  "CURRENCY_SOM": "so'm",
   "TOTAL_INVOICES": "Umumiy hisob-fakturalar",
   "TOTAL_PATIENTS": "Umumiy bemorlar",
   "BEDROOM": "Yotoqxona",

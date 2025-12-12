@@ -67,7 +67,8 @@
               {{ t("AMOUNT_WITHOUT_DISCOUNT") }}
             </div>
             <div class="text-sm font-regular fs-[12px]">
-              {{ getFormatAmount(invoice?.subTotal || 0) }} so'm
+              {{ getFormatAmount(invoice?.subTotal || 0) }}
+              {{ t("CURRENCY_SOM") }}
             </div>
           </div>
           <div class="flex justify-between p-[9px]">
@@ -75,7 +76,8 @@
               {{ t("DISCOUNT") }}
             </div>
             <div class="text-sm font-regular fs-[12px]">
-              {{ getFormatAmount(Number(invoice?.discount) || 0) }} so'm
+              {{ getFormatAmount(Number(invoice?.discount) || 0) }}
+              {{ t("CURRENCY_SOM") }}
             </div>
           </div>
           <div
@@ -83,7 +85,7 @@
           >
             <div class="text-sm font-semibold fs-[12px]">{{ t("TOTAL_") }}</div>
             <div class="text-sm font-semibold fs-[12px]">
-              {{ getFormatAmount(invoice?.total || 0) }} so'm
+              {{ getFormatAmount(invoice?.total || 0) }} {{ t("CURRENCY_SOM") }}
             </div>
           </div>
           <div
@@ -91,15 +93,31 @@
             v-for="payment in payments.filter((item: any) => item.amount)"
           >
             <div>
-              <p class="text-base text-[#4B83C3] font-regular fs-[12px]">
-                {{ $t(payment.type) }}
-              </p>
+              <div class="flex items-center gap-2">
+                <button
+                  v-if="payment.id"
+                  type="button"
+                  class="text-gray-400 hover:text-red-500 transition-colors"
+                  @click="askDelete(payment.id)"
+                >
+                  <icon-trash class="w-4 h-4" />
+                </button>
+                <p class="text-base text-[#4B83C3] font-regular fs-[12px]">
+                  {{ $t(payment.type) }}
+                </p>
+              </div>
+
               <span class="text-xs fs-[12px]">{{
                 dayjs(payment.date).format("MMM, DD YYYY")
               }}</span>
             </div>
-            <div class="text-sm fs-[12px] font-regular flex items-center gap-2">
-              <span>{{ getFormatAmount(payment.amount) }} so'm</span>
+            <div
+              class="text-sm fs-[12px] text-[#4B83C3] font-regular flex items-center gap-2"
+            >
+              <span
+                >{{ getFormatAmount(payment.amount) }}
+                {{ t("CURRENCY_SOM") }}</span
+              >
             </div>
           </div>
           <div class="border-b-[1px] border-dashed border-black pb-[1px]">
@@ -110,21 +128,12 @@
                 {{ t("DUE_AMOUNT_") }}
               </div>
               <div class="text-sm fs-[12px] font-semibold">
-                {{ getFormatAmount(invoice?.dueAmount) }} so'm
+                {{ getFormatAmount(invoice?.dueAmount) }}
+                {{ t("CURRENCY_SOM") }}
               </div>
             </div>
           </div>
-          <div class="flex justify-between items-center mt-5">
-            <div>
-              <el-button
-                v-if="lastPaymentId"
-                class="small_btn"
-                type="danger"
-                @click="askDelete(lastPaymentId)"
-              >
-                {{ t("DELETE") }}
-              </el-button>
-            </div>
+          <div class="flex justify-end items-center mt-5">
             <el-button class="small_btn" @click="downloadPrintInvoice">{{
               t("PRINT_CHECK")
             }}</el-button>
