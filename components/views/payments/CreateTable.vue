@@ -98,8 +98,16 @@
                 dayjs(payment.date).format("MMM, DD YYYY")
               }}</span>
             </div>
-            <div class="text-sm fs-[12px] font-regular">
-              {{ getFormatAmount(payment.amount) }} so'm
+            <div class="text-sm fs-[12px] font-regular flex items-center gap-2">
+              <span>{{ getFormatAmount(payment.amount) }} so'm</span>
+              <button
+                v-if="payment.id"
+                type="button"
+                class="text-xs text-red-500 hover:underline"
+                @click="askDelete(payment.id)"
+              >
+                {{ t("DELETE") }}
+              </button>
             </div>
           </div>
           <div class="border-b-[1px] border-dashed border-black pb-[1px]">
@@ -114,7 +122,17 @@
               </div>
             </div>
           </div>
-          <div class="flex justify-end mt-5">
+          <div class="flex justify-between items-center mt-5">
+            <div>
+              <el-button
+                v-if="lastPaymentId"
+                class="small_btn"
+                type="danger"
+                @click="askDelete(lastPaymentId)"
+              >
+                {{ t("DELETE") }}
+              </el-button>
+            </div>
             <el-button class="small_btn" @click="downloadPrintInvoice">{{
               t("PRINT_CHECK")
             }}</el-button>
@@ -122,6 +140,22 @@
         </div>
       </div>
     </el-form>
+    <el-dialog v-model="showDeleteConfirm" width="360px" :show-close="false">
+      <template #title>
+        <div class="text-base font-semibold">{{ t("DELETE") }}</div>
+      </template>
+      <div class="text-sm text-gray-600 mb-4">
+        {{ t("DELETE_PAYMENT_CONFIRM") }}
+      </div>
+      <template #footer>
+        <div class="flex justify-end gap-2">
+          <el-button @click="cancelDelete">{{ t("CANCEL") }}</el-button>
+          <el-button type="primary" @click="confirmDelete">{{
+            t("DELETE")
+          }}</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -151,6 +185,14 @@ const paymentTypes = useConstants().PAYMENT_TYPES.map((elem) => {
   return {
     code: elem,
   };
+});
+const showDeleteConfirm = ref(false);
+const deletingId = ref<number | null>(null);
+const lastPaymentId = computed(() => {
+  const paymentsWithId = payments.value.filter((p: any) => p.id);
+  return paymentsWithId.length > 0
+    ? paymentsWithId[paymentsWithId.length - 1].id
+    : null;
 });
 
 const totalPrice = computed(() => {
@@ -291,6 +333,38 @@ const downloadPrintInvoice = async () => {
   } catch (error) {
     console.error("Failed to download invoice:", error);
   }
+};
+
+const deletePayment = async (id: number) => {
+  try {
+    loading.value = true;
+    await (<Axios>$axios).delete(`/api/invoice/payment/${id}`);
+    await getInvoiceById();
+  } catch (error) {
+    console.error("Failed to delete payment:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const askDelete = (id: number) => {
+  deletingId.value = id;
+  showDeleteConfirm.value = true;
+};
+
+const confirmDelete = async () => {
+  if (!deletingId.value) {
+    showDeleteConfirm.value = false;
+    return;
+  }
+  await deletePayment(deletingId.value);
+  deletingId.value = null;
+  showDeleteConfirm.value = false;
+};
+
+const cancelDelete = () => {
+  deletingId.value = null;
+  showDeleteConfirm.value = false;
 };
 </script>
 
