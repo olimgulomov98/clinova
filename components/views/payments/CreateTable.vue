@@ -100,14 +100,6 @@
             </div>
             <div class="text-sm fs-[12px] font-regular flex items-center gap-2">
               <span>{{ getFormatAmount(payment.amount) }} so'm</span>
-              <button
-                v-if="payment.id"
-                type="button"
-                class="text-xs text-red-500 hover:underline"
-                @click="askDelete(payment.id)"
-              >
-                {{ t("DELETE") }}
-              </button>
             </div>
           </div>
           <div class="border-b-[1px] border-dashed border-black pb-[1px]">
