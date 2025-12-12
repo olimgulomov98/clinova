@@ -93,20 +93,9 @@
             v-for="payment in payments.filter((item: any) => item.amount)"
           >
             <div>
-              <div class="flex items-center gap-2">
-                <button
-                  v-if="payment.id"
-                  type="button"
-                  class="text-gray-400 hover:text-red-500 transition-colors"
-                  @click="askDelete(payment.id)"
-                >
-                  <icon-trash class="w-4 h-4" />
-                </button>
-                <p class="text-base text-[#4B83C3] font-regular fs-[12px]">
-                  {{ $t(payment.type) }}
-                </p>
-              </div>
-
+              <p class="text-base text-[#4B83C3] font-regular fs-[12px]">
+                {{ $t(payment.type) }}
+              </p>
               <span class="text-xs fs-[12px]">{{
                 dayjs(payment.date).format("MMM, DD YYYY")
               }}</span>
@@ -118,6 +107,14 @@
                 >{{ getFormatAmount(payment.amount) }}
                 {{ t("CURRENCY_SOM") }}</span
               >
+              <button
+                v-if="payment.id"
+                type="button"
+                class="text-gray-400 hover:text-red-500 transition-colors"
+                @click="askDelete(payment.id)"
+              >
+                <icon-trash class="w-4 h-4" />
+              </button>
             </div>
           </div>
           <div class="border-b-[1px] border-dashed border-black pb-[1px]">
