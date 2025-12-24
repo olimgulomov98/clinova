@@ -75,23 +75,27 @@
           </template>
         </el-table-column>
         <el-table-column prop="number" :label="t('ROOM_NUMBER')" />
-        <el-table-column
-          prop="beds"
-          :label="t('BEDS')"
-          :formatter="
-            (row) =>
-              Array.isArray(row.beds)
-                ? row.beds
-                    .map((bed: any) => {
-                      const number = bed?.number || bed?.id || '';
-                      const status = bed?.status || '';
-                      const statusLabel = status ? t(status) : '';
-                      return status ? `${number} (${statusLabel})` : number;
-                    })
-                    .join(', ')
-                : row.beds || ''
-          "
-        />
+        <el-table-column prop="beds" :label="t('BEDS')">
+          <template #default="{ row }">
+            <div
+              v-if="Array.isArray(row.beds) && row.beds.length > 0"
+              class="flex flex-col gap-1"
+            >
+              <div
+                v-for="(bed, index) in row.beds"
+                :key="index"
+                class="text-sm"
+              >
+                {{
+                  bed?.status
+                    ? `${bed?.number || bed?.id || ""} (${t(bed.status)})`
+                    : bed?.number || bed?.id || ""
+                }}
+              </div>
+            </div>
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="price"
           :label="t('PRICE')"
