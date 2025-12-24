@@ -77,10 +77,10 @@ export default [
     to: "/expenses",
     roles: ["ADMIN", "CASHIER"],
   },
-  // {
-  //   title: "INVENTORY",
-  //   icon: "cube",
-  //   to: "/inventory",
-  //   roles: ["CASHIER","ADMIN"]
-  // },
+  {
+    title: "ROOMS",
+    // icon: "cube",
+    to: "/rooms",
+    roles: ["RECEPTION", "DOCTOR", "ADMIN", "CASHIER"],
+  },
 ];

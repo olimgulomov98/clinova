@@ -123,7 +123,7 @@
               :label="t('DATE')"
               :formatter="(row) => getFormatDate(row.creationDate)"
             />
-            <el-table-column :label="t('SERVICE')">
+            <!-- <el-table-column :label="t('SERVICE')">
               <template #default="{ row }">
                 <ul class="flex flex-col flex-wrap gap-2">
                   <li>
@@ -150,7 +150,7 @@
                   </li>
                 </ul>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
               prop="total"
               :label="t('TOTAL')"
