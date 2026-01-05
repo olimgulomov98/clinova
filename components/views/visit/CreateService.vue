@@ -94,7 +94,7 @@
                     remote
                     :suffix-icon="Search"
                     :remote-method="
-                      ($event) => remoteServiceMethod($event, scope.$index)
+                      (query: string) => remoteServiceMethod(query, scope.$index)
                     "
                     :loading="selectLoading"
                     remote-show-suffix
@@ -114,7 +114,7 @@
                     value-key="id"
                     remote
                     :remote-method="
-                      ($event) => remoteDoctorMethod($event, scope.$index)
+                      (query: string) => remoteDoctorMethod(query, scope.$index)
                     "
                     :loading="selectLoading"
                     :suffix-icon="Search"
@@ -137,7 +137,6 @@
                     v-model.number="scope.row.quantity"
                     type="number"
                     @keypress="handleKeyPress"
-                    @blur="() => normalizeQuantity(scope.$index)"
                   />
                 </el-form-item>
               </template>
@@ -211,7 +210,7 @@
     </el-form>
     <div class="flex justify-end">
       <button
-        @click="submitForm(formRef)"
+        @click="submitForm(formRef, '')"
         :class="{ 'pointer-events-none opacity-50': loading }"
       >
         <v-button type="primary" size="xlarge" :loading="loading">{{
@@ -238,14 +237,16 @@ const router = useRouter();
 const visitId = computed(() => route.params?.id);
 const patientId = computed(() => route.params?.patientId);
 const doctors = ref<any>([]);
-const allServices = ref([]);
+const allServices = ref<any[]>([]);
 const services = ref<any>([]);
-const patients = ref([]);
+const patients = ref<any[]>([]);
 const selectLoading = ref(false);
-const departments = ref([]);
+const departments = ref<IDepartmentListItem[]>([]);
 const departmentId = ref(null);
 const paymentType = ref(null);
 const visit = ref<any>(null);
+const rowServices = ref<any[]>([]);
+const rowDoctors = ref<any[]>([]);
 const rules: any = {
   startDate: [{ required: true, message: "", trigger: "change" }],
   // items: [{ validator: validateItems, trigger: "blur" }],
@@ -379,17 +380,22 @@ function handleKeyPress(event: KeyboardEvent) {
   }
 }
 
+const createEmptyItem = () => ({
+  doctors: [],
+  services: [],
+  departmentId: "",
+  subDepartmentId: "",
+  serviceId: "",
+  doctorId: "",
+  quantity: "",
+  discount: "",
+});
+
 const createFormItem = () => {
-  form.items.push({
-    doctors: [],
-    services: [],
-    departmentId: "",
-    subDepartmentId: "",
-    serviceId: "",
-    quantity: "",
-    discount: "",
-    doctorId: "",
-  });
+  form.items.push(createEmptyItem()); // har safar fresh obyekt
+  // Initialize empty arrays for the new row
+  rowServices.value.push([]);
+  rowDoctors.value.push([]);
   itemsValidator();
 };
 
@@ -401,7 +407,9 @@ const deleteItem = (index: number) => {
 const getSubDepartments = (rowIndex: number) => {
   const departmentId = form.items[rowIndex]?.departmentId;
   if (!departmentId) return [];
-  const department = departments.value.find((d: any) => d.id === departmentId);
+  const department = departments.value.find(
+    (d: any) => d.id === departmentId
+  ) as any;
   return department?.subDepartments || [];
 };
 
@@ -490,7 +498,11 @@ const getDoctors = async (
 };
 
 const getServices = async (
-  queryData?: { searchKey: string },
+  queryData?: {
+    searchKey?: string;
+    departmentId?: string;
+    subDepartmentId?: string;
+  },
   index: number = 0
 ) => {
   try {
