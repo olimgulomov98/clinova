@@ -41,13 +41,16 @@
               <template #default="scope">
                 <el-form-item>
                   <v-select
+                    filterable
                     v-model="scope.row.departmentId"
                     :options="departments"
                     label-key="name"
                     value-key="id"
                     :placeholder="t('DEPARTMENT')"
                     class="form_select"
-                    @change="changeDepartment"
+                    @change="(value) => changeDepartment(value, scope.$index)"
+                    :remote-method="remoteDepartmentMethod"
+                    :loading="selectLoading"
                     :suffix-icon="Search"
                     remote-show-suffix
                   />
@@ -87,16 +90,16 @@
                 >
                   <v-select
                     v-model="scope.row.serviceId"
-                    :options="scope.row.services"
+                    :options="getServicesForRow(scope.$index)"
                     filterable
                     label-key="name"
                     value-key="id"
                     remote
-                    :suffix-icon="Search"
                     :remote-method="
                       (query: string) => remoteServiceMethod(query, scope.$index)
                     "
                     :loading="selectLoading"
+                    :suffix-icon="Search"
                     remote-show-suffix
                   />
                 </el-form-item>
@@ -108,7 +111,7 @@
                 <el-form-item :prop="''">
                   <v-select
                     v-model="scope.row.doctorId"
-                    :options="scope.row.doctors"
+                    :options="getDoctorsForRow(scope.$index)"
                     filterable
                     label-key="name"
                     value-key="id"
@@ -303,19 +306,17 @@ const form = reactive({
 
 itemsValidator();
 
-const changeDepartment = (searchText: string) => {
-  const queryData = { departmentId: searchText };
-  getServices(queryData);
+const changeDepartment = (departmentId: any, rowIndex: number) => {
+  const dep = departments.value.find((d: any) => d.id === departmentId);
 
-  form.items.forEach((item) => {
-    item.serviceId = "";
-    item.doctorId = "";
-    item.subDepartmentId = "";
-    item.doctors = [];
-  });
+  // Update the specific row's data
+  form.items[rowIndex].subDepartmentId = "";
+  form.items[rowIndex].serviceId = "";
+  form.items[rowIndex].doctorId = "";
 
-  // Fetch doctors filtered by department for each row
-  form.items.forEach((_, idx) => getDoctors({ departmentId: searchText }, idx));
+  // Get services and doctors for this specific row
+  getServicesForRowIndex(rowIndex, departmentId);
+  getDoctorsForRowIndex(rowIndex, departmentId);
 
   itemsValidator();
 };
@@ -323,7 +324,7 @@ const changeDepartment = (searchText: string) => {
 const getDepartments = (queryData?: { searchKey: string }) => {
   selectLoading.value = true;
   (<AxiosInstance>$axios)
-    .post("/api/department/list", { ...queryData, showAll: true, size: 500 })
+    .post("/api/department/list", { ...queryData, showAll: false, size: 500 })
     .then((res: IBaseResponseModel<IDepartmentListItem[]>) => {
       departments.value = res?.data?.payload?.list || [];
     })
@@ -413,14 +414,52 @@ const getSubDepartments = (rowIndex: number) => {
   return department?.subDepartments || [];
 };
 
+const getServicesForRow = (rowIndex: number) => {
+  return rowServices.value[rowIndex] || [];
+};
+
+const getDoctorsForRow = (rowIndex: number) => {
+  return rowDoctors.value[rowIndex] || [];
+};
+
+// Per-row doctor fetching
+const getDoctorsForRowIndex = async (rowIndex: number, departmentId: any) => {
+  try {
+    selectLoading.value = true;
+
+    const response = await (<Axios>$axios).post("/api/user/list", {
+      role: "DOCTOR",
+      status: "AVAILABLE",
+      departmentId: departmentId || undefined,
+      size: 999,
+    });
+    const data = response?.data?.payload?.list;
+
+    // Update the specific row's doctors
+    rowDoctors.value[rowIndex] =
+      data?.map((elem: any) => {
+        return {
+          name: `${elem.firstName ?? ""} ${elem.lastName ?? ""} ${
+            elem.middleName ?? ""
+          }`.trim(),
+          ...elem,
+        };
+      }) || [];
+  } catch (error: any) {
+    console.error("Failed to fetch data:", error?.message || error);
+    rowDoctors.value[rowIndex] = [];
+  } finally {
+    selectLoading.value = false;
+  }
+};
+
 const changeSubDepartment = (subDepartmentId: string, index: number) => {
   form.items[index].serviceId = "";
   form.items[index].doctorId = "";
-  form.items[index].doctors = [];
 
   const departmentId = form.items[index]?.departmentId;
-  getServices({ departmentId, subDepartmentId }, index);
-  getDoctors({ departmentId }, index);
+  getServicesForRowIndex(index, departmentId, subDepartmentId);
+  getDoctorsForRowIndex(index, departmentId);
 };
 async function createVisit() {
   loading.value = true;
@@ -453,18 +492,20 @@ const remoteDepartmentMethod = debounce((query: string) => {
   const queryData = { searchKey: query };
   if (query.length > 0) getDepartments(queryData);
 }, 300);
-const remoteServiceMethod = debounce((query: string, index: number) => {
+const remoteServiceMethod = debounce((query: string, rowIndex: number) => {
   const queryData = { searchKey: query };
-  if (query.length > 0) getServices(queryData, index);
-}, 300);
-const remoteDoctorMethod = debounce((query: string, index: number) => {
-  const departmentId = form.items[index]?.departmentId;
-  const queryData = { searchKey: query, departmentId };
-  if (!departmentId) {
-    form.items[index].doctors = [];
-    return;
+  if (query.length > 0) {
+    const departmentId = form.items[rowIndex]?.departmentId;
+    const subDepartmentId = form.items[rowIndex]?.subDepartmentId;
+    getServicesForRowIndex(rowIndex, departmentId, subDepartmentId);
   }
-  if (query.length > 0) getDoctors(queryData, index);
+}, 300);
+const remoteDoctorMethod = debounce((query: string, rowIndex: number) => {
+  const queryData = { searchKey: query };
+  if (query.length > 0) {
+    const departmentId = form.items[rowIndex]?.departmentId;
+    getDoctorsForRowIndex(rowIndex, departmentId);
+  }
 }, 300);
 const getDoctors = async (
   queryData?: { searchKey?: string; departmentId?: string },
@@ -492,6 +533,38 @@ const getDoctors = async (
     });
   } catch (error: any) {
     console.error("Failed to fetch data:", error?.message || error);
+  } finally {
+    selectLoading.value = false;
+  }
+};
+
+// Per-row service fetching
+const getServicesForRowIndex = async (
+  rowIndex: number,
+  departmentId: any,
+  subDepartmentId?: any
+) => {
+  try {
+    selectLoading.value = true;
+
+    const targetDepartmentId = subDepartmentId || departmentId;
+
+    const response = await (<Axios>$axios).post("/api/service/list", {
+      departmentId: targetDepartmentId || undefined,
+    });
+    const data = response?.data?.payload?.list;
+
+    // Update the specific row's services
+    rowServices.value[rowIndex] = data || [];
+
+    // Add to all services for price calculation
+    data?.forEach((elem: any) => {
+      if (!allServices.value.find((service: any) => service.id === elem.id))
+        allServices.value.push(elem);
+    });
+  } catch (error: any) {
+    console.error("Failed to fetch data:", error?.message || error);
+    rowServices.value[rowIndex] = [];
   } finally {
     selectLoading.value = false;
   }
