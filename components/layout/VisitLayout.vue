@@ -25,6 +25,10 @@ const options = [
     value: "history",
   },
   {
+    label: t("STAY"),
+    value: "stay",
+  },
+  {
     label: t("DOCUMENTS"),
     value: "documents",
   },

@@ -12,6 +12,7 @@ import {
   ViewsVisitDocuments,
   ViewsVisitList,
   ViewsVisitPayments,
+  ViewsVisitStay,
 } from "#components";
 
 const route = useRoute();
@@ -25,6 +26,11 @@ const options = [
     label: t("VISIT_HISTORY"),
     value: "history",
     component: ViewsVisitList,
+  },
+  {
+    label: t("STAY"),
+    value: "stay",
+    component: ViewsVisitStay,
   },
   {
     label: t("DOCUMENTS"),

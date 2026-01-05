@@ -11,10 +11,26 @@
       <span>{{ label }}:</span>
       <span style="font-weight: bold">{{ value }}</span>
     </template>
-    <el-option-group v-if="group" v-for="(group, index) in options" :key="group.label" :label="group.label">
-      <el-option v-for="item in group.options" :key="item.value" :label="item.label" :value="item.value">
+    <el-option-group
+      v-if="group"
+      v-for="(group, index) in options"
+      :key="group.label"
+      :label="group.label"
+    >
+      <el-option
+        v-for="item in group.options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      >
         <span style="float: left">{{ item.label }}</span>
-        <span style="float: right; color: var(--el-text-color-secondary); font-size: 13px">
+        <span
+          style="
+            float: right;
+            color: var(--el-text-color-secondary);
+            font-size: 13px;
+          "
+        >
           {{ item.value }}
         </span>
       </el-option>

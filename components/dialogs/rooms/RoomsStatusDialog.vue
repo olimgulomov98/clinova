@@ -188,7 +188,7 @@ watch(
   (newVal) => {
     if (newVal) {
       if (props.bedId) {
-        getBedById();
+      getBedById();
       } else if (props.room?.beds && props.room.beds.length > 0) {
         // Auto-select first bed if no bedId provided
         const firstBed = props.room.beds[0];
