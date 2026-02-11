@@ -362,5 +362,6 @@
   "ADD_DAYS": "Добавить дни",
   "COMPLETE_STAY": "Завершить проживание",
   "STAY_ID": "ID проживания",
-  "ADDITIONAL_DAYS": "Дополнительные дни"
+  "ADDITIONAL_DAYS": "Дополнительные дни",
+  "REVENUE_BY_ROOMS": "Доход по комнатам"
 }

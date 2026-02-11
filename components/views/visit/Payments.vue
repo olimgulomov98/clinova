@@ -115,7 +115,7 @@
           <template #default="{ row }">
             <div
               :class="{
-                'link-div': hasPermission('patient', 'payments_action'),
+                'link-div': hasPermission('patient', 'payments_action') && (row.visit || row.stay),
                 'text-gray-400 cursor-not-allowed': !hasPermission(
                   'patient',
                   'payments_action'
@@ -123,13 +123,16 @@
               }"
               @click="
                 hasPermission('patient', 'payments_action') &&
+                  (row.visit || row.stay) &&
                   handleDropClick(
-                    `/patients/${route.params.patientId}/visit/${row.visit.id}/summary?tab=history`,
-                    row.visit.code
+                    row.visit
+                      ? `/patients/${route.params.patientId}/visit/${row.visit.id}/summary?tab=history`
+                      : `/patients/${route.params.patientId}/visit/${row.stay.id}/stay-summary?tab=stay`,
+                    row.visit?.code || row.stay?.code
                   )
               "
             >
-              {{ row.visit.code }}
+              {{ row.visit?.code || row.stay?.code || '----' }}
             </div>
           </template>
         </el-table-column>

@@ -362,5 +362,6 @@
   "ADD_DAYS": "Kun qo'shish",
   "COMPLETE_STAY": "Yashashni yakunlash",
   "STAY_ID": "Yashash ID",
-  "ADDITIONAL_DAYS": "Qo'shimcha kunlar"
+  "ADDITIONAL_DAYS": "Qo'shimcha kunlar",
+  "REVENUE_BY_ROOMS": "Xonalar bo‘yicha daromad"
 }

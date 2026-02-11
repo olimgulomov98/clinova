@@ -71,6 +71,43 @@
         </div>
       </div>
 
+      <!-- Revenue by rooms -->
+      <div class="report-section">
+        <div class="section-header" @click="toggleSection('revenue')">
+          <div class="flex items-center gap-[10px]">
+            <el-icon v-if="!expandedSections.revenue" class="arrow-icon">
+              <ArrowDown />
+            </el-icon>
+            <el-icon v-else class="arrow-icon">
+              <ArrowUp />
+            </el-icon>
+            <span class="section-title">{{ t("REVENUE_BY_ROOMS") }}</span>
+          </div>
+
+          <span class="section-amount">{{
+            formatAmount(servicesTotalAmount)
+          }}</span>
+        </div>
+        <div v-if="expandedSections.revenue" class="section-content">
+          <div class="employee-table">
+            <div class="table-header">
+              <span class="table-header-cell">{{ t("SERVICES") }}</span>
+              <span class="table-header-cell">{{ t("AMOUNTS") }}</span>
+            </div>
+            <div
+              v-for="(revenue, index) in revenueData"
+              :key="index"
+              class="table-row"
+            >
+              <span class="table-cell">{{ revenue.name }}</span>
+              <span class="table-cell salary-col">{{
+                formatAmount(revenue.amount)
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Doctor salaries -->
       <div class="report-section">
         <div class="section-header" @click="toggleSection('salaries')">

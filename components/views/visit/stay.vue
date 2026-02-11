@@ -258,8 +258,9 @@ const filters = ref({
   size: 10,
   patientId: route.params?.patientId,
   status: null,
-  startDate: null,
-  endDate: null,
+  // initialize with same range as date picker, then normalized in payload
+  startDate: value2.value[0],
+  endDate: value2.value[1],
   roomId: null,
   bedId: null,
   date: null,
@@ -287,6 +288,8 @@ const getData = async () => {
       desc: restFilters.desc !== undefined ? restFilters.desc : true,
       page: page - 1 || 0,
       size: filters.value.size || 10,
+      // Ensure we only fetch stays related to current patient
+      patientId: patientId || undefined,
     };
 
     // Only include roomId and bedId if they are selected
@@ -385,14 +388,16 @@ const StayCompleteAction = (id: number) => {
   isStayCompleteVisible.value = true;
   visitId.value = id;
 };
-const onChangeDatePicker = (values: string[] | null) => {
+const onChangeDatePicker = (values: (string | Date)[] | null) => {
   if (!values) {
     filters.value.startDate = null as any;
     filters.value.endDate = null as any;
     return;
   }
-  filters.value.startDate = values[0] as any;
-  filters.value.endDate = values[1] as any;
+  const [start, end] = values;
+  // normalize to full ISO string with time and Z, e.g. 2026-02-10T09:29:09.559Z
+  filters.value.startDate = new Date(start as any).toISOString() as any;
+  filters.value.endDate = new Date(end as any).toISOString() as any;
 };
 // hooks
 const addStay = () => {
