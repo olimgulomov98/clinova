@@ -60,6 +60,12 @@ export default [
     roles: ["ADMIN", "CASHIER"],
   },
   {
+    title: "DAILY_REPORTS",
+    // icon: "credit-card",
+    to: "/daily-reports",
+    roles: ["ADMIN", "CASHIER"],
+  },
+  {
     title: "DOCTOR_SALARY",
     // icon: "credit-card",
     to: "/doctor-salary",

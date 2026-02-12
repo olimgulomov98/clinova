@@ -72,7 +72,11 @@
               :placeholder="t('SELECT_BED')"
             />
           </el-form-item>
-          <el-form-item class="!mb-0" :label="t('DISCOUNT')" prop="discount">
+          <el-form-item
+            class="!mb-0"
+            :label="t('DISCOUNT') + ' (%)'"
+            prop="discount"
+          >
             <v-input v-model.number="form.discount" type="number" />
           </el-form-item>
         </div>
@@ -112,7 +116,8 @@
                 {{ t("DISCOUNT") }}
               </div>
               <div class="text-sm font-regular text-nowrap">
-                {{ getFormatAmount(discountPrice) }} {{ t("CURRENCY_SOM") }}
+                {{ discountPrice > 0 ? "-" : ""
+                }}{{ getFormatAmount(discountPrice) }} {{ t("CURRENCY_SOM") }}
               </div>
             </div>
             <div class="flex justify-between p-[9px] gap-4">
@@ -179,14 +184,16 @@ const totalPriceWithoutDiscount = computed(() => {
   return price * dayCount;
 });
 
-const totalPrice = computed(() => {
-  const discount = Number(form.discount) || 0;
-  return Math.max(0, totalPriceWithoutDiscount.value - discount);
+const discountPercent = computed(() => Number(form.discount) || 0);
+
+const discountPrice = computed(() => {
+  const total = totalPriceWithoutDiscount.value;
+  return (total * discountPercent.value) / 100;
 });
 
-const discountPrice = computed(
-  () => totalPriceWithoutDiscount.value - totalPrice.value
-);
+const totalPrice = computed(() => {
+  return Math.max(0, totalPriceWithoutDiscount.value - discountPrice.value);
+});
 
 const form = reactive({
   startDate: "",

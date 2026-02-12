@@ -115,7 +115,9 @@
           <template #default="{ row }">
             <div
               :class="{
-                'link-div': hasPermission('patient', 'payments_action') && (row.visit || row.stay),
+                'link-div':
+                  hasPermission('patient', 'payments_action') &&
+                  (row.visit || row.stay),
                 'text-gray-400 cursor-not-allowed': !hasPermission(
                   'patient',
                   'payments_action'
@@ -132,14 +134,20 @@
                   )
               "
             >
-              {{ row.visit?.code || row.stay?.code || '----' }}
+              {{ row.visit?.code || row.stay?.code || "----" }}
             </div>
           </template>
         </el-table-column>
         <el-table-column
           prop="visit.patient.name"
           :label="t('PATIENT')"
-          :formatter="(row) => row.visit?.patient?.name"
+          :formatter="
+            (row) =>
+              row.visit?.patient?.name ||
+              row.stay?.patient?.name ||
+              row.patient?.name ||
+              '----'
+          "
         />
         <el-table-column
           prop="creationDate"

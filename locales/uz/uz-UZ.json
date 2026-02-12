@@ -17,6 +17,8 @@
   "DEPARTMENT": "Bo‘lim",
   "SERVICES": "Xizmatlar",
   "SERVICE": "Xizmat",
+  "ROOM": "Xona",
+  "BED": "Karavot",
   "DOCTOR_SCHEDULE": "Shifokorlar jadvali",
   "PAYMENTS": "To‘lovlar",
   "INVENTORY": "Inventar",
@@ -362,6 +364,8 @@
   "ADD_DAYS": "Kun qo'shish",
   "COMPLETE_STAY": "Yashashni yakunlash",
   "STAY_ID": "Yashash ID",
+  "STAY_NUMBER": "Yashash raqami",
   "ADDITIONAL_DAYS": "Qo'shimcha kunlar",
-  "REVENUE_BY_ROOMS": "Xonalar bo‘yicha daromad"
+  "REVENUE_BY_ROOMS": "Xonalar bo‘yicha daromad",
+  "DAILY_REPORTS": "Kunlik hisobotlar"
 }

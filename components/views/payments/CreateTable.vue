@@ -12,7 +12,11 @@
         <div class="grid grid-cols-3 gap-6">
           <el-form-item class="!mb-0" :label="t('PATIENT')" prop="name">
             <v-input
-              :model-value="invoice?.visit?.patient?.name"
+              :model-value="
+                invoice?.visit?.patient?.name ||
+                invoice?.stay?.patient?.name ||
+                ''
+              "
               :readonly="true"
             />
           </el-form-item>
@@ -23,13 +27,27 @@
           >
             <v-input
               :model-value="
-                dayjs(visit?.startDate + '+05:00').format('DD.MM.YYYY')
-              "
+              (() => {
+                const raw =
+                  (visit?.startDate as string | undefined) ||
+                  (invoice?.stay?.startDate as string | undefined);
+                if (!raw) return '';
+                // Agar datetime bo'lsa (+05:00 qo'shamiz), agar faqat sana bo'lsa bevosita parse qilamiz
+                const value = raw.includes('T') ? raw + '+05:00' : raw;
+                return dayjs(value).format('DD.MM.YYYY');
+              })()
+            "
               :readonly="true"
             />
           </el-form-item>
-          <el-form-item :label="t('VISIT_NUMBER')" prop="patientName">
-            <v-input :model-value="invoice?.visit?.code" :readonly="true" />
+          <el-form-item
+            :label="invoice?.visit ? t('VISIT_NUMBER') : t('STAY_NUMBER')"
+            prop="patientName"
+          >
+            <v-input
+              :model-value="invoice?.visit?.code || invoice?.stay?.code || ''"
+              :readonly="true"
+            />
           </el-form-item>
         </div>
       </div>
@@ -268,14 +286,19 @@ async function paymentCreate() {
 
 const getInvoiceById = async () => {
   (<Axios>$axios).get(`/api/invoice/summary/${paymentId.value}`).then((res) => {
-    visit.startDate = res.data.payload.visit.startDate;
-    invoice.value = res.data.payload;
-    payments.value = [...res.data.payload.payments];
+    const payload = res.data.payload || {};
+    // visit null bo'lsa, stay ma'lumotlari bilan ishlaymiz
+    const visitOrStay = payload.visit || payload.stay || {};
+
+    visit.startDate = visitOrStay.startDate;
+    invoice.value = payload;
+    payments.value = [...(payload.payments || [])];
     form.amount = invoice.value?.dueAmount;
     if (invoice.value.total !== invoice.value.subTotal) {
       payments.value.push({ amount: 0, type: "" });
     }
-    visit.items = res.data.payload.visit.items.map((elem: any) => {
+
+    visit.items = (visitOrStay.items || []).map((elem: any) => {
       const findDoc = doctors.value.find(
         (doc: any) => doc.id === elem.doctor.id
       );
@@ -296,8 +319,10 @@ const getInvoiceById = async () => {
         department: elem.service?.department?.name,
       };
     });
-    patients.value = [res.data.payload.visit.patient];
-    patientId.value = res.data.payload.visit.patient?.id;
+    if (visitOrStay.patient) {
+      patients.value = [visitOrStay.patient];
+      patientId.value = visitOrStay.patient?.id;
+    }
   });
 };
 

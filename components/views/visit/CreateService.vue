@@ -186,7 +186,8 @@
                 {{ t("SUBTOTAL") }}
               </div>
               <div class="text-sm font-regular text-nowrap">
-                {{ getFormatAmount(totalPriceWithoutDiscount) }} so'm
+                {{ getFormatAmount(totalPriceWithoutDiscount) }}
+                {{ t("CURRENCY_SOM") }}
               </div>
             </div>
             <div
@@ -196,7 +197,7 @@
                 {{ t("DISCOUNT") }}
               </div>
               <div class="text-sm font-regular text-nowrap">
-                {{ getFormatAmount(discountPrice) }} so'm
+                {{ getFormatAmount(discountPrice) }} {{ t("CURRENCY_SOM") }}
               </div>
             </div>
             <div class="flex justify-between p-[9px] gap-4">
@@ -204,7 +205,7 @@
                 {{ t("TOTALS") }}
               </div>
               <div class="text-sm font-semibold text-nowrap">
-                {{ getFormatAmount(totalPrice) }} so'm
+                {{ getFormatAmount(totalPrice) }} {{ t("CURRENCY_SOM") }}
               </div>
             </div>
           </div>
