@@ -111,7 +111,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="code" :label="t('VISIT_NUMBER')">
+        <el-table-column prop="code" :label="t('VISIT_STAY')">
           <template #default="{ row }">
             <div
               :class="{

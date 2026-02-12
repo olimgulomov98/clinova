@@ -70,9 +70,9 @@
 
       <!-- Revenue by rooms -->
       <div class="report-section">
-        <div class="section-header" @click="toggleSection('revenue')">
+        <div class="section-header" @click="toggleSection('revenueRooms')">
           <div class="flex items-center gap-[10px]">
-            <el-icon v-if="!expandedSections.revenue" class="arrow-icon">
+            <el-icon v-if="!expandedSections.revenueRooms" class="arrow-icon">
               <ArrowDown />
             </el-icon>
             <el-icon v-else class="arrow-icon">
@@ -82,23 +82,23 @@
           </div>
 
           <span class="section-amount">{{
-            formatAmount(servicesTotalAmount)
+            formatAmount(roomsTotalAmount)
           }}</span>
         </div>
-        <div v-if="expandedSections.revenue" class="section-content">
+        <div v-if="expandedSections.revenueRooms" class="section-content">
           <div class="employee-table">
             <div class="table-header">
-              <span class="table-header-cell">{{ t("SERVICES") }}</span>
+              <span class="table-header-cell">{{ t("ROOM_NUMBER") }}</span>
               <span class="table-header-cell">{{ t("AMOUNTS") }}</span>
             </div>
             <div
-              v-for="(revenue, index) in revenueData"
-              :key="index"
+              v-for="(room, index) in rooms"
+              :key="room.id ?? index"
               class="table-row"
             >
-              <span class="table-cell">{{ revenue.name }}</span>
+              <span class="table-cell">{{ room.name }}</span>
               <span class="table-cell salary-col">{{
-                formatAmount(revenue.amount)
+                formatAmount(room.amount)
               }}</span>
             </div>
           </div>
@@ -265,6 +265,7 @@ const dateRange = ref<[Date, Date] | null>([
 // API response data
 const employees = ref<any[]>([]);
 const services = ref<any[]>([]);
+const rooms = ref<any[]>([]);
 const expenses = ref<any[]>([]);
 const cashTotal = ref(0);
 const terminalTotal = ref(0);
@@ -308,6 +309,10 @@ const servicesTotalAmount = computed(() => {
   );
 });
 
+const roomsTotalAmount = computed(() => {
+  return rooms.value.reduce((total, room) => total + (room.amount || 0), 0);
+});
+
 const expencesData = computed(() => {
   return expenses.value.map((expense) => ({
     name: expense.name,
@@ -346,6 +351,7 @@ const totalPaymentAmount = computed(() => {
 // Expandable sections
 const expandedSections = ref({
   revenue: false,
+  revenueRooms: false,
   salaries: false,
   expenses: false,
   grossProfit: false,
@@ -392,6 +398,7 @@ const fetchFinancialData = async (start?: Date, end?: Date) => {
       // Update detailed data
       employees.value = data.employees || [];
       services.value = data.services || [];
+      rooms.value = data.rooms || [];
       expenses.value = data.expenses || [];
 
       // Update payment totals

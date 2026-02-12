@@ -237,10 +237,7 @@ const loading = ref(false);
 const router = useRouter();
 const { hasPermission } = usePermission();
 const visitId = ref<number | null>(null);
-const value2 = ref([
-  dayjs().startOf("month").format("YYYY-MM-DDTHH:mm:ss[Z]"),
-  dayjs().endOf("day").format("YYYY-MM-DDTHH:mm:ss[Z]"),
-]);
+const value2 = ref<[Date, Date] | undefined>(undefined);
 const statusOptions = ref([
   {
     name: t("NEW"),
@@ -258,9 +255,8 @@ const filters = ref({
   size: 10,
   patientId: route.params?.patientId,
   status: null,
-  // initialize with same range as date picker, then normalized in payload
-  startDate: value2.value[0],
-  endDate: value2.value[1],
+  startDate: null as string | null,
+  endDate: null as string | null,
   roomId: null,
   bedId: null,
   date: null,
@@ -390,14 +386,19 @@ const StayCompleteAction = (id: number) => {
 };
 const onChangeDatePicker = (values: (string | Date)[] | null) => {
   if (!values) {
-    filters.value.startDate = null as any;
-    filters.value.endDate = null as any;
+    filters.value.startDate = null;
+    filters.value.endDate = null;
+    value2.value = undefined;
+    getData();
     return;
   }
   const [start, end] = values;
-  // normalize to full ISO string with time and Z, e.g. 2026-02-10T09:29:09.559Z
-  filters.value.startDate = new Date(start as any).toISOString() as any;
-  filters.value.endDate = new Date(end as any).toISOString() as any;
+  const startDate = new Date(start as any);
+  const endDate = new Date(end as any);
+  filters.value.startDate = startDate.toISOString();
+  filters.value.endDate = endDate.toISOString();
+  value2.value = [startDate, endDate] as [Date, Date];
+  getData();
 };
 // hooks
 const addStay = () => {
