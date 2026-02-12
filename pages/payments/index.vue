@@ -116,7 +116,7 @@
             <el-table-column
               prop="visit.patient.name"
               :label="t('PATIENT')"
-              :formatter="(row) => row.visit?.patient?.name"
+              :formatter="(row) => row.visit?.patient?.name || row.stay?.patient?.name || row.patient?.name"
             />
             <el-table-column
               prop="creationDate"
@@ -253,11 +253,22 @@ const getData = async () => {
   isLoading.value = true;
   try {
     const { page, page_size, ...restFilters } = filters.value;
-    const payload = {
+    const payload: any = {
       ...restFilters,
       page: page - 1,
       size: page_size || filters.value.size,
     };
+
+    // startDate/endDate va boshqa bo'sh filterlarni yubormaslik uchun
+    Object.keys(payload).forEach((key) => {
+      if (
+        payload[key] === null ||
+        payload[key] === undefined ||
+        payload[key] === ""
+      ) {
+        delete payload[key];
+      }
+    });
 
     const response = await (<Axios>$axios).post("/api/invoice/list", payload);
     const data = response?.data?.payload;
@@ -278,11 +289,21 @@ const getStatistics = async () => {
   isLoading.value = true;
   try {
     const { page, page_size, ...restFilters } = filters.value;
-    const payload = {
+    const payload: any = {
       ...restFilters,
       page: 1,
       size: 100000000,
     };
+
+    Object.keys(payload).forEach((key) => {
+      if (
+        payload[key] === null ||
+        payload[key] === undefined ||
+        payload[key] === ""
+      ) {
+        delete payload[key];
+      }
+    });
 
     const response = await (<Axios>$axios).post(
       "/api/invoice/statistics",
@@ -362,12 +383,6 @@ watch(filters.value, async () => {
 });
 
 onMounted(async () => {
-  // Default holatda bugungi kundagi ma'lumotlarni ko'rsatish
-  const today = dayjs().format("YYYY-MM-DD");
-  value2.value = [today, today];
-  filters.value.startDate = dayjs(today).startOf("day").toISOString();
-  filters.value.endDate = dayjs(today).endOf("day").toISOString();
-  filters.value.date = null;
   await getData();
 });
 </script>
