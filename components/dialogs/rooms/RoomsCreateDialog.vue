@@ -67,6 +67,7 @@
             filterable
             allow-create
             default-first-option
+            :reserve-keyword="false"
             class="form_select w-full"
             :placeholder="t('ENTER_BEDS')"
           >
