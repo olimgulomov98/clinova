@@ -61,6 +61,14 @@
                       {{ t("CHANGE_BEDS") }}
                     </button>
                   </el-dropdown-item>
+                  <el-dropdown-item>
+                    <button
+                      @click="editHandle(row)"
+                      class="text-base flex gap-2 items-center font-medium text-gray-400 pb-0 justify-between w-full"
+                    >
+                      {{ t("UPDATE_ROOM") }}
+                    </button>
+                  </el-dropdown-item>
                   <!-- <el-dropdown-item>
                     <button
                       @click="deleteAction(row.id)"
@@ -121,7 +129,7 @@
       v-model="isServiceCreateVisible"
       @close="isServiceCreateVisible = false"
       @getData="getData"
-      :service-id="service?.id"
+      :room="service"
     />
     <RoomsShowDialog
       v-if="isServiceShowVisible"
@@ -249,19 +257,19 @@ watch(
   () => isServiceCreateVisible.value,
   (val) => {
     if (!val) service.value = undefined;
-  }
+  },
 );
 watch(
   () => isServiceShowVisible.value,
   (val) => {
     if (!val) service.value = undefined;
-  }
+  },
 );
 watch(
   () => isBedStatusVisible.value,
   (val) => {
     if (!val) service.value = undefined;
-  }
+  },
 );
 onMounted(() => {
   getData();

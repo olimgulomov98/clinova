@@ -11,7 +11,7 @@
       <div
         class="p-4 sm:p-6 flex justify-between border-b border-solid border-gray-line"
       >
-        <v-form-title>{{ t("ADD_NEW_ROOM") }}</v-form-title>
+        <v-form-title>{{ isEditMode ? t("UPDATE_ROOM") : t("ADD_NEW_ROOM") }}</v-form-title>
         <button @click="emit('close')"><icon-x /></button>
       </div>
     </template>
@@ -109,7 +109,7 @@ import type { FormInstance } from "element-plus";
 import { debounce } from "lodash";
 import type { IDepartmentListItem } from "~/types/department/index.type";
 const { t } = useI18n();
-const props = defineProps<{ modelValue: boolean }>();
+const props = defineProps<{ modelValue: boolean; room?: any }>();
 const emit = defineEmits(["update:modelValue", "getData", "close"]);
 const { $axios } = useNuxtApp();
 const rules = {
@@ -132,11 +132,13 @@ const form = reactive<{
   beds: [],
 });
 const formRef = ref<FormInstance>();
+const isEditMode = computed(() => !!props.room?.id);
+const originalBeds = ref<{ id: number; number: string }[]>([]);
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate(async (valid) => {
     if (!valid) return;
-    createRoom();
+    isEditMode.value ? updateRoom() : createRoom();
   });
 };
 const remoteMethod = debounce((query: string) => {
@@ -180,12 +182,78 @@ async function createRoom() {
       loading.value = false;
     });
 }
+
+async function updateRoom() {
+  const roomId = props.room?.id;
+  if (!roomId) return;
+
+  const currentNumbers = new Set(form.beds.map(String));
+  const deletedBeds = originalBeds.value
+    .filter((b) => !currentNumbers.has(String(b.number)))
+    .map((b) => b.id);
+  const beds = form.beds.map((num) => {
+    const orig = originalBeds.value.find((b) => String(b.number) === String(num));
+    return { id: orig?.id ?? 0, number: String(num) };
+  });
+
+  loading.value = true;
+  (<Axios>$axios)
+    .put("/api/room/update", {
+      id: roomId,
+      number: form.number,
+      departmentId: form.departmentId,
+      price: Number(form.price),
+      beds,
+      deletedBeds,
+    })
+    .then((res) => {
+      notificationShower("success", t("ROOM_UPDATE_SUCCESS"));
+      emit("close");
+      emit("getData");
+      resetForm();
+    })
+    .catch((error) => {
+      console.error("Error updating room:", error);
+      notificationShower(
+        "error",
+        error?.response?.data?.message || t("ERROR_OCCURRED")
+      );
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+}
 const resetForm = () => {
   form.number = "";
   form.price = undefined;
   form.departmentId = undefined;
   form.beds = [];
+  originalBeds.value = [];
 };
+
+const prefillForm = () => {
+  const r = props.room;
+  if (!r?.id) return;
+  form.number = r.number ?? "";
+  form.price = r.price ?? undefined;
+  form.departmentId = r.department?.id ?? r.departmentId ?? undefined;
+  const bedList = Array.isArray(r.beds)
+    ? r.beds.map((b: any) => ({ id: b?.id ?? 0, number: String(b?.number ?? b?.id ?? b ?? "") })).filter((b: { number: string }) => b.number)
+    : [];
+  originalBeds.value = bedList;
+  form.beds = bedList.map((b: { id: number; number: string }) => b.number);
+};
+
+watch(
+  () => [props.modelValue, props.room],
+  ([visible, room]) => {
+    if (!visible) resetForm();
+    else if (room?.id) prefillForm();
+    else resetForm();
+  },
+  { immediate: true }
+);
+
 onMounted(() => {
   getDepartments();
 });
