@@ -106,7 +106,7 @@
       </div>
 
       <!-- Doctor salaries -->
-      <div class="report-section">
+      <!-- <div class="report-section">
         <div class="section-header" @click="toggleSection('salaries')">
           <div class="flex items-center gap-[10px]">
             <el-icon v-if="!expandedSections.salaries" class="arrow-icon">
@@ -144,7 +144,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Expenses -->
       <div class="report-section">
@@ -217,7 +217,7 @@
       </div>
 
       <!-- Doctors' salaries -->
-      <div class="report-section">
+      <!-- <div class="report-section">
         <div class="section-header">
           <span class="section-title ml-[28px]">{{
             t("DOCTORS_SALARIES")
@@ -226,7 +226,7 @@
             formatAmount(employeesSalaries)
           }}</span>
         </div>
-      </div>
+      </div> -->
 
       <!-- Expenses -->
       <div class="report-section">
@@ -291,7 +291,7 @@ const doctorSalariesTotalAmount = computed(() => {
   return employees.value.reduce(
     (total, employee) =>
       total + (employee.commission || 0) + (employee.basicSalary || 0),
-    0
+    0,
   );
 });
 
@@ -305,7 +305,7 @@ const revenueData = computed(() => {
 const servicesTotalAmount = computed(() => {
   return services.value.reduce(
     (total, service) => total + (service.amount || 0),
-    0
+    0,
   );
 });
 
@@ -323,7 +323,7 @@ const expencesData = computed(() => {
 const expensesTotalAmount = computed(() => {
   return expenses.value.reduce(
     (total, expense) => total + (expense.amount || 0),
-    0
+    0,
   );
 });
 
@@ -383,13 +383,13 @@ const fetchFinancialData = async (start?: Date, end?: Date) => {
 
     // Determine start and end dates (fallback to today if not provided)
     const startDate = dayjs(start || dayjs().startOf("day")).format(
-      "YYYY-MM-DD"
+      "YYYY-MM-DD",
     );
     const endDate = dayjs(end || dayjs().endOf("day")).format("YYYY-MM-DD");
 
     const response = await (<Axios>$axios).post(
       `/api/report/daily?startDate=${startDate}&endDate=${endDate}`,
-      {}
+      {},
     );
 
     if (response.data && response.data.payload) {
@@ -418,7 +418,7 @@ const fetchFinancialData = async (start?: Date, end?: Date) => {
     if (error.response?.data) {
       console.log(
         "API Error Details:",
-        JSON.stringify(error.response.data, null, 2)
+        JSON.stringify(error.response.data, null, 2),
       );
     }
 
@@ -432,7 +432,7 @@ const fetchFinancialData = async (start?: Date, end?: Date) => {
 onMounted(async () => {
   await fetchFinancialData(
     dayjs().startOf("day").toDate(),
-    dayjs().endOf("day").toDate()
+    dayjs().endOf("day").toDate(),
   );
 });
 </script>
